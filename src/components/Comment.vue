@@ -200,7 +200,6 @@ export default {
       commentApi
         .listComments(this.target, this.id, "tree_view", this.pagination)
         .then((response) => {
-          console.error(response);
           this.comments = response.data.data.content;
           this.pagination.size = response.data.data.rpp;
           this.pagination.total = response.data.data.total;
