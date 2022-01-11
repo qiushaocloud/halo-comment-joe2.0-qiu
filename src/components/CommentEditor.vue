@@ -256,9 +256,9 @@ export default {
   },
   created() {
     // Get info from local storage
-    var author = localStorage.getItem("comment-author");
-    var authorUrl = localStorage.getItem("comment-authorUrl");
-    var email = localStorage.getItem("comment-email");
+    var author = localStorage.getItem("qiushaocloud-halo-comment-author");
+    var authorUrl = localStorage.getItem("qiushaocloud-halo-comment-authorUrl");
+    var email = localStorage.getItem("qiushaocloud-halo-comment-email");
     this.comment.author = author ? author : "";
     this.comment.authorUrl = authorUrl || "";
     this.comment.avatar = this.avatar;
@@ -273,7 +273,7 @@ export default {
   },
   methods: {
     updateAvatar() {
-      var avatar = localStorage.getItem("avatar");
+      var avatar = localStorage.getItem("qiushaocloud-halo-comment-avatar");
       this.avatar = avatar ? avatar : this.pullGravatarInfo(true);
     },
     handleSubmitClick() {
@@ -290,11 +290,10 @@ export default {
         return;
       }
 
-      console.error('qgstest this', this);
-      console.error('qgstest this.comment', this.comment);
       // Submit the comment
-      // this.comment.authorUrl = this.authorUrl; //后台目前没提供头像字段，暂时用authorUrl来存
-      // this.comment.avatar = this.avatar;
+      if (!this.comment.avatar)
+        this.comment.avatar = this.avatar;
+        
       this.comment.postId = this.targetId;
       if (this.replyComment) {
         // Set parent id if available
@@ -304,10 +303,10 @@ export default {
         .createComment(this.target, this.comment)
         .then((response) => {
           // Store comment author, email, authorUrl
-          localStorage.setItem("comment-author", this.comment.author);
-          localStorage.setItem("comment-email", this.comment.email);
-          localStorage.setItem("comment-authorUrl", this.comment.authorUrl);
-          localStorage.setItem("avatar", this.avatar);
+          localStorage.setItem("qiushaocloud-halo-comment-author", this.comment.author);
+          localStorage.setItem("qiushaocloud-halo-comment-email", this.comment.email);
+          localStorage.setItem("qiushaocloud-halo-comment-authorUrl", this.comment.authorUrl);
+          localStorage.setItem("qiushaocloud-halo-comment-avatar", this.comment.avatar);
 
           // clear comment
           this.comment.content = "";

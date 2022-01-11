@@ -181,18 +181,21 @@ export default {
   },
   computed: {
     avatar() {
-      console.error('qgssstest this.comment.avatar', this.comment)
       // if (this.comment.avatar) {
       //   return this.comment.avatar;
       // } else {
-      // !!优先从主题配置取，取不到才从后台配置取
-      const gravatarSource =
-        this.configs.gravatarSource ||
-        this.options.gravatar_source ||
-        this.configs.gravatarSourceDefault;
 
-      return `${gravatarSource}/${this.comment.gravatarMd5}?s=256&d=${this.options.comment_gravatar_default}`;
-      // }
+      if (this.comment.avatarFromContent) {
+        return this.comment.avatarFromContent;
+      } else {
+        // !!优先从主题配置取，取不到才从后台配置取
+        const gravatarSource =
+          this.configs.gravatarSource ||
+          this.options.gravatar_source ||
+          this.configs.gravatarSourceDefault;
+
+        return `${gravatarSource}/${this.comment.gravatarMd5}?s=256&d=${this.options.comment_gravatar_default}`;
+      }
     },
     compileContent() {
       var at = "";
