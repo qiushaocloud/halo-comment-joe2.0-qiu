@@ -5974,14 +5974,14 @@ var addStylesShadow = __webpack_require__("35d6");
 // EXTERNAL MODULE: ./node_modules/vue-loader/lib/runtime/componentNormalizer.js
 var componentNormalizer = __webpack_require__("2877");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"93979ac4-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Comment.vue?vue&type=template&id=c0c2150c&shadow
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"93979ac4-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Comment.vue?vue&type=template&id=3e86b6d4&shadow
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:[
     'halo-comment',
     { 'halo-comment__small': _vm.mergedConfigs.size === 'small' } ],attrs:{"id":"halo-comment"}},[(_vm.isReply)?_c('comment-editor',{staticClass:"bottom-comment",attrs:{"targetId":_vm.id,"target":_vm.target,"options":_vm.mergedOptions,"configs":_vm.mergedConfigs}}):_vm._e(),(!_vm.mergedConfigs.autoLoad && !_vm.loaded)?_c('div',{staticClass:"comment-load-button"},[_c('a',{staticClass:"button-load",attrs:{"href":"javascript:void(0)","rel":"nofollow noopener"},on:{"click":_vm.loadComments}},[_vm._v("加载评论")])]):_vm._e(),_c('comment-loading',{directives:[{name:"show",rawName:"v-show",value:(_vm.commentLoading),expression:"commentLoading"}],attrs:{"configs":_vm.mergedConfigs}}),(_vm.comments.length >= 1)?_c('ul',{staticClass:"commentwrap"},[_vm._l((_vm.comments),function(comment,index){return [_c('CommentNode',{key:index,attrs:{"targetId":_vm.id,"target":_vm.target,"comment":comment,"options":_vm.mergedOptions,"configs":_vm.mergedConfigs,"depth":1}})]})],2):_vm._e(),(_vm.loaded && !_vm.commentLoading && _vm.comments.length <= 0)?_c('div',{staticClass:"comment-empty"},[_vm._v(" "+_vm._s(_vm.mergedConfigs.notComment || "还没有评论哦，快来抢占沙发 ♪(´▽｀)")+" ")]):_vm._e(),(_vm.pagination.pages > 1)?_c('div',{staticClass:"comment-page"},[_c('pagination',{attrs:{"page":_vm.pagination.page,"size":_vm.pagination.size,"total":_vm.pagination.total},on:{"change":_vm.handlePaginationChange}})],1):_vm._e()],1)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/Comment.vue?vue&type=template&id=c0c2150c&shadow
+// CONCATENATED MODULE: ./src/components/Comment.vue?vue&type=template&id=3e86b6d4&shadow
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.error.cause.js
 var es_error_cause = __webpack_require__("d9e2");
@@ -8155,7 +8155,6 @@ external_Vue_default.a.use(plugins_Tips);
       this.comments = [];
       this.commentLoading = true;
       comment["a" /* default */].listComments(this.target, this.id, "tree_view", this.pagination).then(response => {
-        console.error(response);
         this.comments = response.data.data.content;
         this.pagination.size = response.data.data.rpp;
         this.pagination.total = response.data.data.total;
