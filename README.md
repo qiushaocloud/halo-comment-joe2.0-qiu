@@ -10,6 +10,8 @@
 ### 邱少羽梦修改内容
 1. 项目某些资源来源更新为 qiushaocloud
 2. 适配 [halo-theme-joe2.0-qiu](https://github.com/qiushaocloud/halo-theme-joe2.0-qiu) 主题
+3. 支持拉取 QQ 头像，发布评论时携带头像
+4. 添加个人站点功能
 
 <!-- ### 使用指南
 
