@@ -293,8 +293,8 @@ export default {
       console.error('qgstest this', this);
       console.error('qgstest this.comment', this.comment);
       // Submit the comment
-      this.comment.authorUrl = this.authorUrl; //后台目前没提供头像字段，暂时用authorUrl来存
-      this.comment.avatar = this.avatar;
+      // this.comment.authorUrl = this.authorUrl; //后台目前没提供头像字段，暂时用authorUrl来存
+      // this.comment.avatar = this.avatar;
       this.comment.postId = this.targetId;
       if (this.replyComment) {
         // Set parent id if available
