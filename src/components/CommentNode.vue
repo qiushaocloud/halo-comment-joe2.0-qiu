@@ -181,7 +181,7 @@ export default {
   },
   computed: {
     avatar() {
-      console.error('qgstest this.comment.avatar', this.comment)
+      console.error('qgssstest this.comment.avatar', this.comment)
       // if (this.comment.avatar) {
       //   return this.comment.avatar;
       // } else {
