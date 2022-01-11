@@ -40,7 +40,7 @@
       <!-- 表情开关 -->
       <p id="emotion-toggle" class="no-select">
         <span @click="handleToggleDialogEmoji">{{
-          !emojiDialogVisible ? "戳我试试 OωO" : "嘿嘿嘿 ヾ(≧∇≦*)ゝ"
+          !emojiDialogVisible ? "戳这里哦，宝宝给您表演表情包 OωO" : "喜欢宝宝的表演吧 ヾ(≧∇≦*)ゝ"
         }}</span>
       </p>
       <transition name="emoji-fade">
@@ -61,7 +61,7 @@
         <PopupInput
           class="cmt-popup cmt-author"
           popupStyle="margin-left: -115px"
-          :popupText="configs.authorPopup || '输入QQ号将自动拉取昵称和头像 |●´∀`|σ'"
+          :popupText="configs.authorPopup || '输入QQ号将自动拉取昵称和头像 ♪(´▽｀)'"
           inputType="text"
           placeholder="* 昵称"
           id="author"
@@ -78,7 +78,7 @@
           v-model="comment.email"
           @blurInput="pullInfo"
         />
-        <!-- <PopupInput
+        <PopupInput
           class="cmt-popup"
           popupStyle="margin-left: -55px;"
           :popupText="configs.urlPopup || '请不要打小广告哦 (^し^)'"
@@ -86,7 +86,7 @@
           placeholder="个人站点"
           id="url"
           v-model="comment.authorUrl"
-        /> -->
+        />
       </div>
       <ul class="comment-buttons">
         <li v-if="comment.content" class="middle" style="margin-right: 5px">

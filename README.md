@@ -31,7 +31,7 @@
 | avatarLoading  | 头像加载时展示的图片     | ''                                 |                            |
 | loadingStyle   | 评论加载样式             | `default`                          | `default` `circle` `balls` |
 | aWord          | 评论框内的一言           | `欢迎您，请点击此处，动动您的小手指，留下您的👣  ...` | -                          |
-| authorPopup    | 填写昵称时的提示         | `输入QQ号将自动拉取昵称和头像 |●´∀`|σ`     | -                          |
+| authorPopup    | 填写昵称时的提示         | `输入QQ号将自动拉取昵称和头像 ♪(´▽｀)`     | -                          |
 | emailPopup     | 填写 email 时的提示      | `您的邮箱将收到回复通知 ๑乛◡乛๑`                 | -                          |
 | urlPopup       | 填写网站链接时的提示     | `请不要打小广告哦 (^し^)`                     | -                          |
 | notComment     | 没有评论时显示的语句     | `还没有评论哦，快来抢占沙发 ♪(´▽｀)`                         | -                          |
