@@ -11924,9 +11924,9 @@ module.exports = function combineURLs(baseURL, relativeURL) {
         tokenizer: null,
         walkTokens: null,
         xhtml: false,
-        bilibiliEmojiUrl: 'https://cdn.jsdelivr.net/gh/qinhua/cdn_assets@master/comment/emoji/bili/',
-        tiebaEmojiUrl: 'https://cdn.jsdelivr.net/gh/qinhua/cdn_assets@master/comment/emoji/smilies/',
-        hahaEmojiUrl: 'https://cdn.jsdelivr.net/gh/qinhua/cdn_assets@master/comment/emoji/haha/'
+        bilibiliEmojiUrl: 'https://cdn.jsdelivr.net/gh/gh/qiushaocloud/cdn-static@master/halo-comment/emoji/bili/',
+        tiebaEmojiUrl: 'https://cdn.jsdelivr.net/gh/gh/qiushaocloud/cdn-static@master/halo-comment/emoji/smilies/',
+        hahaEmojiUrl: 'https://cdn.jsdelivr.net/gh/gh/qiushaocloud/cdn-static@master/halo-comment/emoji/haha/'
       };
     }
 

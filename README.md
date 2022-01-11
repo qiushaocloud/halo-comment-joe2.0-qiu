@@ -1,11 +1,15 @@
-<h1 align="center"><a href="https://gitee.com/duider/halo-comment-joe2.0" target="_blank">halo-comment-joe2.0</a></h1>
+<h1 align="center"><a href="https://gitee.com/duider/halo-comment-joe2.0-qiu" target="_blank">halo-comment-joe2.0-qiu 邱少修改版</a></h1>
 <p align="center">
   <a href="https://github.com/qiushaocloud/halo-theme-joe2.0-qiu"><img alt="Build Status" src="https://img.shields.io/badge/build-positive-brightgreen?style=for-the-badge"></a>
   <a href="https://github.com/prettier/prettier"><img alt="Code Style: Prettier" src="https://img.shields.io/badge/release-1.0.0-blue?style=for-the-badge"></a>
   <a href="./LICENSE"><img alt="LICENSE MIT" src="https://img.shields.io/badge/license-MIT-blue.svg?style=for-the-badge"></a>
 </p>
 
-> 仅适用于 `halo-theme-joe2.0` 主题的评论组件，基于 `LIlGG` 开发的 [halo-comment-sakura](https://github.com/LIlGG/halo-comment-sakura) 定制而成，在此感谢原作者。
+> 仅适用于 `halo-theme-joe2.0-qiu` 主题的评论组件，基于  `qinhua` 开发的 [halo-comment-joe2.0](https://github.com/qinhua/halo-comment-joe2.0) 以及 `LIlGG` 开发的 [halo-comment-sakura](https://github.com/LIlGG/halo-comment-sakura) 定制而成，在此感谢原作者。
+
+### 邱少羽梦修改内容
+1. 项目某些资源来源更新为 qiushaocloud
+2. 适配 [halo-theme-joe2.0-qiu](https://github.com/qiushaocloud/halo-theme-joe2.0-qiu) 主题
 
 <!-- ### 使用指南
 
@@ -231,3 +235,20 @@ for (var i = 0; i < comments.length; i++) {
 ### 关于emoji
 
 项目中的 emoji 解析依赖了 [j-marked](https://gitee.com/duider/j-marked) 这个包。
+
+
+
+#### 开源不易，如果对您有帮助，请您动一动您的小手，给作者点 Star，也请您多多关注分享者「[邱少羽梦](https://www.qiushaocloud.top)」
+
+* 分享者邮箱: [qiushaocloud@126.com](mailto:qiushaocloud@126.com)
+* [分享者博客](https://www.qiushaocloud.top)
+* [分享者自己搭建的 gitlab](https://www.qiushaocloud.top/gitlab/qiushaocloud) 
+* [分享者 gitee](https://gitee.com/qiushaocloud/dashboard/projects) 
+* [分享者 github](https://github.com/qiushaocloud?tab=repositories) 
+
+
+### 版权信息公告:
+* 此主题是基于 [qinhua/halo-comment-joe2.0](https://github.com/qinhua/halo-comment-joe2.0) 修改
+* 以上内容大部分为原作者原创内容
+* 如果大家喜欢，请支持 [邱少羽梦(修改者)](https://www.qiushaocloud.top)，也请支持下原作者哦
+* 版权归原作者所有，修改者只是进行部分修改，以满足修改者需求

@@ -1,5 +1,5 @@
 {
-  "name": "halo-comment-joe2.0",
+  "name": "halo-comment-joe2.0-qiu",
   "version": "1.0.0",
   "private": false,
   "scripts": {
@@ -35,16 +35,16 @@
     "> 1%",
     "last 2 versions"
   ],
-  "description": "<h1 align=\"center\"><a href=\"https://github.com/qiushaocloud\" target=\"_blank\">halo-comment-joe2.0</a></h1> > 适用于 halo-theme-joe2.0 的评论组件。",
+  "description": "<h1 align=\"center\"><a href=\"https://github.com/qiushaocloud\" target=\"_blank\">halo-comment-joe2.0-qiu</a></h1> > 适用于 halo-theme-joe2.0-qiu 的评论组件。",
   "main": "babel.config.js",
   "repository": {
     "type": "git",
-    "url": "git+https://gitee.com/duider/halo-comment-joe2.0.git"
+    "url": "git+https://gitee.com/duider/halo-comment-joe2.0-qiu.git"
   },
-  "author": "qinhua",
+  "author": "qiushaocloud",
   "license": "MIT",
   "bugs": {
-    "url": "https://gitee.com/duider/halo-comment-joe2.0/issues"
+    "url": "https://gitee.com/duider/halo-comment-joe2.0-qiu/issues"
   },
-  "homepage": "https://gitee.com/duider/halo-comment-joe2.0#readme"
+  "homepage": "https://gitee.com/duider/halo-comment-joe2.0-qiu#readme"
 }
