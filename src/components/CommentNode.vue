@@ -10,8 +10,8 @@
       <div class="contents">
         <div class="main shadow">
           <div class="profile">
-            <!-- <a :href="comment.authorUrl" rel="nofollow noopener noreferrer" target="_blank"> -->
-            <a href="javascript:;" rel="nofollow noopener noreferrer">
+            <a :href="comment.authorUrl" rel="nofollow noopener noreferrer" target="_blank">
+            <!-- <a href="javascript:;" rel="nofollow noopener noreferrer"> -->
               <img
                 :alt="comment.author"
                 v-lazy="comment.isAdmin ? options.blog_logo : avatar"
