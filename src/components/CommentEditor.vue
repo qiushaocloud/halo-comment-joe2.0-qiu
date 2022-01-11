@@ -187,7 +187,7 @@ export default {
       emojiDialogVisible: false,
       comment: {
         author: "",
-        // avatar: "",
+        avatar: "",
         authorUrl: "",
         email: "",
         content: "",
@@ -257,11 +257,11 @@ export default {
   created() {
     // Get info from local storage
     var author = localStorage.getItem("comment-author");
-    // var authorUrl = localStorage.getItem("comment-authorUrl");
+    var authorUrl = localStorage.getItem("comment-authorUrl");
     var email = localStorage.getItem("comment-email");
     this.comment.author = author ? author : "";
-    // this.comment.authorUrl = authorUrl || "";
-    // this.comment.avatar = this.avatar;
+    this.comment.authorUrl = authorUrl || "";
+    this.comment.avatar = this.avatar;
     this.comment.email = email ? email : "";
     this.updateAvatar();
 
@@ -289,9 +289,12 @@ export default {
         this.$tips("评论内容不能为空", 5000, this);
         return;
       }
+
+      console.error('qgstest this', this);
+      console.error('qgstest this.comment', this.comment);
       // Submit the comment
-      // this.comment.authorUrl = this.avatar; //后台目前没提供头像字段，暂时用authorUrl来存
-      // this.comment.avatar = this.avatar;
+      this.comment.authorUrl = this.authorUrl; //后台目前没提供头像字段，暂时用authorUrl来存
+      this.comment.avatar = this.avatar;
       this.comment.postId = this.targetId;
       if (this.replyComment) {
         // Set parent id if available
@@ -303,7 +306,7 @@ export default {
           // Store comment author, email, authorUrl
           localStorage.setItem("comment-author", this.comment.author);
           localStorage.setItem("comment-email", this.comment.email);
-          // localStorage.setItem("comment-authorUrl", this.comment.authorUrl);
+          localStorage.setItem("comment-authorUrl", this.comment.authorUrl);
           localStorage.setItem("avatar", this.avatar);
 
           // clear comment

@@ -26,8 +26,8 @@
             <section class="commeta">
               <div class="left">
                 <h4 class="author">
-                  <!-- <a :href="comment.authorUrl" rel="nofollow noopener noreferrer" target="_blank"> -->
-                  <a href="javascript:;" rel="noopener noreferrer nofollow">
+                  <a :href="comment.authorUrl" rel="nofollow noopener noreferrer" target="_blank">
+                  <!-- <a href="javascript:;" rel="noopener noreferrer nofollow"> -->
                     <img
                       :alt="comment.author"
                       v-lazy="comment.isAdmin ? options.blog_logo : avatar"
@@ -181,6 +181,7 @@ export default {
   },
   computed: {
     avatar() {
+      console.error('qgstest this.comment.avatar')
       // if (this.comment.avatar) {
       //   return this.comment.avatar;
       // } else {
@@ -196,16 +197,16 @@ export default {
     compileContent() {
       var at = "";
       if (this.parent != undefined) {
-        // at =
-        //   '<a href="' +
-        //   this.parent.authorUrl +
-        //   '" class="comment-at" rel="noopener noreferrer nofollow"> @' +
-        //   this.parent.author +
-        //   " </a>";
         at =
-          '<a href="javascript:;" class="comment-at"> @' +
+          '<a href="' +
+          this.parent.authorUrl +
+          '" class="comment-at" rel="noopener noreferrer nofollow"> @' +
           this.parent.author +
           " </a>";
+        // at =
+        //   '<a href="javascript:;" class="comment-at"> @' +
+        //   this.parent.author +
+        //   " </a>";
       }
       // 获取转换后的marked
       const markedHtml = marked(at + this.comment.content);
