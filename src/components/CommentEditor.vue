@@ -327,6 +327,9 @@ export default {
     updateAvatar() {
       var avatar = localStorage.getItem("qiushaocloud-halo-comment-avatar");
       this.avatar = avatar ? avatar : this.pullGravatarInfo(true);
+
+      localStorage.setItem("qiushaocloud-halo-comment-avatar", this.avatar);
+      localStorage.setItem("qiushaocloud-halo-comment-avatar-key", this.comment.author+'###'+this.comment.email);
     },
     handleSubmitClick() {
       if (isEmpty(this.comment.author)) {
@@ -695,6 +698,11 @@ export default {
 
       if (!isDefault) {
         this.avatar = avatar;
+
+        if (cacheAvatar) {
+          localStorage.setItem("qiushaocloud-halo-comment-avatar", this.avatar);
+          localStorage.setItem("qiushaocloud-halo-comment-avatar-key", this.comment.author+'###'+this.comment.email);
+        }
       } else {
         return avatar;
       }
