@@ -12,6 +12,8 @@
 2. 适配 [halo-theme-joe2.0-qiu](https://github.com/qiushaocloud/halo-theme-joe2.0-qiu) 主题
 3. 支持拉取 QQ 头像，发布评论时携带头像
 4. 添加个人站点功能
+5. 支持点击头像框上传自定义头像
+6. 修复部分 bug，进行了部分优化
 
 #### 👀 [预览组件](https://www.qiushaocloud.top/extras/message-board)
 
@@ -39,6 +41,7 @@
 | emailPopup     | 填写 email 时的提示      | `您的邮箱将收到回复通知 ๑乛◡乛๑`                 | -                          |
 | urlPopup       | 填写网站链接时的提示     | `请不要打小广告哦 (^し^)`                     | -                          |
 | notComment     | 没有评论时显示的语句     | `还没有评论哦，快来抢占沙发 ♪(´▽｀)`                         | -                          |
+| isAllowUploadAvatar       | 是否允许上传头像【注：因为使用的是「即库图床」上传的头像，头像会在该地址(https://img.78al.net/index/gallery.html)上被所有人看到】     | `true`                             | `true` `false`             |
 
 配置方法：
 

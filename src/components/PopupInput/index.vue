@@ -31,10 +31,14 @@ export default {
             default: 'text'
         },
         value: String,
-        placeholder: String
+        placeholder: String,
+        localStorageDataCacheKey: String
     },
     methods: {
         inputBlur($event) {
+            if (this.localStorageDataCacheKey)
+                localStorage.setItem(this.localStorageDataCacheKey, $event.target.value);
+
             this.isPopup=false;
             this.$emit('blurInput', $event.target.value);
         }

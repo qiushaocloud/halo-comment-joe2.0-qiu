@@ -1,3 +1,4 @@
+import axios from 'axios'
 import service from '@/utils/service'
 const baseUrl = '/api/content'
 
@@ -50,5 +51,23 @@ commentApi.listComments = (target, targetId, view = 'tree_view', pagination) => 
         return response;
     });
 }
+
+commentApi.uploadAvatar = (file, token) => {
+    const param = new FormData();
+    param.append("image", file);
+  
+    const config = {
+        headers: { "Content-Type": "multipart/form-data" }
+    };
+
+    if (token)
+        config.headers.token = token;
+
+    return axios.post(
+        "https://img.78al.net/api/upload",
+        param,
+        config
+    );
+};
 
 export default commentApi

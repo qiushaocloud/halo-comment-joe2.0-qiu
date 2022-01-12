@@ -52,8 +52,23 @@
       </transition>
       <div class="author-info">
         <!-- 用户头像信息 -->
-        <div class="commentator">
-          <img :src="avatar" class="avatar" @error="handleAvatarError" />
+        <div 
+          class="commentator"
+          style="pointer-events: initial;"
+          @click="handleAvatarUploadInputOpen"
+        >
+          <input 
+            type="file"
+            style="display: none;"
+            accept="image/*"
+            ref="commentAvatarUploadFileInputEle"
+            @change="handleAvatarUpload($event)"
+          />
+
+          <img :src="avatar"
+            class="avatar"
+            @error="handleAvatarError"
+          />
           <div class="socila-check" :class="[checkType.back]">
             <i :class="[checkType.icon]" aria-hidden="true"></i>
           </div>
@@ -65,6 +80,7 @@
           inputType="text"
           placeholder="* 昵称"
           id="author"
+          localStorageDataCacheKey="qiushaocloud-halo-comment-author"
           v-model="comment.author"
           @blurInput="pullInfo"
         />
@@ -75,6 +91,7 @@
           inputType="text"
           placeholder="* 电子邮件"
           id="email"
+          localStorageDataCacheKey="qiushaocloud-halo-comment-email"
           v-model="comment.email"
           @blurInput="pullInfo"
         />
@@ -85,6 +102,7 @@
           inputType="text"
           placeholder="个人站点"
           id="url"
+          localStorageDataCacheKey="qiushaocloud-halo-comment-authorUrl"
           v-model="comment.authorUrl"
         />
       </div>
@@ -272,6 +290,40 @@ export default {
     });
   },
   methods: {
+    handleAvatarUploadInputOpen() {
+      if (!this.configs.isAllowUploadAvatar)
+        return;
+
+      this.$refs.commentAvatarUploadFileInputEle.dispatchEvent(new MouseEvent('click'))
+    },
+    handleAvatarUpload(event) {
+      if (!this.configs.isAllowUploadAvatar)
+      return;
+        
+      const file = event.target.files[0];
+      if (!file)
+        return;
+
+      commentApi
+        .uploadAvatar(file)
+        .then((response) => {
+          const resData = response.data;
+          if (resData.code !== 200) {
+            console.error('uploadAvatar failure, resData:', resData);
+            return;
+          }
+
+          console.info('uploadAvatar success, resData:', resData);
+
+          this.avatar = resData.data.url;
+
+          localStorage.setItem("qiushaocloud-halo-comment-avatar", this.avatar);
+          localStorage.setItem("qiushaocloud-halo-comment-avatar-key", this.comment.author+'###'+this.comment.email);
+        })
+        .catch((error) => {
+          console.error('uploadAvatar error:', error);
+        });
+    },
     updateAvatar() {
       var avatar = localStorage.getItem("qiushaocloud-halo-comment-avatar");
       this.avatar = avatar ? avatar : this.pullGravatarInfo(true);
@@ -291,8 +343,7 @@ export default {
       }
 
       // Submit the comment
-      if (!this.comment.avatar)
-        this.comment.avatar = this.avatar;
+      this.comment.avatar = this.avatar;
         
       this.comment.postId = this.targetId;
       if (this.replyComment) {
@@ -306,7 +357,8 @@ export default {
           localStorage.setItem("qiushaocloud-halo-comment-author", this.comment.author);
           localStorage.setItem("qiushaocloud-halo-comment-email", this.comment.email);
           localStorage.setItem("qiushaocloud-halo-comment-authorUrl", this.comment.authorUrl);
-          localStorage.setItem("qiushaocloud-halo-comment-avatar", this.comment.avatar);
+          localStorage.setItem("qiushaocloud-halo-comment-avatar", this.avatar);
+          localStorage.setItem("qiushaocloud-halo-comment-avatar-key", this.comment.author+'###'+this.comment.email);
 
           // clear comment
           this.comment.content = "";
@@ -516,7 +568,20 @@ export default {
     },
     pullInfo() {
       let author = this.comment.author;
-      if (author.length != 0 && isQQ(author)) {
+      let authorQQ = author;
+      const cacheQqStr = window.localStorage.getItem('qiushaocloud-halo-comment-qq');
+      const cacheQq = cacheQqStr ? JSON.parse(cacheQqStr) : undefined;
+
+      if (authorQQ && cacheQq) {
+        if (
+          this.comment.email === cacheQq.email
+          && authorQQ === cacheQq.nickname
+        ) {
+          authorQQ = cacheQq.qq;
+        }
+      }
+
+      if (authorQQ && authorQQ.length != 0 && isQQ(authorQQ)) {
         // 如果是QQ号，则拉取QQ头像
         this.pullQQInfo(() => {
           this.$tips("拉取QQ信息失败！尝试拉取Gravatar", 2000, this);
@@ -525,21 +590,46 @@ export default {
         });
         return;
       }
+
       // 防止刚拉取完QQ头像就拉取Gravatar头像
       if (this.lockPullAvatar) {
         this.lockPullAvatar = false;
         return;
       }
+
       // 否则拉取Gravatar头像
       this.pullGravatarInfo();
     },
     pullQQInfo(errorQQCallback) {
       let _self = this;
+
+      let authorQQ = _self.comment.author;
+      const cacheQqStr = window.localStorage.getItem('qiushaocloud-halo-comment-qq');
+      const cacheQq = cacheQqStr ? JSON.parse(cacheQqStr) : undefined;
+
+      if (authorQQ && cacheQq) {
+        if (
+          _self.comment.email === cacheQq.email
+          && authorQQ === cacheQq.nickname
+        ) {
+          if ((Date.now() - cacheQq.saveTs) < 60000) {
+            return new Promise((resolve)=>{
+                _self.comment.author = cacheQq.nickname;
+                _self.comment.email = cacheQq.email;
+                _self.avatar = cacheQq.avatar;
+              resolve();
+            });
+          }
+
+          authorQQ = cacheQq.qq;
+        }
+      }
+
       // 拉取QQ昵称，头像等
       axios
         .get("https://api.lixingyong.com/api/qq", {
           params: {
-            id: _self.comment.author,
+            id: authorQQ,
           },
         })
         .then(function(res) {
@@ -547,27 +637,62 @@ export default {
           if (!!data.code && data.code == 500) {
             errorQQCallback();
           }
+
+          if (
+            _self.comment.author === data.nickname
+            && _self.comment.email === data.email
+            && _self.avatar === data.avatar
+          ) {
+            return;
+          }
+
           _self.$tips("拉取QQ头像成功！", 2000, _self);
           _self.comment.author = data.nickname;
           _self.comment.email = data.email;
           _self.avatar = data.avatar;
           _self.lockPullAvatar = true;
+
+          _self.comment.avatar = _self.avatar;
+
+          localStorage.setItem("qiushaocloud-halo-comment-author", _self.comment.author);
+          localStorage.setItem("qiushaocloud-halo-comment-email", _self.comment.email);
+          localStorage.setItem("qiushaocloud-halo-comment-authorUrl", _self.comment.authorUrl);
+          localStorage.setItem("qiushaocloud-halo-comment-avatar", _self.avatar);
+          localStorage.setItem("qiushaocloud-halo-comment-avatar-key", _self.comment.author+'###'+_self.comment.email);
+          
+          localStorage.setItem('qiushaocloud-halo-comment-qq', JSON.stringify({
+            qq: data.qq,
+            nickname: data.nickname,
+            email: data.email,
+            avatar: data.avatar,
+            saveTs: Date.now()
+          }));
         })
         .catch(() => {
           errorQQCallback();
         });
     },
     pullGravatarInfo(isDefault) {
+      // 由本地缓存的图片优先用本地缓存的
+      let cacheAvatar = localStorage.getItem("qiushaocloud-halo-comment-avatar");
+      const cacheAvatarKey = localStorage.getItem("qiushaocloud-halo-comment-avatar-key");
+      if (cacheAvatarKey !== this.comment.author+'###'+this.comment.email) {
+        cacheAvatar = undefined;
+      }
+     
       const gravatarMd5 = `/${md5(this.comment.email)}`;
       // !!优先从主题配置取，取不到才从后台配置取
       const gravatarSource =
         this.configs.gravatarSource ||
         this.options.gravatar_source ||
         this.configs.gravatarSourceDefault;
-      const avatar =
+
+      const avatar = cacheAvatar || (
         gravatarSource +
         `${gravatarMd5}?s=256&d=` +
-        this.options.comment_gravatar_default;
+        this.options.comment_gravatar_default
+      );
+
       if (!isDefault) {
         this.avatar = avatar;
       } else {

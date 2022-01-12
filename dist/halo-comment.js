@@ -625,6 +625,7 @@ service.interceptors.response.use(response => {
 /* harmony default export */ var utils_service = (service);
 // CONCATENATED MODULE: ./src/api/comment.js
 
+
 const baseUrl = '/api/content';
 const commentApi = {};
 
@@ -669,6 +670,18 @@ commentApi.listComments = (target, targetId, view = 'tree_view', pagination) => 
 
     return response;
   });
+};
+
+commentApi.uploadAvatar = (file, token) => {
+  const param = new FormData();
+  param.append("image", file);
+  const config = {
+    headers: {
+      "Content-Type": "multipart/form-data"
+    }
+  };
+  if (token) config.headers.token = token;
+  return axios_default.a.post("https://img.78al.net/api/upload", param, config);
 };
 
 /* harmony default export */ var api_comment = __webpack_exports__["a"] = (commentApi);
@@ -3654,12 +3667,12 @@ if ($defineProperty) {
 
 "use strict";
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"93979ac4-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CommentEditor.vue?vue&type=template&id=1e6c6ecc&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.isCurrReply)?_c('section',{ref:"editor",staticClass:"comment-editor",attrs:{"id":_vm.respondId,"role":"form"}},[(_vm.isReply)?_c('h3',{staticClass:"comment-reply-title",attrs:{"id":"reply-title"}},[_c('small',[_c('a',{staticClass:"cancel-comment-reply-link",attrs:{"href":"javascript:;"},on:{"click":_vm.cancelReply}},[_vm._v("取消回复")])])]):_vm._e(),_c('form',{staticClass:"comment-form"},[(!_vm.previewMode)?_c('div',{staticClass:"comment-textarea"},[_c('textarea',{directives:[{name:"model",rawName:"v-model",value:(_vm.comment.content),expression:"comment.content"}],staticClass:"commentbody",attrs:{"required":"required","aria-required":"true","tabindex":"4","placeholder":_vm.configs.aWord || '欢迎您，请点击此处，动动您的小手指，留下您的👣  ...'},domProps:{"value":(_vm.comment.content)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.comment, "content", $event.target.value)}}}),_c('label',{staticClass:"input-label"},[_vm._v(_vm._s(_vm.configs.aWord || "欢迎您，请点击此处，动动您的小手指，留下您的👣 ..."))])]):_c('div',{staticClass:"comment-preview markdown-body",domProps:{"innerHTML":_vm._s(_vm.renderedContent)}}),_c('div',{attrs:{"id":"upload-img-show"}}),_c('p',{staticClass:"no-select",attrs:{"id":"emotion-toggle"}},[_c('span',{on:{"click":_vm.handleToggleDialogEmoji}},[_vm._v(_vm._s(!_vm.emojiDialogVisible ? "戳这里哦，宝宝给您表演表情包 OωO" : "喜欢宝宝的表演吧 ヾ(≧∇≦*)ゝ"))])]),_c('transition',{attrs:{"name":"emoji-fade"}},[(_vm.emojiDialogVisible)?_c('VEmojiPicker',{attrs:{"pack":_vm.emojiPack},on:{"select":_vm.handleSelectEmoji}}):_vm._e()],1),_c('div',{staticClass:"author-info"},[_c('div',{staticClass:"commentator"},[_c('img',{staticClass:"avatar",attrs:{"src":_vm.avatar},on:{"error":_vm.handleAvatarError}}),_c('div',{staticClass:"socila-check",class:[_vm.checkType.back]},[_c('i',{class:[_vm.checkType.icon],attrs:{"aria-hidden":"true"}})])]),_c('PopupInput',{staticClass:"cmt-popup cmt-author",attrs:{"popupStyle":"margin-left: -115px","popupText":_vm.configs.authorPopup || '输入QQ号将自动拉取昵称和头像 ♪(´▽｀)',"inputType":"text","placeholder":"* 昵称","id":"author"},on:{"blurInput":_vm.pullInfo},model:{value:(_vm.comment.author),callback:function ($$v) {_vm.$set(_vm.comment, "author", $$v)},expression:"comment.author"}}),_c('PopupInput',{staticClass:"cmt-popup",attrs:{"popupStyle":"margin-left: -65px;","popupText":_vm.configs.emailPopup || '您的邮箱将收到回复通知 ๑乛◡乛๑',"inputType":"text","placeholder":"* 电子邮件","id":"email"},on:{"blurInput":_vm.pullInfo},model:{value:(_vm.comment.email),callback:function ($$v) {_vm.$set(_vm.comment, "email", $$v)},expression:"comment.email"}}),_c('PopupInput',{staticClass:"cmt-popup",attrs:{"popupStyle":"margin-left: -55px;","popupText":_vm.configs.urlPopup || '请不要打小广告哦 (^し^)',"inputType":"text","placeholder":"个人站点","id":"url"},model:{value:(_vm.comment.authorUrl),callback:function ($$v) {_vm.$set(_vm.comment, "authorUrl", $$v)},expression:"comment.authorUrl"}})],1),_c('ul',{staticClass:"comment-buttons"},[(_vm.comment.content)?_c('li',{staticClass:"middle",staticStyle:{"margin-right":"5px"}},[_c('a',{staticClass:"button-preview-edit",attrs:{"href":"javascript:;","rel":"nofollow noopener"},on:{"click":_vm.handlePreviewContent}},[_vm._v(_vm._s(_vm.previewMode ? "编辑" : "预览"))])]):_vm._e(),_c('li',{staticClass:"middle"},[_c('a',{staticClass:"button-submit",attrs:{"href":"javascript:;","tabindex":"5","rel":"nofollow noopener"},on:{"click":_vm.handleSubmitClick}},[_vm._v("提交")])])])],1)]):_vm._e()}
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"93979ac4-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CommentEditor.vue?vue&type=template&id=266a154b&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.isCurrReply)?_c('section',{ref:"editor",staticClass:"comment-editor",attrs:{"id":_vm.respondId,"role":"form"}},[(_vm.isReply)?_c('h3',{staticClass:"comment-reply-title",attrs:{"id":"reply-title"}},[_c('small',[_c('a',{staticClass:"cancel-comment-reply-link",attrs:{"href":"javascript:;"},on:{"click":_vm.cancelReply}},[_vm._v("取消回复")])])]):_vm._e(),_c('form',{staticClass:"comment-form"},[(!_vm.previewMode)?_c('div',{staticClass:"comment-textarea"},[_c('textarea',{directives:[{name:"model",rawName:"v-model",value:(_vm.comment.content),expression:"comment.content"}],staticClass:"commentbody",attrs:{"required":"required","aria-required":"true","tabindex":"4","placeholder":_vm.configs.aWord || '欢迎您，请点击此处，动动您的小手指，留下您的👣  ...'},domProps:{"value":(_vm.comment.content)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.comment, "content", $event.target.value)}}}),_c('label',{staticClass:"input-label"},[_vm._v(_vm._s(_vm.configs.aWord || "欢迎您，请点击此处，动动您的小手指，留下您的👣 ..."))])]):_c('div',{staticClass:"comment-preview markdown-body",domProps:{"innerHTML":_vm._s(_vm.renderedContent)}}),_c('div',{attrs:{"id":"upload-img-show"}}),_c('p',{staticClass:"no-select",attrs:{"id":"emotion-toggle"}},[_c('span',{on:{"click":_vm.handleToggleDialogEmoji}},[_vm._v(_vm._s(!_vm.emojiDialogVisible ? "戳这里哦，宝宝给您表演表情包 OωO" : "喜欢宝宝的表演吧 ヾ(≧∇≦*)ゝ"))])]),_c('transition',{attrs:{"name":"emoji-fade"}},[(_vm.emojiDialogVisible)?_c('VEmojiPicker',{attrs:{"pack":_vm.emojiPack},on:{"select":_vm.handleSelectEmoji}}):_vm._e()],1),_c('div',{staticClass:"author-info"},[_c('div',{staticClass:"commentator",staticStyle:{"pointer-events":"initial"},on:{"click":_vm.handleAvatarUploadInputOpen}},[_c('input',{ref:"commentAvatarUploadFileInputEle",staticStyle:{"display":"none"},attrs:{"type":"file","accept":"image/*"},on:{"change":function($event){return _vm.handleAvatarUpload($event)}}}),_c('img',{staticClass:"avatar",attrs:{"src":_vm.avatar},on:{"error":_vm.handleAvatarError}}),_c('div',{staticClass:"socila-check",class:[_vm.checkType.back]},[_c('i',{class:[_vm.checkType.icon],attrs:{"aria-hidden":"true"}})])]),_c('PopupInput',{staticClass:"cmt-popup cmt-author",attrs:{"popupStyle":"margin-left: -115px","popupText":_vm.configs.authorPopup || '输入QQ号将自动拉取昵称和头像 ♪(´▽｀)',"inputType":"text","placeholder":"* 昵称","id":"author","localStorageDataCacheKey":"qiushaocloud-halo-comment-author"},on:{"blurInput":_vm.pullInfo},model:{value:(_vm.comment.author),callback:function ($$v) {_vm.$set(_vm.comment, "author", $$v)},expression:"comment.author"}}),_c('PopupInput',{staticClass:"cmt-popup",attrs:{"popupStyle":"margin-left: -65px;","popupText":_vm.configs.emailPopup || '您的邮箱将收到回复通知 ๑乛◡乛๑',"inputType":"text","placeholder":"* 电子邮件","id":"email","localStorageDataCacheKey":"qiushaocloud-halo-comment-email"},on:{"blurInput":_vm.pullInfo},model:{value:(_vm.comment.email),callback:function ($$v) {_vm.$set(_vm.comment, "email", $$v)},expression:"comment.email"}}),_c('PopupInput',{staticClass:"cmt-popup",attrs:{"popupStyle":"margin-left: -55px;","popupText":_vm.configs.urlPopup || '请不要打小广告哦 (^し^)',"inputType":"text","placeholder":"个人站点","id":"url","localStorageDataCacheKey":"qiushaocloud-halo-comment-authorUrl"},model:{value:(_vm.comment.authorUrl),callback:function ($$v) {_vm.$set(_vm.comment, "authorUrl", $$v)},expression:"comment.authorUrl"}})],1),_c('ul',{staticClass:"comment-buttons"},[(_vm.comment.content)?_c('li',{staticClass:"middle",staticStyle:{"margin-right":"5px"}},[_c('a',{staticClass:"button-preview-edit",attrs:{"href":"javascript:;","rel":"nofollow noopener"},on:{"click":_vm.handlePreviewContent}},[_vm._v(_vm._s(_vm.previewMode ? "编辑" : "预览"))])]):_vm._e(),_c('li',{staticClass:"middle"},[_c('a',{staticClass:"button-submit",attrs:{"href":"javascript:;","tabindex":"5","rel":"nofollow noopener"},on:{"click":_vm.handleSubmitClick}},[_vm._v("提交")])])])],1)]):_vm._e()}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/CommentEditor.vue?vue&type=template&id=1e6c6ecc&
+// CONCATENATED MODULE: ./src/components/CommentEditor.vue?vue&type=template&id=266a154b&
 
 // EXTERNAL MODULE: external "Vue"
 var external_Vue_ = __webpack_require__("8bbf");
@@ -4153,12 +4166,12 @@ var api_comment = __webpack_require__("063c");
 var axios = __webpack_require__("bc3a");
 var axios_default = /*#__PURE__*/__webpack_require__.n(axios);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"93979ac4-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/PopupInput/index.vue?vue&type=template&id=2b8851d8&
-var PopupInputvue_type_template_id_2b8851d8_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"popup"},[_c('transition',{attrs:{"name":"fade"}},[_c('span',{directives:[{name:"show",rawName:"v-show",value:(_vm.isPopup),expression:"isPopup"}],staticClass:"popuptext",style:(_vm.popupStyle)},[_vm._v(" "+_vm._s(_vm.popupText)+" ")])]),_c('input',{attrs:{"type":_vm.inputType,"required":"required","aria-required":"true","placeholder":_vm.placeholder},domProps:{"value":_vm.value},on:{"focus":function($event){_vm.isPopup=true},"blur":_vm.inputBlur,"input":function($event){return _vm.$emit('input', $event.target.value)}}})],1)}
-var PopupInputvue_type_template_id_2b8851d8_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"93979ac4-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/PopupInput/index.vue?vue&type=template&id=04ba01fd&
+var PopupInputvue_type_template_id_04ba01fd_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"popup"},[_c('transition',{attrs:{"name":"fade"}},[_c('span',{directives:[{name:"show",rawName:"v-show",value:(_vm.isPopup),expression:"isPopup"}],staticClass:"popuptext",style:(_vm.popupStyle)},[_vm._v(" "+_vm._s(_vm.popupText)+" ")])]),_c('input',{attrs:{"type":_vm.inputType,"required":"required","aria-required":"true","placeholder":_vm.placeholder},domProps:{"value":_vm.value},on:{"focus":function($event){_vm.isPopup=true},"blur":_vm.inputBlur,"input":function($event){return _vm.$emit('input', $event.target.value)}}})],1)}
+var PopupInputvue_type_template_id_04ba01fd_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/PopupInput/index.vue?vue&type=template&id=2b8851d8&
+// CONCATENATED MODULE: ./src/components/PopupInput/index.vue?vue&type=template&id=04ba01fd&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/PopupInput/index.vue?vue&type=script&lang=js&
 //
@@ -4193,10 +4206,12 @@ var PopupInputvue_type_template_id_2b8851d8_staticRenderFns = []
       default: 'text'
     },
     value: String,
-    placeholder: String
+    placeholder: String,
+    localStorageDataCacheKey: String
   },
   methods: {
     inputBlur($event) {
+      if (this.localStorageDataCacheKey) localStorage.setItem(this.localStorageDataCacheKey, $event.target.value);
       this.isPopup = false;
       this.$emit('blurInput', $event.target.value);
     }
@@ -4222,8 +4237,8 @@ var PopupInputvue_type_template_id_2b8851d8_staticRenderFns = []
 
 var PopupInput_component = Object(componentNormalizer["a" /* default */])(
   components_PopupInputvue_type_script_lang_js_,
-  PopupInputvue_type_template_id_2b8851d8_render,
-  PopupInputvue_type_template_id_2b8851d8_staticRenderFns,
+  PopupInputvue_type_template_id_04ba01fd_render,
+  PopupInputvue_type_template_id_04ba01fd_staticRenderFns,
   false,
   null,
   null,
@@ -4515,6 +4530,24 @@ function loop() {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* eslint-disable no-unused-vars */
 
@@ -4662,6 +4695,32 @@ function loop() {
   },
 
   methods: {
+    handleAvatarUploadInputOpen() {
+      if (!this.configs.isAllowUploadAvatar) return;
+      this.$refs.commentAvatarUploadFileInputEle.dispatchEvent(new MouseEvent('click'));
+    },
+
+    handleAvatarUpload(event) {
+      if (!this.configs.isAllowUploadAvatar) return;
+      const file = event.target.files[0];
+      if (!file) return;
+      api_comment["a" /* default */].uploadAvatar(file).then(response => {
+        const resData = response.data;
+
+        if (resData.code !== 200) {
+          console.error('uploadAvatar failure, resData:', resData);
+          return;
+        }
+
+        console.info('uploadAvatar success, resData:', resData);
+        this.avatar = resData.data.url;
+        localStorage.setItem("qiushaocloud-halo-comment-avatar", this.avatar);
+        localStorage.setItem("qiushaocloud-halo-comment-avatar-key", this.comment.author + '###' + this.comment.email);
+      }).catch(error => {
+        console.error('uploadAvatar error:', error);
+      });
+    },
+
     updateAvatar() {
       var avatar = localStorage.getItem("qiushaocloud-halo-comment-avatar");
       this.avatar = avatar ? avatar : this.pullGravatarInfo(true);
@@ -4684,7 +4743,7 @@ function loop() {
       } // Submit the comment
 
 
-      if (!this.comment.avatar) this.comment.avatar = this.avatar;
+      this.comment.avatar = this.avatar;
       this.comment.postId = this.targetId;
 
       if (this.replyComment) {
@@ -4697,7 +4756,8 @@ function loop() {
         localStorage.setItem("qiushaocloud-halo-comment-author", this.comment.author);
         localStorage.setItem("qiushaocloud-halo-comment-email", this.comment.email);
         localStorage.setItem("qiushaocloud-halo-comment-authorUrl", this.comment.authorUrl);
-        localStorage.setItem("qiushaocloud-halo-comment-avatar", this.comment.avatar); // clear comment
+        localStorage.setItem("qiushaocloud-halo-comment-avatar", this.avatar);
+        localStorage.setItem("qiushaocloud-halo-comment-avatar-key", this.comment.author + '###' + this.comment.email); // clear comment
 
         this.comment.content = "";
         this.previewMode = false;
@@ -4905,8 +4965,17 @@ function loop() {
 
     pullInfo() {
       let author = this.comment.author;
+      let authorQQ = author;
+      const cacheQqStr = window.localStorage.getItem('qiushaocloud-halo-comment-qq');
+      const cacheQq = cacheQqStr ? JSON.parse(cacheQqStr) : undefined;
 
-      if (author.length != 0 && Object(util["e" /* isQQ */])(author)) {
+      if (authorQQ && cacheQq) {
+        if (this.comment.email === cacheQq.email && authorQQ === cacheQq.nickname) {
+          authorQQ = cacheQq.qq;
+        }
+      }
+
+      if (authorQQ && authorQQ.length != 0 && Object(util["e" /* isQQ */])(authorQQ)) {
         // 如果是QQ号，则拉取QQ头像
         this.pullQQInfo(() => {
           this.$tips("拉取QQ信息失败！尝试拉取Gravatar", 2000, this); // 如果QQ拉取失败，则尝试拉取Gravatar
@@ -4927,12 +4996,31 @@ function loop() {
     },
 
     pullQQInfo(errorQQCallback) {
-      let _self = this; // 拉取QQ昵称，头像等
+      let _self = this;
+
+      let authorQQ = _self.comment.author;
+      const cacheQqStr = window.localStorage.getItem('qiushaocloud-halo-comment-qq');
+      const cacheQq = cacheQqStr ? JSON.parse(cacheQqStr) : undefined;
+
+      if (authorQQ && cacheQq) {
+        if (_self.comment.email === cacheQq.email && authorQQ === cacheQq.nickname) {
+          if (Date.now() - cacheQq.saveTs < 60000) {
+            return new Promise(resolve => {
+              _self.comment.author = cacheQq.nickname;
+              _self.comment.email = cacheQq.email;
+              _self.avatar = cacheQq.avatar;
+              resolve();
+            });
+          }
+
+          authorQQ = cacheQq.qq;
+        }
+      } // 拉取QQ昵称，头像等
 
 
       axios_default.a.get("https://api.lixingyong.com/api/qq", {
         params: {
-          id: _self.comment.author
+          id: authorQQ
         }
       }).then(function (res) {
         let data = res.data;
@@ -4941,22 +5029,47 @@ function loop() {
           errorQQCallback();
         }
 
+        if (_self.comment.author === data.nickname && _self.comment.email === data.email && _self.avatar === data.avatar) {
+          return;
+        }
+
         _self.$tips("拉取QQ头像成功！", 2000, _self);
 
         _self.comment.author = data.nickname;
         _self.comment.email = data.email;
         _self.avatar = data.avatar;
         _self.lockPullAvatar = true;
+        _self.comment.avatar = _self.avatar;
+        localStorage.setItem("qiushaocloud-halo-comment-author", _self.comment.author);
+        localStorage.setItem("qiushaocloud-halo-comment-email", _self.comment.email);
+        localStorage.setItem("qiushaocloud-halo-comment-authorUrl", _self.comment.authorUrl);
+        localStorage.setItem("qiushaocloud-halo-comment-avatar", _self.avatar);
+        localStorage.setItem("qiushaocloud-halo-comment-avatar-key", _self.comment.author + '###' + _self.comment.email);
+        localStorage.setItem('qiushaocloud-halo-comment-qq', JSON.stringify({
+          qq: data.qq,
+          nickname: data.nickname,
+          email: data.email,
+          avatar: data.avatar,
+          saveTs: Date.now()
+        }));
       }).catch(() => {
         errorQQCallback();
       });
     },
 
     pullGravatarInfo(isDefault) {
+      // 由本地缓存的图片优先用本地缓存的
+      let cacheAvatar = localStorage.getItem("qiushaocloud-halo-comment-avatar");
+      const cacheAvatarKey = localStorage.getItem("qiushaocloud-halo-comment-avatar-key");
+
+      if (cacheAvatarKey !== this.comment.author + '###' + this.comment.email) {
+        cacheAvatar = undefined;
+      }
+
       const gravatarMd5 = `/${md5_default()(this.comment.email)}`; // !!优先从主题配置取，取不到才从后台配置取
 
       const gravatarSource = this.configs.gravatarSource || this.options.gravatar_source || this.configs.gravatarSourceDefault;
-      const avatar = gravatarSource + `${gravatarMd5}?s=256&d=` + this.options.comment_gravatar_default;
+      const avatar = cacheAvatar || gravatarSource + `${gravatarMd5}?s=256&d=` + this.options.comment_gravatar_default;
 
       if (!isDefault) {
         this.avatar = avatar;
@@ -6017,7 +6130,9 @@ var components = __webpack_require__("2af9");
   // 输入邮箱时的提示文案
   urlPopup: "请不要打小广告哦 (^し^)",
   // 输入网址时的提示文案
-  notComment: "还没有评论哦，快来抢占沙发 ♪(´▽｀)" // 无数据时展示的文案
+  notComment: "还没有评论哦，快来抢占沙发 ♪(´▽｀)",
+  // 无数据时展示的文案
+  isAllowUploadAvatar: true // 是否允许上传头像，因为使用的是「即库图床」上传的头像，头像会在该地址(https://img.78al.net/index/gallery.html)上被所有人看到
 
 });
 // CONCATENATED MODULE: ./src/config/default_option.js
