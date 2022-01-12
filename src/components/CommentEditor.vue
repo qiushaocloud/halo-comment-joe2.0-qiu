@@ -699,10 +699,8 @@ export default {
       if (!isDefault) {
         this.avatar = avatar;
 
-        if (cacheAvatar) {
-          localStorage.setItem("qiushaocloud-halo-comment-avatar", this.avatar);
-          localStorage.setItem("qiushaocloud-halo-comment-avatar-key", this.comment.author+'###'+this.comment.email);
-        }
+        localStorage.setItem("qiushaocloud-halo-comment-avatar", this.avatar);
+        localStorage.setItem("qiushaocloud-halo-comment-avatar-key", this.comment.author+'###'+this.comment.email);
       } else {
         return avatar;
       }
