@@ -17,6 +17,7 @@ export default {
       configs: {
         autoLoad: true,
         showUserAgent: true,
+        isAllowUploadAvatar: true,
         gravatarType: "mm",
         gravatarSource: "",
         loadingStyle: "default",
