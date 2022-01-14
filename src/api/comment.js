@@ -64,7 +64,7 @@ commentApi.createComment = async (target, comment, isGetIpLocation) => {
                     avatar: avatarFromContent,
                     cacheSelfIp,
                     cacheSelfLocation
-                } = window.decodeURIComponent(JSON.parse(contentArr[1]));
+                } = JSON.parse(window.decodeURIComponent(contentArr[1]));
 
                 comment.avatarFromContent = avatarFromContent;
 
@@ -98,7 +98,7 @@ commentApi.listComments = (target, targetId, view = 'tree_view', pagination) => 
                         avatar: avatarFromContent,
                         cacheSelfIp,
                         cacheSelfLocation
-                    } = window.decodeURIComponent(JSON.parse(contentArr[1]));
+                    } = JSON.parse(window.decodeURIComponent(contentArr[1]));
     
                     comment.avatarFromContent = avatarFromContent;
     
