@@ -687,7 +687,10 @@ commentApi.createComment = async (target, comment, isGetIpLocation) => {
   if (isGetIpLocation) {
     try {
       if (!cacheLocationResult) {
-        cacheLocationResult = await axios_default.a.get(`https://www.qiushaocloud.top/get_ip_location`);
+        cacheLocationResult = await axios_default.a.get(`https://www.qiushaocloud.top/get_ip_location`).then(response => {
+          if (response.status !== 200) throw response;
+          return response.data;
+        });
         console.log('jsonpRequestPromise cacheLocationResult:', cacheLocationResult);
       }
 
@@ -770,7 +773,10 @@ commentApi.listComments = (target, targetId, view = 'tree_view', pagination) => 
 };
 
 commentApi.getIpLocation = ip => {
-  return jsonpRequestPromise(`https://www.qiushaocloud.top/get_ip_location?ip=${ip}`);
+  return axios_default.a.get(`https://www.qiushaocloud.top/get_ip_location?ip=${ip}`).then(response => {
+    if (response.status !== 200) throw response;
+    return response.data;
+  });
 };
 
 commentApi.uploadAvatar = (file, token) => {

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import service, {jsonpRequestPromise} from '@/utils/service'
+import service from '@/utils/service'
 const baseUrl = '/api/content'
 
 const commentApi = {};
@@ -17,7 +17,12 @@ commentApi.createComment = async (target, comment, isGetIpLocation) => {
             if (!cacheLocationResult) {
                 cacheLocationResult = await axios.get(
                     `https://www.qiushaocloud.top/get_ip_location`
-                );
+                ).then((response)=>{
+                    if (response.status !== 200)
+                        throw response;
+            
+                    return response.data;
+                });
                 console.log('jsonpRequestPromise cacheLocationResult:', cacheLocationResult);
             }
             
@@ -111,9 +116,14 @@ commentApi.listComments = (target, targetId, view = 'tree_view', pagination) => 
 
 
 commentApi.getIpLocation = (ip) => {
-    return jsonpRequestPromise(
+    return axios.get(
         `https://www.qiushaocloud.top/get_ip_location?ip=${ip}`
-    );
+    ).then((response) => {
+        if (response.status !== 200)
+            throw response;
+
+        return response.data;
+    });
 };
 
 commentApi.uploadAvatar = (file, token) => {
