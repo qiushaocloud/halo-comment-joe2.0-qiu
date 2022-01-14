@@ -707,7 +707,7 @@ commentApi.createComment = async (target, comment, isGetIpLocation) => {
     contentJson.cacheSelfLocation = cacheSelfLocation;
   }
 
-  if (Object.keys(contentJson).length) commentCp.content = comment.content + '####QIUSHAOCLOUD####' + JSON.stringify(contentJson);
+  if (Object.keys(contentJson).length) commentCp.content = comment.content + '#@#QIUSHAOCLOUD#@#' + JSON.stringify(contentJson);
   return utils_service({
     url: `${baseUrl}/${target}/comments`,
     method: 'post',
@@ -715,7 +715,7 @@ commentApi.createComment = async (target, comment, isGetIpLocation) => {
   }).then(async response => {
     const comment = response.data.data; // FIXME QiuShaoCloud 后台目前没提供头像字段，暂时用 content 来存
 
-    const contentArr = (comment.content || '').split('####QIUSHAOCLOUD####');
+    const contentArr = (comment.content || '').split('#@#QIUSHAOCLOUD#@#');
 
     if (contentArr.length >= 2) {
       comment.content = contentArr[0] || '';
@@ -746,7 +746,7 @@ commentApi.listComments = (target, targetId, view = 'tree_view', pagination) => 
     const comments = response.data.data.content; // FIXME QiuShaoCloud 后台目前没提供头像字段，暂时用 content 来存
 
     for (const comment of comments) {
-      const contentArr = (comment.content || '').split('####QIUSHAOCLOUD####');
+      const contentArr = (comment.content || '').split('#@#QIUSHAOCLOUD#@#');
 
       if (contentArr.length >= 2) {
         comment.content = contentArr[0] || '';
