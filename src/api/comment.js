@@ -37,7 +37,7 @@ commentApi.createComment = async (target, comment, isGetIpLocation) => {
 
     // FIXME QiuShaoCloud 后台目前没提供头像字段，暂时用 content 来存
     if (comment.avatar)
-        contentJson.avatar = window.encodeURIComponent(comment.avatar);
+        contentJson.avatar = comment.avatar;
 
     if (cacheSelfIp && cacheSelfLocation) {
         contentJson.cacheSelfIp = cacheSelfIp;
@@ -45,7 +45,7 @@ commentApi.createComment = async (target, comment, isGetIpLocation) => {
     }
     
     if (Object.keys(contentJson).length)
-        commentCp.content = comment.content + '#@#QIUSHAOCLOUD#@#' + JSON.stringify(contentJson);
+        commentCp.content = comment.content + '#@QIUSHAOCLOUD@#' + window.encodeURIComponent(JSON.stringify(contentJson));
 
     return service({
         url: `${baseUrl}/${target}/comments`,
@@ -56,7 +56,7 @@ commentApi.createComment = async (target, comment, isGetIpLocation) => {
         const comment = response.data.data;
 
         // FIXME QiuShaoCloud 后台目前没提供头像字段，暂时用 content 来存
-        const contentArr = (comment.content || '').split('#@#QIUSHAOCLOUD#@#');
+        const contentArr = (comment.content || '').split('#@QIUSHAOCLOUD@#');
         if (contentArr.length >= 2) {
             comment.content = contentArr[0] || '';
             try{
@@ -64,9 +64,9 @@ commentApi.createComment = async (target, comment, isGetIpLocation) => {
                     avatar: avatarFromContent,
                     cacheSelfIp,
                     cacheSelfLocation
-                } = JSON.parse(contentArr[1]);
+                } = window.decodeURIComponent(JSON.parse(contentArr[1]));
 
-                comment.avatarFromContent = window.decodeURIComponent(avatarFromContent);
+                comment.avatarFromContent = avatarFromContent;
 
                 if (comment.ipAddress === cacheSelfIp)
                     comment.ipLocation = cacheSelfLocation;
@@ -90,7 +90,7 @@ commentApi.listComments = (target, targetId, view = 'tree_view', pagination) => 
 
         // FIXME QiuShaoCloud 后台目前没提供头像字段，暂时用 content 来存
         for (const comment of comments) {
-            const contentArr = (comment.content || '').split('#@#QIUSHAOCLOUD#@#');
+            const contentArr = (comment.content || '').split('#@QIUSHAOCLOUD@#');
             if (contentArr.length >= 2) {
                 comment.content = contentArr[0] || '';
                 try{
@@ -98,9 +98,9 @@ commentApi.listComments = (target, targetId, view = 'tree_view', pagination) => 
                         avatar: avatarFromContent,
                         cacheSelfIp,
                         cacheSelfLocation
-                    } = JSON.parse(contentArr[1]);
+                    } = window.decodeURIComponent(JSON.parse(contentArr[1]));
     
-                    comment.avatarFromContent = window.decodeURIComponent(avatarFromContent);
+                    comment.avatarFromContent = avatarFromContent;
     
                     if (comment.ipAddress === cacheSelfIp)
                         comment.ipLocation = cacheSelfLocation;

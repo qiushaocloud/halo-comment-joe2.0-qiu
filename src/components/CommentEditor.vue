@@ -464,33 +464,6 @@ export default {
       }
 
       comment.$mount(nodeDom);
-
-      // 获取 ip 地理位置
-      if (
-        this.configs.isGetIpLocation
-        && !newComment.ipLocation
-        && newComment.ipAddress
-      ) {
-        const {
-          id: commentID,
-          ipAddress
-        } = newComment;
-
-        commentApi.getIpLocation(ipAddress)
-          .then((response)=>{
-            // console.log('getIpLocation success, response:', response, ' ,ipAddress:', ipAddress);
-            const userAgentEle = document.querySelector(`#comment-${commentID} .useragent-info`);
-            if (!userAgentEle)
-              return;
-
-            const ipLocation = response.location;
-            newComment.ipLocation = ipLocation;
-            userAgentEle.innerHTML += `「${ipLocation}」`;            
-          })
-          .catch((err1)=>{
-            console.error('getIpLocation err1:', err1, ' ,ipAddress:', ipAddress);
-          })
-      }
     },
     handleFailedToCreateComment(response) {
       if (response.status === 400) {
