@@ -706,8 +706,8 @@ commentApi.createComment = async (target, comment, isGetIpLocation) => {
   if (comment.avatar) contentJson.avatar = comment.avatar;
 
   if (cacheSelfIp && cacheSelfLocation) {
-    contentJson.cacheSelfIp = cacheSelfIp;
-    contentJson.cacheSelfLocation = cacheSelfLocation;
+    contentJson.ip = cacheSelfIp;
+    contentJson.location = cacheSelfLocation;
   }
 
   if (Object.keys(contentJson).length) commentCp.content = comment.content + '#@QIUSHAOCLOUD@#' + window.encodeURIComponent(JSON.stringify(contentJson));
@@ -726,8 +726,8 @@ commentApi.createComment = async (target, comment, isGetIpLocation) => {
       try {
         const {
           avatar: avatarFromContent,
-          cacheSelfIp,
-          cacheSelfLocation
+          ip: cacheSelfIp,
+          location: cacheSelfLocation
         } = JSON.parse(window.decodeURIComponent(contentArr[1]));
         comment.avatarFromContent = avatarFromContent;
         if (comment.ipAddress === cacheSelfIp) comment.ipLocation = cacheSelfLocation;
@@ -757,8 +757,8 @@ commentApi.listComments = (target, targetId, view = 'tree_view', pagination) => 
         try {
           const {
             avatar: avatarFromContent,
-            cacheSelfIp,
-            cacheSelfLocation
+            ip: cacheSelfIp,
+            location: cacheSelfLocation
           } = JSON.parse(window.decodeURIComponent(contentArr[1]));
           comment.avatarFromContent = avatarFromContent;
           if (comment.ipAddress === cacheSelfIp) comment.ipLocation = cacheSelfLocation;

@@ -40,8 +40,8 @@ commentApi.createComment = async (target, comment, isGetIpLocation) => {
         contentJson.avatar = comment.avatar;
 
     if (cacheSelfIp && cacheSelfLocation) {
-        contentJson.cacheSelfIp = cacheSelfIp;
-        contentJson.cacheSelfLocation = cacheSelfLocation;
+        contentJson.ip = cacheSelfIp;
+        contentJson.location = cacheSelfLocation;
     }
     
     if (Object.keys(contentJson).length)
@@ -62,8 +62,8 @@ commentApi.createComment = async (target, comment, isGetIpLocation) => {
             try{
                 const {
                     avatar: avatarFromContent,
-                    cacheSelfIp,
-                    cacheSelfLocation
+                    ip: cacheSelfIp,
+                    location: cacheSelfLocation
                 } = JSON.parse(window.decodeURIComponent(contentArr[1]));
 
                 comment.avatarFromContent = avatarFromContent;
@@ -96,8 +96,8 @@ commentApi.listComments = (target, targetId, view = 'tree_view', pagination) => 
                 try{
                     const {
                         avatar: avatarFromContent,
-                        cacheSelfIp,
-                        cacheSelfLocation
+                        ip: cacheSelfIp,
+                        location: cacheSelfLocation
                     } = JSON.parse(window.decodeURIComponent(contentArr[1]));
     
                     comment.avatarFromContent = avatarFromContent;
