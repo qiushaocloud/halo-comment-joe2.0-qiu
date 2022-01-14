@@ -56,4 +56,77 @@ service.interceptors.response.use(
   }
 )
 
-export default service
+export default service;
+
+let jsonSeq = 0;
+
+export const jsonpRequest = (
+  url,
+  params = {},
+  callbackKey = 'callback',
+  onCallback,
+  onFailure
+) => {
+  const jsonpReqId = 'jsonpCallback_'+(++jsonSeq);
+
+  let timer = setTimeout(() => {
+    timer = undefined;
+    window[jsonpReqId] = undefined;
+
+    const scriptEle = document.getElementById(jsonpReqId);
+    if (scriptEle && scriptEle.parentNode) {
+      scriptEle.parentNode.removeChild(scriptEle);
+    }
+
+    onFailure && onFailure('jsonp request timeout');
+    onCallback = undefined;
+    onFailure = undefined;
+  }, 60000);
+
+  window[jsonpReqId] = (response) => {
+    timer && clearTimeout(timer);
+    timer = undefined;
+    window[jsonpReqId] = undefined;
+
+    const scriptEle = document.getElementById(jsonpReqId);
+    if (scriptEle && scriptEle.parentNode) {
+      scriptEle.parentNode.removeChild(scriptEle);
+    }
+
+    onCallback && onCallback(response);
+    onCallback = undefined;
+    onFailure = undefined;
+  };
+
+  params[callbackKey] = jsonpReqId;
+
+  const paramKeys = Object.keys(params);
+  const paramString = paramKeys
+    .map(key => `${key}=${params[key]}`)
+    .join('&');
+
+  const script = document.createElement('script');
+  script.setAttribute('src', `${url}${url.indexOf('?')?'&':'?'}${paramString}`);
+  script.id = jsonpReqId;
+  document.body.appendChild(script);
+};
+
+export const jsonpRequestPromise = (
+  url,
+  params = {},
+  callbackKey = 'callback'
+) => {
+  return new Promise((resolve, reject) => {
+    jsonpRequest(
+      url,
+      params,
+      callbackKey,
+      (response) => {
+        resolve(response);
+      },
+      (err) => {
+        reject(err);
+      }
+    );
+  });
+};

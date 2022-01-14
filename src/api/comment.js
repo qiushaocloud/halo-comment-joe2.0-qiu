@@ -1,29 +1,73 @@
 import axios from 'axios'
-import service from '@/utils/service'
+import service, {jsonpRequestPromise} from '@/utils/service'
 const baseUrl = '/api/content'
 
-const commentApi = {}
+const commentApi = {};
 
-commentApi.createComment = (target, comment) => {
+let cacheLocationResult;
+
+commentApi.createComment = async (target, comment, isGetIpLocation) => {
     const commentCp = Object.assign({}, comment);
+
+    let cacheSelfIp = undefined;
+    let cacheSelfLocation = undefined;
+
+    if (isGetIpLocation) {
+        try{
+            if (!cacheLocationResult) {
+                cacheLocationResult = await axios.get(
+                    `https://www.qiushaocloud.top/get_ip_location`
+                );
+                console.log('jsonpRequestPromise cacheLocationResult:', cacheLocationResult);
+            }
+            
+            cacheSelfIp = cacheLocationResult.ip;
+            cacheSelfLocation = cacheLocationResult.location;
+        }catch (err){
+            console.error('createComment getIpLocation err:', err, commentCp);
+        }
+    }
+
+    const contentJson = {};
 
     // FIXME QiuShaoCloud 后台目前没提供头像字段，暂时用 content 来存
     if (comment.avatar)
-        commentCp.content = comment.content+'###QIUSHAOCLOUD###'+window.encodeURIComponent(comment.avatar);
+        contentJson.avatar = window.encodeURIComponent(comment.avatar);
+
+    if (cacheSelfIp && cacheSelfLocation) {
+        contentJson.cacheSelfIp = cacheSelfIp;
+        contentJson.cacheSelfLocation = cacheSelfLocation;
+    }
+    
+    if (Object.keys(contentJson).length)
+        commentCp.content = comment.content + '#@#QIUSHAOCLOUD#@#' + JSON.stringify(contentJson);
 
     return service({
         url: `${baseUrl}/${target}/comments`,
         method: 'post',
         data: commentCp
     })
-    .then((response) => {
+    .then(async (response) => {
         const comment = response.data.data;
 
         // FIXME QiuShaoCloud 后台目前没提供头像字段，暂时用 content 来存
-        const contentArr = (comment.content || '').split('###QIUSHAOCLOUD###');
+        const contentArr = (comment.content || '').split('#@#QIUSHAOCLOUD#@#');
         if (contentArr.length >= 2) {
             comment.content = contentArr[0] || '';
-            comment.avatarFromContent = window.decodeURIComponent(contentArr[1]);
+            try{
+                const {
+                    avatar: avatarFromContent,
+                    cacheSelfIp,
+                    cacheSelfLocation
+                } = JSON.parse(contentArr[1]);
+
+                comment.avatarFromContent = window.decodeURIComponent(avatarFromContent);
+
+                if (comment.ipAddress === cacheSelfIp)
+                    comment.ipLocation = cacheSelfLocation;
+            }catch(err){
+                console.error('JSON.parse catch err:', err, contentArr);
+            }
         }
 
         return response;
@@ -41,16 +85,36 @@ commentApi.listComments = (target, targetId, view = 'tree_view', pagination) => 
 
         // FIXME QiuShaoCloud 后台目前没提供头像字段，暂时用 content 来存
         for (const comment of comments) {
-            const contentArr = (comment.content || '').split('###QIUSHAOCLOUD###');
+            const contentArr = (comment.content || '').split('#@#QIUSHAOCLOUD#@#');
             if (contentArr.length >= 2) {
                 comment.content = contentArr[0] || '';
-                comment.avatarFromContent = window.decodeURIComponent(contentArr[1]);
+                try{
+                    const {
+                        avatar: avatarFromContent,
+                        cacheSelfIp,
+                        cacheSelfLocation
+                    } = JSON.parse(contentArr[1]);
+    
+                    comment.avatarFromContent = window.decodeURIComponent(avatarFromContent);
+    
+                    if (comment.ipAddress === cacheSelfIp)
+                        comment.ipLocation = cacheSelfLocation;
+                }catch(err){
+                    console.error('JSON.parse catch err:', err);
+                }
             }
         }
 
         return response;
     });
 }
+
+
+commentApi.getIpLocation = (ip) => {
+    return jsonpRequestPromise(
+        `https://www.qiushaocloud.top/get_ip_location?ip=${ip}`
+    );
+};
 
 commentApi.uploadAvatar = (file, token) => {
     const param = new FormData();

@@ -354,7 +354,7 @@ export default {
         this.comment.parentId = this.replyComment.id;
       }
       commentApi
-        .createComment(this.target, this.comment)
+        .createComment(this.target, this.comment, this.configs.isGetIpLocation)
         .then((response) => {
           // Store comment author, email, authorUrl
           localStorage.setItem("qiushaocloud-halo-comment-author", this.comment.author);
@@ -429,6 +429,7 @@ export default {
           });
         },
       });
+
       let dom;
       if (newComment.parentId == 0) {
         if (elDom.getElementsByClassName("commentwrap").length > 0) {
@@ -454,6 +455,7 @@ export default {
           parentDom.appendChild(dom);
         }
       }
+
       let nodeDom = document.createElement("div");
       if (dom.children[0]) {
         dom.insertBefore(nodeDom, dom.children[0]);
@@ -462,6 +464,33 @@ export default {
       }
 
       comment.$mount(nodeDom);
+
+      // 获取 ip 地理位置
+      if (
+        this.configs.isGetIpLocation
+        && !newComment.ipLocation
+        && newComment.ipAddress
+      ) {
+        const {
+          id: commentID,
+          ipAddress
+        } = newComment;
+
+        commentApi.getIpLocation(ipAddress)
+          .then((response)=>{
+            // console.log('getIpLocation success, response:', response, ' ,ipAddress:', ipAddress);
+            const userAgentEle = document.querySelector(`#comment-${commentID} .useragent-info`);
+            if (!userAgentEle)
+              return;
+
+            const ipLocation = response.location;
+            newComment.ipLocation = ipLocation;
+            userAgentEle.innerHTML += `「${ipLocation}」`;            
+          })
+          .catch((err1)=>{
+            console.error('getIpLocation err1:', err1, ' ,ipAddress:', ipAddress);
+          })
+      }
     },
     handleFailedToCreateComment(response) {
       if (response.status === 400) {

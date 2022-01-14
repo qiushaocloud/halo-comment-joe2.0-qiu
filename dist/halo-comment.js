@@ -623,28 +623,114 @@ service.interceptors.response.use(response => {
   return Promise.reject(error);
 });
 /* harmony default export */ var utils_service = (service);
+let jsonSeq = 0;
+const jsonpRequest = (url, params = {}, callbackKey = 'callback', onCallback, onFailure) => {
+  const jsonpReqId = 'jsonpCallback_' + ++jsonSeq;
+  let timer = setTimeout(() => {
+    timer = undefined;
+    window[jsonpReqId] = undefined;
+    const scriptEle = document.getElementById(jsonpReqId);
+
+    if (scriptEle && scriptEle.parentNode) {
+      scriptEle.parentNode.removeChild(scriptEle);
+    }
+
+    onFailure && onFailure('jsonp request timeout');
+    onCallback = undefined;
+    onFailure = undefined;
+  }, 60000);
+
+  window[jsonpReqId] = response => {
+    timer && clearTimeout(timer);
+    timer = undefined;
+    window[jsonpReqId] = undefined;
+    const scriptEle = document.getElementById(jsonpReqId);
+
+    if (scriptEle && scriptEle.parentNode) {
+      scriptEle.parentNode.removeChild(scriptEle);
+    }
+
+    onCallback && onCallback(response);
+    onCallback = undefined;
+    onFailure = undefined;
+  };
+
+  params[callbackKey] = jsonpReqId;
+  const paramKeys = Object.keys(params);
+  const paramString = paramKeys.map(key => `${key}=${params[key]}`).join('&');
+  const script = document.createElement('script');
+  script.setAttribute('src', `${url}${url.indexOf('?') ? '&' : '?'}${paramString}`);
+  script.id = jsonpReqId;
+  document.body.appendChild(script);
+};
+const jsonpRequestPromise = (url, params = {}, callbackKey = 'callback') => {
+  return new Promise((resolve, reject) => {
+    jsonpRequest(url, params, callbackKey, response => {
+      resolve(response);
+    }, err => {
+      reject(err);
+    });
+  });
+};
 // CONCATENATED MODULE: ./src/api/comment.js
 
 
 const baseUrl = '/api/content';
 const commentApi = {};
+let cacheLocationResult;
 
-commentApi.createComment = (target, comment) => {
-  const commentCp = Object.assign({}, comment); // FIXME QiuShaoCloud 后台目前没提供头像字段，暂时用 content 来存
+commentApi.createComment = async (target, comment, isGetIpLocation) => {
+  const commentCp = Object.assign({}, comment);
+  let cacheSelfIp = undefined;
+  let cacheSelfLocation = undefined;
 
-  if (comment.avatar) commentCp.content = comment.content + '###QIUSHAOCLOUD###' + window.encodeURIComponent(comment.avatar);
+  if (isGetIpLocation) {
+    try {
+      if (!cacheLocationResult) {
+        cacheLocationResult = await axios_default.a.get(`https://www.qiushaocloud.top/get_ip_location`);
+        console.log('jsonpRequestPromise cacheLocationResult:', cacheLocationResult);
+      }
+
+      cacheSelfIp = cacheLocationResult.ip;
+      cacheSelfLocation = cacheLocationResult.location;
+    } catch (err) {
+      console.error('createComment getIpLocation err:', err, commentCp);
+    }
+  }
+
+  const contentJson = {}; // FIXME QiuShaoCloud 后台目前没提供头像字段，暂时用 content 来存
+
+  if (comment.avatar) contentJson.avatar = window.encodeURIComponent(comment.avatar);
+
+  if (cacheSelfIp && cacheSelfLocation) {
+    contentJson.cacheSelfIp = cacheSelfIp;
+    contentJson.cacheSelfLocation = cacheSelfLocation;
+  }
+
+  if (Object.keys(contentJson).length) commentCp.content = comment.content + '####QIUSHAOCLOUD####' + JSON.stringify(contentJson);
   return utils_service({
     url: `${baseUrl}/${target}/comments`,
     method: 'post',
     data: commentCp
-  }).then(response => {
+  }).then(async response => {
     const comment = response.data.data; // FIXME QiuShaoCloud 后台目前没提供头像字段，暂时用 content 来存
 
-    const contentArr = (comment.content || '').split('###QIUSHAOCLOUD###');
+    const contentArr = (comment.content || '').split('####QIUSHAOCLOUD####');
 
     if (contentArr.length >= 2) {
       comment.content = contentArr[0] || '';
-      comment.avatarFromContent = window.decodeURIComponent(contentArr[1]);
+
+      try {
+        const {
+          avatar: avatarFromContent,
+          cacheSelfIp,
+          cacheSelfLocation
+        } = JSON.parse(contentArr[1]);
+        comment.avatarFromContent = window.decodeURIComponent(avatarFromContent);
+        if (comment.ipAddress === cacheSelfIp) comment.ipLocation = cacheSelfLocation;
+      } catch (err) {
+        console.error('JSON.parse catch err:', err, contentArr);
+      }
     }
 
     return response;
@@ -660,16 +746,31 @@ commentApi.listComments = (target, targetId, view = 'tree_view', pagination) => 
     const comments = response.data.data.content; // FIXME QiuShaoCloud 后台目前没提供头像字段，暂时用 content 来存
 
     for (const comment of comments) {
-      const contentArr = (comment.content || '').split('###QIUSHAOCLOUD###');
+      const contentArr = (comment.content || '').split('####QIUSHAOCLOUD####');
 
       if (contentArr.length >= 2) {
         comment.content = contentArr[0] || '';
-        comment.avatarFromContent = window.decodeURIComponent(contentArr[1]);
+
+        try {
+          const {
+            avatar: avatarFromContent,
+            cacheSelfIp,
+            cacheSelfLocation
+          } = JSON.parse(contentArr[1]);
+          comment.avatarFromContent = window.decodeURIComponent(avatarFromContent);
+          if (comment.ipAddress === cacheSelfIp) comment.ipLocation = cacheSelfLocation;
+        } catch (err) {
+          console.error('JSON.parse catch err:', err);
+        }
       }
     }
 
     return response;
   });
+};
+
+commentApi.getIpLocation = ip => {
+  return jsonpRequestPromise(`https://www.qiushaocloud.top/get_ip_location?ip=${ip}`);
 };
 
 commentApi.uploadAvatar = (file, token) => {
@@ -3667,12 +3768,12 @@ if ($defineProperty) {
 
 "use strict";
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"93979ac4-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CommentEditor.vue?vue&type=template&id=0fed042b&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"93979ac4-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CommentEditor.vue?vue&type=template&id=1767559c&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.isCurrReply)?_c('section',{ref:"editor",staticClass:"comment-editor",attrs:{"id":_vm.respondId,"role":"form"}},[(_vm.isReply)?_c('h3',{staticClass:"comment-reply-title",attrs:{"id":"reply-title"}},[_c('small',[_c('a',{staticClass:"cancel-comment-reply-link",attrs:{"href":"javascript:;"},on:{"click":_vm.cancelReply}},[_vm._v("取消回复")])])]):_vm._e(),_c('form',{staticClass:"comment-form"},[(!_vm.previewMode)?_c('div',{staticClass:"comment-textarea"},[_c('textarea',{directives:[{name:"model",rawName:"v-model",value:(_vm.comment.content),expression:"comment.content"}],staticClass:"commentbody",attrs:{"required":"required","aria-required":"true","tabindex":"4","placeholder":_vm.configs.aWord || '欢迎您，请点击此处，动动您的小手指，留下您的👣  ...'},domProps:{"value":(_vm.comment.content)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.comment, "content", $event.target.value)}}}),_c('label',{staticClass:"input-label"},[_vm._v(_vm._s(_vm.configs.aWord || "欢迎您，请点击此处，动动您的小手指，留下您的👣 ..."))])]):_c('div',{staticClass:"comment-preview markdown-body",domProps:{"innerHTML":_vm._s(_vm.renderedContent)}}),_c('div',{attrs:{"id":"upload-img-show"}}),_c('p',{staticClass:"no-select",attrs:{"id":"emotion-toggle"}},[_c('span',{on:{"click":_vm.handleToggleDialogEmoji}},[_vm._v(_vm._s(!_vm.emojiDialogVisible ? "戳这里哦，宝宝给您表演表情包 OωO" : "喜欢宝宝的表演吧 ヾ(≧∇≦*)ゝ"))])]),_c('transition',{attrs:{"name":"emoji-fade"}},[(_vm.emojiDialogVisible)?_c('VEmojiPicker',{attrs:{"pack":_vm.emojiPack},on:{"select":_vm.handleSelectEmoji}}):_vm._e()],1),_c('div',{staticClass:"author-info"},[_c('div',{staticClass:"commentator",staticStyle:{"pointer-events":"initial"},on:{"click":_vm.handleAvatarUploadInputOpen}},[_c('input',{ref:"commentAvatarUploadFileInputEle",staticStyle:{"display":"none"},attrs:{"type":"file","accept":"image/*"},on:{"change":function($event){return _vm.handleAvatarUpload($event)}}}),_c('img',{staticClass:"avatar",attrs:{"src":_vm.avatar},on:{"error":_vm.handleAvatarError}}),_c('div',{staticClass:"socila-check",class:[_vm.checkType.back]},[_c('i',{class:[_vm.checkType.icon],attrs:{"aria-hidden":"true"}})])]),_c('PopupInput',{staticClass:"cmt-popup cmt-author",attrs:{"popupStyle":"margin-left: -115px","popupText":_vm.configs.authorPopup || '输入QQ号将自动拉取昵称和头像 ♪(´▽｀)',"inputType":"text","placeholder":"* 昵称","id":"author","localStorageDataCacheKey":"qiushaocloud-halo-comment-author"},on:{"blurInput":_vm.pullInfo},model:{value:(_vm.comment.author),callback:function ($$v) {_vm.$set(_vm.comment, "author", $$v)},expression:"comment.author"}}),_c('PopupInput',{staticClass:"cmt-popup",attrs:{"popupStyle":"margin-left: -65px;","popupText":_vm.configs.emailPopup || '您的邮箱将收到回复通知 ๑乛◡乛๑',"inputType":"text","placeholder":"* 电子邮件","id":"email","localStorageDataCacheKey":"qiushaocloud-halo-comment-email"},on:{"blurInput":_vm.pullInfo},model:{value:(_vm.comment.email),callback:function ($$v) {_vm.$set(_vm.comment, "email", $$v)},expression:"comment.email"}}),_c('PopupInput',{staticClass:"cmt-popup",attrs:{"popupStyle":"margin-left: -55px;","popupText":_vm.configs.urlPopup || '请不要打小广告哦 (^し^)',"inputType":"text","placeholder":"个人站点","id":"url","localStorageDataCacheKey":"qiushaocloud-halo-comment-authorUrl"},model:{value:(_vm.comment.authorUrl),callback:function ($$v) {_vm.$set(_vm.comment, "authorUrl", $$v)},expression:"comment.authorUrl"}})],1),_c('ul',{staticClass:"comment-buttons"},[(_vm.comment.content)?_c('li',{staticClass:"middle",staticStyle:{"margin-right":"5px"}},[_c('a',{staticClass:"button-preview-edit",attrs:{"href":"javascript:;","rel":"nofollow noopener"},on:{"click":_vm.handlePreviewContent}},[_vm._v(_vm._s(_vm.previewMode ? "编辑" : "预览"))])]):_vm._e(),_c('li',{staticClass:"middle"},[_c('a',{staticClass:"button-submit",attrs:{"href":"javascript:;","tabindex":"5","rel":"nofollow noopener"},on:{"click":_vm.handleSubmitClick}},[_vm._v("提交")])])])],1)]):_vm._e()}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/CommentEditor.vue?vue&type=template&id=0fed042b&
+// CONCATENATED MODULE: ./src/components/CommentEditor.vue?vue&type=template&id=1767559c&
 
 // EXTERNAL MODULE: external "Vue"
 var external_Vue_ = __webpack_require__("8bbf");
@@ -4753,7 +4854,7 @@ function loop() {
         this.comment.parentId = this.replyComment.id;
       }
 
-      api_comment["a" /* default */].createComment(this.target, this.comment).then(response => {
+      api_comment["a" /* default */].createComment(this.target, this.comment, this.configs.isGetIpLocation).then(response => {
         // Store comment author, email, authorUrl
         localStorage.setItem("qiushaocloud-halo-comment-author", this.comment.author);
         localStorage.setItem("qiushaocloud-halo-comment-email", this.comment.email);
@@ -4859,7 +4960,24 @@ function loop() {
         dom.appendChild(nodeDom);
       }
 
-      comment.$mount(nodeDom);
+      comment.$mount(nodeDom); // 获取 ip 地理位置
+
+      if (this.configs.isGetIpLocation && !newComment.ipLocation && newComment.ipAddress) {
+        const {
+          id: commentID,
+          ipAddress
+        } = newComment;
+        api_comment["a" /* default */].getIpLocation(ipAddress).then(response => {
+          // console.log('getIpLocation success, response:', response, ' ,ipAddress:', ipAddress);
+          const userAgentEle = document.querySelector(`#comment-${commentID} .useragent-info`);
+          if (!userAgentEle) return;
+          const ipLocation = response.location;
+          newComment.ipLocation = ipLocation;
+          userAgentEle.innerHTML += `「${ipLocation}」`;
+        }).catch(err1 => {
+          console.error('getIpLocation err1:', err1, ' ,ipAddress:', ipAddress);
+        });
+      }
     },
 
     handleFailedToCreateComment(response) {
@@ -6136,7 +6254,9 @@ var components = __webpack_require__("2af9");
   // 输入网址时的提示文案
   notComment: "还没有评论哦，快来抢占沙发 ♪(´▽｀)",
   // 无数据时展示的文案
-  isAllowUploadAvatar: true // 是否允许上传头像，因为使用的是「即库图床」上传的头像，头像会在该地址(https://img.78al.net/index/gallery.html)上被所有人看到
+  isAllowUploadAvatar: true,
+  // 是否允许上传头像，因为使用的是「即库图床」上传的头像，头像会在该地址(https://img.78al.net/index/gallery.html)上被所有人看到
+  isGetIpLocation: true // 是否获取评论者的地理位置
 
 });
 // CONCATENATED MODULE: ./src/config/default_option.js
@@ -14910,12 +15030,12 @@ module.exports = function (key) {
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"93979ac4-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CommentNode.vue?vue&type=template&id=5a6f1402&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"93979ac4-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CommentNode.vue?vue&type=template&id=657a54c2&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"comment-wrp"},[_c('li',{staticClass:"comment",class:_vm.commentClass,attrs:{"id":'comment-' + _vm.comment.id,"itemtype":"http://schema.org/Comment","itemprop":"comment"}},[_c('div',{staticClass:"contents"},[_c('div',{staticClass:"main shadow"},[_c('div',{staticClass:"profile"},[_c('a',{attrs:{"href":_vm.comment.authorUrl,"rel":"nofollow noopener noreferrer","target":"_blank"}},[_c('img',{directives:[{name:"lazy",rawName:"v-lazy",value:(_vm.comment.isAdmin ? _vm.options.blog_logo : _vm.avatar),expression:"comment.isAdmin ? options.blog_logo : avatar"}],staticClass:"avatar",attrs:{"alt":_vm.comment.author,"height":"80","width":"80"},on:{"error":_vm.handleAvatarError}})])]),_c('div',{staticClass:"commentinfo"},[_c('section',{staticClass:"commeta"},[_c('div',{staticClass:"left"},[_c('h4',{staticClass:"author"},[_c('a',{attrs:{"href":_vm.comment.authorUrl,"rel":"nofollow noopener noreferrer","target":"_blank"}},[_c('img',{directives:[{name:"lazy",rawName:"v-lazy",value:(_vm.comment.isAdmin ? _vm.options.blog_logo : _vm.avatar),expression:"comment.isAdmin ? options.blog_logo : avatar"}],staticClass:"avatar",attrs:{"alt":_vm.comment.author,"height":"24","width":"24"},on:{"error":_vm.handleAvatarError}}),(_vm.comment.isAdmin)?_c('span',{staticClass:"bb-comment isauthor",attrs:{"title":"博主"}},[_vm._v("博主")]):_vm._e(),_vm._v(" "+_vm._s(_vm.comment.author)+" ")])])]),_c('a',{staticClass:"comment-reply-link",style:(_vm.editing ? 'display:block;' : ''),attrs:{"href":"javascript:;"},on:{"click":_vm.handleReplyClick}},[_vm._v("回复")]),_c('div',{staticClass:"right"},[_c('div',{staticClass:"info"},[_c('time',{staticClass:"comment-time",attrs:{"itemprop":"datePublished","datetime":_vm.comment.createTime}},[_vm._v("发布于 "+_vm._s(_vm.createTimeAgo)+" ")]),(_vm.configs.showUserAgent)?_c('span',{staticClass:"useragent-info",domProps:{"innerHTML":_vm._s(_vm.compileUserAgent)}}):_vm._e()])])])]),_c('div',{staticClass:"body markdown-body"},[_c('div',{staticClass:"markdown-content",domProps:{"innerHTML":_vm._s(_vm.compileContent)}})])])]),(_vm.comment.children)?_c('ul',{staticClass:"children"},[_vm._l((_vm.comment.children),function(children,index){return [_c('CommentNode',{key:index,attrs:{"isChild":true,"targetId":_vm.targetId,"target":_vm.target,"comment":children,"options":_vm.options,"configs":_vm.configs,"depth":_vm.selfAddDepth,"parent":_vm.comment}})]})],2):_vm._e()]),_c('CommentEditor',{attrs:{"targetId":_vm.targetId,"target":_vm.target,"replyComment":_vm.comment,"options":_vm.options,"configs":_vm.configs}})],1)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/CommentNode.vue?vue&type=template&id=5a6f1402&
+// CONCATENATED MODULE: ./src/components/CommentNode.vue?vue&type=template&id=657a54c2&
 
 // EXTERNAL MODULE: ./src/components/index.js + 10 modules
 var components = __webpack_require__("2af9");
@@ -15198,7 +15318,13 @@ var globals = __webpack_require__("0e4d");
           break;
       }
 
-      return `（<img src="${browserImg}" onerror="this.src='https://cdn.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/unknow.svg'" alt="ua-browser"/>  ${result.browser.name} ${result.browser.version} <img src="${uaImg}" onerror="this.src='https://cdn.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/unknow.svg'" alt="ua-os"/> ${result.os.name} ${result.os.version}）`;
+      let returnStr = `（<img src="${browserImg}" onerror="this.src='https://cdn.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/unknow.svg'" alt="ua-browser"/>  ${result.browser.name} ${result.browser.version} <img src="${uaImg}" onerror="this.src='https://cdn.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/unknow.svg'" alt="ua-os"/> ${result.os.name} ${result.os.version}）`;
+
+      if (this.configs.isGetIpLocation && this.comment.ipLocation) {
+        returnStr += `「${this.comment.ipLocation}」`;
+      }
+
+      return returnStr;
     },
 
     selfAddDepth() {

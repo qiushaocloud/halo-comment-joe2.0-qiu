@@ -18,6 +18,7 @@ export default {
         autoLoad: true,
         showUserAgent: true,
         isAllowUploadAvatar: true,
+        isGetIpLocation: true,
         gravatarType: "mm",
         gravatarSource: "",
         loadingStyle: "default",

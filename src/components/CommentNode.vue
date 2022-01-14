@@ -265,7 +265,13 @@ export default {
           break;
       }
 
-      return `（<img src="${browserImg}" onerror="this.src='https://cdn.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/unknow.svg'" alt="ua-browser"/>  ${result.browser.name} ${result.browser.version} <img src="${uaImg}" onerror="this.src='https://cdn.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/unknow.svg'" alt="ua-os"/> ${result.os.name} ${result.os.version}）`
+      let returnStr = `（<img src="${browserImg}" onerror="this.src='https://cdn.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/unknow.svg'" alt="ua-browser"/>  ${result.browser.name} ${result.browser.version} <img src="${uaImg}" onerror="this.src='https://cdn.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/unknow.svg'" alt="ua-os"/> ${result.os.name} ${result.os.version}）`
+      
+      if (this.configs.isGetIpLocation && this.comment.ipLocation) {
+        returnStr += `「${this.comment.ipLocation}」`;
+      }
+
+      return returnStr;
     },
     selfAddDepth() {
       return this.depth + 1;
