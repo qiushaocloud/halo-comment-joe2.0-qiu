@@ -354,7 +354,7 @@ export default {
         this.comment.parentId = this.replyComment.id;
       }
       commentApi
-        .createComment(this.target, this.comment, this.configs.isGetIpLocation)
+        .createComment(this.target, this.comment, this.configs)
         .then((response) => {
           // Store comment author, email, authorUrl
           localStorage.setItem("qiushaocloud-halo-comment-author", this.comment.author);
@@ -467,8 +467,8 @@ export default {
     },
     handleFailedToCreateComment(response) {
       if (response.status === 400) {
-        this.$tips(response.data.message);
-        if (response.data) {
+        this.$tips((response.data && response.data.message) || response.message);
+        if (response.data && response.data.data) {
           const errorDetail = response.data.data;
           if (isObject(errorDetail)) {
             Object.keys(errorDetail).forEach((key) => {

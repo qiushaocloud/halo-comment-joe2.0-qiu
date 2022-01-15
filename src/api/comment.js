@@ -1,16 +1,33 @@
 import axios from 'axios'
 import service from '@/utils/service'
+
 const baseUrl = '/api/content'
+const adminUrl = '/api/admin'
 
 const commentApi = {};
 
 let cacheLocationResult;
 
-commentApi.createComment = async (target, comment, isGetIpLocation) => {
-    const commentCp = Object.assign({}, comment);
+commentApi.createComment = async (target, comment, options = {}) => {
+    const {
+        isGetIpLocation,
+        blogAuthorEmail
+    } = options;
 
+    const throwErrJson = {
+        response: {
+            status: 400,
+            data: {
+                message: 'undefined error'
+            }
+        }
+    };
+    const extraJson = {};
+    const reqHeaders = {};
+    const commentCp = Object.assign({}, comment);
     let cacheSelfIp = undefined;
     let cacheSelfLocation = undefined;
+    let reqUrl = `${baseUrl}/${target}/comments`;
 
     if (isGetIpLocation) {
         try{
@@ -18,7 +35,7 @@ commentApi.createComment = async (target, comment, isGetIpLocation) => {
                 cacheLocationResult = await axios.get(
                     `https://www.qiushaocloud.top/get_ip_location`
                 ).then((response)=>{
-                    if (response.status !== 200)
+                    if (response.status >= 400)
                         throw response;
             
                     return response.data;
@@ -33,50 +50,134 @@ commentApi.createComment = async (target, comment, isGetIpLocation) => {
         }
     }
 
-    const contentJson = {};
 
     // FIXME QiuShaoCloud 后台目前没提供头像字段，暂时用 content 来存
     if (comment.avatar)
-        contentJson.avatar = comment.avatar;
+        extraJson.avatar = comment.avatar;
 
     if (cacheSelfIp && cacheSelfLocation) {
-        contentJson.ip = cacheSelfIp;
-        contentJson.location = cacheSelfLocation;
+        extraJson.ip = cacheSelfIp;
+        extraJson.location = cacheSelfLocation;
     }
     
-    if (Object.keys(contentJson).length)
-        commentCp.content = comment.content + '#@QIUSHAOCLOUD@#' + window.encodeURIComponent(JSON.stringify(contentJson));
+    // 评论邮箱为作者的邮箱，则表明是作者要进行评论
+    if (blogAuthorEmail && blogAuthorEmail === comment.email) {
+        let adminAuthorization = '';
+        let adminUserName = '';
+        let adminUserPwd = '';
 
-    return service({
-        url: `${baseUrl}/${target}/comments`,
-        method: 'post',
-        data: commentCp
-    })
-    .then(async (response) => {
-        const comment = response.data.data;
-
-        // FIXME QiuShaoCloud 后台目前没提供头像字段，暂时用 content 来存
-        const contentArr = (comment.content || '').split('#@QIUSHAOCLOUD@#');
-        if (contentArr.length >= 2) {
-            comment.content = contentArr[0] || '';
+        // 首先查 halo__Access-Token 是否存在
+        const cacheAdminAccessTokenStr = localStorage.getItem('halo__Access-Token');
+        if (cacheAdminAccessTokenStr) {
             try{
                 const {
-                    avatar: avatarFromContent,
-                    ip: cacheSelfIp,
-                    location: cacheSelfLocation
-                } = JSON.parse(window.decodeURIComponent(contentArr[1]));
-
-                comment.avatarFromContent = avatarFromContent;
-
-                if (comment.ipAddress === cacheSelfIp)
-                    comment.ipLocation = cacheSelfLocation;
+                    expire,
+                    value
+                } = JSON.parse(cacheAdminAccessTokenStr);
+                if (expire && value && typeof value === 'object') {
+                    const {
+                        access_token,
+                        expired_in
+                        // refresh_token
+                    } = value;
+                    
+                    if((expire + expired_in) < Date.now())
+                        adminAuthorization = access_token;
+                }
             }catch(err){
-                console.error('JSON.parse catch err:', err, contentArr);
+                console.error('catch err:', err, ' ,cacheAdminAccessTokenStr:', cacheAdminAccessTokenStr);
             }
         }
 
-        return response;
-    });
+        // 没有授权信息，则需要用户输入用户名和密码
+        if (!adminAuthorization) {
+            adminUserName = prompt('您是博主，需要您进行身份验证，请您输入用户名：',"");
+            if (!adminUserName) {
+                console.log('您取消了用户名的输入');
+                throwErrJson.response.data.message = '您取消了用户名的输入';
+                throw throwErrJson;
+            }
+
+            adminUserPwd = prompt('您是博主，需要您进行身份验证，请您输入密码：',"");
+            if (!adminUserPwd) {
+                console.log('您取消了密码的输入');
+                throwErrJson.response.data.message = '您取消了密码的输入';
+                throw throwErrJson;
+            }
+
+            try {
+                const loginResult = await axios.post(
+                    `${adminUrl}/login`,
+                    {
+                        // "authcode": "string",
+                        "password": adminUserPwd,
+                        "username": adminUserName
+                    }
+                );
+
+                if (loginResult.status >= 400) {
+                    console.error('身份验证失败, 您的用户名/密码不正确, loginResult:', loginResult);
+                    throwErrJson.response.data.message = '身份验证失败, 您的用户名/密码不正确';
+                    throw throwErrJson;
+                }
+
+                adminAuthorization = loginResult.data.access_token;
+                localStorage.setItem('halo__Access-Token', JSON.stringify({
+                    expire: Date.now(),
+                    value: loginResult.data
+                }));
+            }catch (err1) {
+                console.error('身份验证接口调用失败了, err1:', err1);
+                throwErrJson.response.data.message = '身份验证接口调用失败了';
+                throw throwErrJson;
+            }
+        }
+
+        reqUrl = `${adminUrl}/${target}/comments`;
+        reqHeaders['Admin-Authorization'] = adminAuthorization;
+        delete extraJson.avatar;
+    }
+
+    if (Object.keys(extraJson).length) {
+        const content = comment.content || '';
+        commentCp.content = content
+            + '#@QIUSHAOCLOUD@#'
+            + window.encodeURIComponent(JSON.stringify(extraJson));
+    }
+
+    const reqConfig = {
+        url: reqUrl,
+        method: 'post',
+        data: commentCp,
+        headers: reqHeaders
+    };
+
+    return service(reqConfig)
+        .then(async (response) => {
+            const comment = response.data.data;
+
+            // FIXME QiuShaoCloud 后台目前没提供头像字段，暂时用 content 来存
+            const contentArr = (comment.content || '').split('#@QIUSHAOCLOUD@#');
+            if (contentArr && contentArr.length >= 2) {
+                comment.content = contentArr[0] || '';
+                try{
+                    const {
+                        avatar: avatarFromContent,
+                        ip: cacheSelfIp,
+                        location: cacheSelfLocation
+                    } = JSON.parse(window.decodeURIComponent(contentArr[1]));
+
+                    comment.avatarFromContent = avatarFromContent;
+
+                    if (comment.ipAddress === cacheSelfIp)
+                        comment.ipLocation = cacheSelfLocation;
+                }catch(err){
+                    console.error('JSON.parse catch err:', err, contentArr);
+                }
+            }
+
+            return response;
+        });
 }
 
 commentApi.listComments = (target, targetId, view = 'tree_view', pagination) => {
@@ -90,8 +191,9 @@ commentApi.listComments = (target, targetId, view = 'tree_view', pagination) => 
 
         // FIXME QiuShaoCloud 后台目前没提供头像字段，暂时用 content 来存
         for (const comment of comments) {
+            // FIXME QiuShaoCloud 后台目前没提供头像字段，暂时用 content 来存
             const contentArr = (comment.content || '').split('#@QIUSHAOCLOUD@#');
-            if (contentArr.length >= 2) {
+            if (contentArr && contentArr.length >= 2) {
                 comment.content = contentArr[0] || '';
                 try{
                     const {
@@ -99,13 +201,13 @@ commentApi.listComments = (target, targetId, view = 'tree_view', pagination) => 
                         ip: cacheSelfIp,
                         location: cacheSelfLocation
                     } = JSON.parse(window.decodeURIComponent(contentArr[1]));
-    
+
                     comment.avatarFromContent = avatarFromContent;
-    
+
                     if (comment.ipAddress === cacheSelfIp)
                         comment.ipLocation = cacheSelfLocation;
                 }catch(err){
-                    console.error('JSON.parse catch err:', err);
+                    console.error('JSON.parse catch err:', err, contentArr);
                 }
             }
         }

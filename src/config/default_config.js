@@ -14,5 +14,6 @@ export default {
   urlPopup: "请不要打小广告哦 (^し^)", // 输入网址时的提示文案
   notComment: "还没有评论哦，快来抢占沙发 ♪(´▽｀)", // 无数据时展示的文案
   isAllowUploadAvatar: true, // 是否允许上传头像，因为使用的是「即库图床」上传的头像，头像会在该地址(https://img.78al.net/index/gallery.html)上被所有人看到
-  isGetIpLocation: true // 是否获取评论者的地理位置
+  isGetIpLocation: true, // 是否获取评论者的地理位置
+  blogAuthorEmail: "" // 设置博主邮箱，则允许博主在博客中进行评论，如果没有授权，则需要进行登录授权
 };

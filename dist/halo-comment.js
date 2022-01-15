@@ -676,19 +676,35 @@ const jsonpRequestPromise = (url, params = {}, callbackKey = 'callback') => {
 
 
 const baseUrl = '/api/content';
+const adminUrl = '/api/admin';
 const commentApi = {};
 let cacheLocationResult;
 
-commentApi.createComment = async (target, comment, isGetIpLocation) => {
+commentApi.createComment = async (target, comment, options = {}) => {
+  const {
+    isGetIpLocation,
+    blogAuthorEmail
+  } = options;
+  const throwErrJson = {
+    response: {
+      status: 400,
+      data: {
+        message: 'undefined error'
+      }
+    }
+  };
+  const extraJson = {};
+  const reqHeaders = {};
   const commentCp = Object.assign({}, comment);
   let cacheSelfIp = undefined;
   let cacheSelfLocation = undefined;
+  let reqUrl = `${baseUrl}/${target}/comments`;
 
   if (isGetIpLocation) {
     try {
       if (!cacheLocationResult) {
         cacheLocationResult = await axios_default.a.get(`https://www.qiushaocloud.top/get_ip_location`).then(response => {
-          if (response.status !== 200) throw response;
+          if (response.status >= 400) throw response;
           return response.data;
         });
         console.log('jsonpRequestPromise cacheLocationResult:', cacheLocationResult);
@@ -699,28 +715,109 @@ commentApi.createComment = async (target, comment, isGetIpLocation) => {
     } catch (err) {
       console.error('createComment getIpLocation err:', err, commentCp);
     }
-  }
+  } // FIXME QiuShaoCloud 后台目前没提供头像字段，暂时用 content 来存
 
-  const contentJson = {}; // FIXME QiuShaoCloud 后台目前没提供头像字段，暂时用 content 来存
 
-  if (comment.avatar) contentJson.avatar = comment.avatar;
+  if (comment.avatar) extraJson.avatar = comment.avatar;
 
   if (cacheSelfIp && cacheSelfLocation) {
-    contentJson.ip = cacheSelfIp;
-    contentJson.location = cacheSelfLocation;
+    extraJson.ip = cacheSelfIp;
+    extraJson.location = cacheSelfLocation;
+  } // 评论邮箱为作者的邮箱，则表明是作者要进行评论
+
+
+  if (blogAuthorEmail && blogAuthorEmail === comment.email) {
+    let adminAuthorization = '';
+    let adminUserName = '';
+    let adminUserPwd = ''; // 首先查 halo__Access-Token 是否存在
+
+    const cacheAdminAccessTokenStr = localStorage.getItem('halo__Access-Token');
+
+    if (cacheAdminAccessTokenStr) {
+      try {
+        const {
+          expire,
+          value
+        } = JSON.parse(cacheAdminAccessTokenStr);
+
+        if (expire && value && typeof value === 'object') {
+          const {
+            access_token,
+            expired_in // refresh_token
+
+          } = value;
+          if (expire + expired_in < Date.now()) adminAuthorization = access_token;
+        }
+      } catch (err) {
+        console.error('catch err:', err, ' ,cacheAdminAccessTokenStr:', cacheAdminAccessTokenStr);
+      }
+    } // 没有授权信息，则需要用户输入用户名和密码
+
+
+    if (!adminAuthorization) {
+      adminUserName = prompt('您是博主，需要您进行身份验证，请您输入用户名：', "");
+
+      if (!adminUserName) {
+        console.log('您取消了用户名的输入');
+        throwErrJson.response.data.message = '您取消了用户名的输入';
+        throw throwErrJson;
+      }
+
+      adminUserPwd = prompt('您是博主，需要您进行身份验证，请您输入密码：', "");
+
+      if (!adminUserPwd) {
+        console.log('您取消了密码的输入');
+        throwErrJson.response.data.message = '您取消了密码的输入';
+        throw throwErrJson;
+      }
+
+      try {
+        const loginResult = await axios_default.a.post(`${adminUrl}/login`, {
+          // "authcode": "string",
+          "password": adminUserPwd,
+          "username": adminUserName
+        });
+
+        if (loginResult.status >= 400) {
+          console.error('身份验证失败, 您的用户名/密码不正确, loginResult:', loginResult);
+          throwErrJson.response.data.message = '身份验证失败, 您的用户名/密码不正确';
+          throw throwErrJson;
+        }
+
+        adminAuthorization = loginResult.data.access_token;
+        localStorage.setItem('halo__Access-Token', JSON.stringify({
+          expire: Date.now(),
+          value: loginResult.data
+        }));
+      } catch (err1) {
+        console.error('身份验证接口调用失败了, err1:', err1);
+        throwErrJson.response.data.message = '身份验证接口调用失败了';
+        throw throwErrJson;
+      }
+    }
+
+    reqUrl = `${adminUrl}/${target}/comments`;
+    reqHeaders['Admin-Authorization'] = adminAuthorization;
+    delete extraJson.avatar;
   }
 
-  if (Object.keys(contentJson).length) commentCp.content = comment.content + '#@QIUSHAOCLOUD@#' + window.encodeURIComponent(JSON.stringify(contentJson));
-  return utils_service({
-    url: `${baseUrl}/${target}/comments`,
+  if (Object.keys(extraJson).length) {
+    const content = comment.content || '';
+    commentCp.content = content + '#@QIUSHAOCLOUD@#' + window.encodeURIComponent(JSON.stringify(extraJson));
+  }
+
+  const reqConfig = {
+    url: reqUrl,
     method: 'post',
-    data: commentCp
-  }).then(async response => {
+    data: commentCp,
+    headers: reqHeaders
+  };
+  return utils_service(reqConfig).then(async response => {
     const comment = response.data.data; // FIXME QiuShaoCloud 后台目前没提供头像字段，暂时用 content 来存
 
     const contentArr = (comment.content || '').split('#@QIUSHAOCLOUD@#');
 
-    if (contentArr.length >= 2) {
+    if (contentArr && contentArr.length >= 2) {
       comment.content = contentArr[0] || '';
 
       try {
@@ -749,9 +846,10 @@ commentApi.listComments = (target, targetId, view = 'tree_view', pagination) => 
     const comments = response.data.data.content; // FIXME QiuShaoCloud 后台目前没提供头像字段，暂时用 content 来存
 
     for (const comment of comments) {
+      // FIXME QiuShaoCloud 后台目前没提供头像字段，暂时用 content 来存
       const contentArr = (comment.content || '').split('#@QIUSHAOCLOUD@#');
 
-      if (contentArr.length >= 2) {
+      if (contentArr && contentArr.length >= 2) {
         comment.content = contentArr[0] || '';
 
         try {
@@ -763,7 +861,7 @@ commentApi.listComments = (target, targetId, view = 'tree_view', pagination) => 
           comment.avatarFromContent = avatarFromContent;
           if (comment.ipAddress === cacheSelfIp) comment.ipLocation = cacheSelfLocation;
         } catch (err) {
-          console.error('JSON.parse catch err:', err);
+          console.error('JSON.parse catch err:', err, contentArr);
         }
       }
     }
@@ -3774,12 +3872,12 @@ if ($defineProperty) {
 
 "use strict";
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"93979ac4-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CommentEditor.vue?vue&type=template&id=cb65f2f4&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"93979ac4-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CommentEditor.vue?vue&type=template&id=882aaf2e&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.isCurrReply)?_c('section',{ref:"editor",staticClass:"comment-editor",attrs:{"id":_vm.respondId,"role":"form"}},[(_vm.isReply)?_c('h3',{staticClass:"comment-reply-title",attrs:{"id":"reply-title"}},[_c('small',[_c('a',{staticClass:"cancel-comment-reply-link",attrs:{"href":"javascript:;"},on:{"click":_vm.cancelReply}},[_vm._v("取消回复")])])]):_vm._e(),_c('form',{staticClass:"comment-form"},[(!_vm.previewMode)?_c('div',{staticClass:"comment-textarea"},[_c('textarea',{directives:[{name:"model",rawName:"v-model",value:(_vm.comment.content),expression:"comment.content"}],staticClass:"commentbody",attrs:{"required":"required","aria-required":"true","tabindex":"4","placeholder":_vm.configs.aWord || '欢迎您，请点击此处，动动您的小手指，留下您的👣  ...'},domProps:{"value":(_vm.comment.content)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.comment, "content", $event.target.value)}}}),_c('label',{staticClass:"input-label"},[_vm._v(_vm._s(_vm.configs.aWord || "欢迎您，请点击此处，动动您的小手指，留下您的👣 ..."))])]):_c('div',{staticClass:"comment-preview markdown-body",domProps:{"innerHTML":_vm._s(_vm.renderedContent)}}),_c('div',{attrs:{"id":"upload-img-show"}}),_c('p',{staticClass:"no-select",attrs:{"id":"emotion-toggle"}},[_c('span',{on:{"click":_vm.handleToggleDialogEmoji}},[_vm._v(_vm._s(!_vm.emojiDialogVisible ? "戳这里哦，宝宝给您表演表情包 OωO" : "喜欢宝宝的表演吧 ヾ(≧∇≦*)ゝ"))])]),_c('transition',{attrs:{"name":"emoji-fade"}},[(_vm.emojiDialogVisible)?_c('VEmojiPicker',{attrs:{"pack":_vm.emojiPack},on:{"select":_vm.handleSelectEmoji}}):_vm._e()],1),_c('div',{staticClass:"author-info"},[_c('div',{staticClass:"commentator",staticStyle:{"pointer-events":"initial"},on:{"click":_vm.handleAvatarUploadInputOpen}},[_c('input',{ref:"commentAvatarUploadFileInputEle",staticStyle:{"display":"none"},attrs:{"type":"file","accept":"image/*"},on:{"change":function($event){return _vm.handleAvatarUpload($event)}}}),_c('img',{staticClass:"avatar",attrs:{"src":_vm.avatar},on:{"error":_vm.handleAvatarError}}),_c('div',{staticClass:"socila-check",class:[_vm.checkType.back]},[_c('i',{class:[_vm.checkType.icon],attrs:{"aria-hidden":"true"}})])]),_c('PopupInput',{staticClass:"cmt-popup cmt-author",attrs:{"popupStyle":"margin-left: -115px","popupText":_vm.configs.authorPopup || '输入QQ号将自动拉取昵称和头像 ♪(´▽｀)',"inputType":"text","placeholder":"* 昵称","id":"author","localStorageDataCacheKey":"qiushaocloud-halo-comment-author"},on:{"blurInput":_vm.pullInfo},model:{value:(_vm.comment.author),callback:function ($$v) {_vm.$set(_vm.comment, "author", $$v)},expression:"comment.author"}}),_c('PopupInput',{staticClass:"cmt-popup",attrs:{"popupStyle":"margin-left: -65px;","popupText":_vm.configs.emailPopup || '您的邮箱将收到回复通知 ๑乛◡乛๑',"inputType":"text","placeholder":"* 电子邮件","id":"email","localStorageDataCacheKey":"qiushaocloud-halo-comment-email"},on:{"blurInput":_vm.pullInfo},model:{value:(_vm.comment.email),callback:function ($$v) {_vm.$set(_vm.comment, "email", $$v)},expression:"comment.email"}}),_c('PopupInput',{staticClass:"cmt-popup",attrs:{"popupStyle":"margin-left: -55px;","popupText":_vm.configs.urlPopup || '请不要打小广告哦 (^し^)',"inputType":"text","placeholder":"个人站点","id":"url","localStorageDataCacheKey":"qiushaocloud-halo-comment-authorUrl"},model:{value:(_vm.comment.authorUrl),callback:function ($$v) {_vm.$set(_vm.comment, "authorUrl", $$v)},expression:"comment.authorUrl"}})],1),_c('ul',{staticClass:"comment-buttons"},[(_vm.comment.content)?_c('li',{staticClass:"middle",staticStyle:{"margin-right":"5px"}},[_c('a',{staticClass:"button-preview-edit",attrs:{"href":"javascript:;","rel":"nofollow noopener"},on:{"click":_vm.handlePreviewContent}},[_vm._v(_vm._s(_vm.previewMode ? "编辑" : "预览"))])]):_vm._e(),_c('li',{staticClass:"middle"},[_c('a',{staticClass:"button-submit",attrs:{"href":"javascript:;","tabindex":"5","rel":"nofollow noopener"},on:{"click":_vm.handleSubmitClick}},[_vm._v("提交")])])])],1)]):_vm._e()}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/CommentEditor.vue?vue&type=template&id=cb65f2f4&
+// CONCATENATED MODULE: ./src/components/CommentEditor.vue?vue&type=template&id=882aaf2e&
 
 // EXTERNAL MODULE: external "Vue"
 var external_Vue_ = __webpack_require__("8bbf");
@@ -4860,7 +4958,7 @@ function loop() {
         this.comment.parentId = this.replyComment.id;
       }
 
-      api_comment["a" /* default */].createComment(this.target, this.comment, this.configs.isGetIpLocation).then(response => {
+      api_comment["a" /* default */].createComment(this.target, this.comment, this.configs).then(response => {
         // Store comment author, email, authorUrl
         localStorage.setItem("qiushaocloud-halo-comment-author", this.comment.author);
         localStorage.setItem("qiushaocloud-halo-comment-email", this.comment.email);
@@ -4971,9 +5069,9 @@ function loop() {
 
     handleFailedToCreateComment(response) {
       if (response.status === 400) {
-        this.$tips(response.data.message);
+        this.$tips(response.data && response.data.message || response.message);
 
-        if (response.data) {
+        if (response.data && response.data.data) {
           const errorDetail = response.data.data;
 
           if (Object(util["d" /* isObject */])(errorDetail)) {
@@ -6245,7 +6343,9 @@ var components = __webpack_require__("2af9");
   // 无数据时展示的文案
   isAllowUploadAvatar: true,
   // 是否允许上传头像，因为使用的是「即库图床」上传的头像，头像会在该地址(https://img.78al.net/index/gallery.html)上被所有人看到
-  isGetIpLocation: true // 是否获取评论者的地理位置
+  isGetIpLocation: true,
+  // 是否获取评论者的地理位置
+  blogAuthorEmail: "" // 设置博主邮箱，则允许博主在博客中进行评论，如果没有授权，则需要进行登录授权
 
 });
 // CONCATENATED MODULE: ./src/config/default_option.js
