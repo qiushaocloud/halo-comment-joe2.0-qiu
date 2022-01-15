@@ -14,6 +14,7 @@
 4. 添加个人站点功能
 5. 支持点击头像框上传自定义头像
 6. 修复部分 bug，进行了部分优化
+7. 支持获取评论者的地理位置
 
 #### 👀 [预览组件](https://www.qiushaocloud.top/extras/message-board)
 
