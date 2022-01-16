@@ -44,8 +44,22 @@ const tips = (message, time = 6000, _self) => {
   }, instance.time);
 };
 
+const initInstance = (_self) => {
+  if (!instance) {
+    instance = new tipTem();
+    instance.vm = instance.$mount();
+    /**
+     * 解决提示信息不存在的问题，使用此方式后，样式只能由配置参数传入
+     * 如果想使用主题自定义的方式，可以采用 var rootDom = document.body; 这时将采用主题定义的样式（默认样式会失效）
+     */
+    var rootDom = _self.$root.$el;
+    rootDom.appendChild(instance.vm.$el);
+  }
+};
+
 tips.install = (Vue) => {
   Vue.prototype.$tips = tips;
+  Vue.prototype.$tipsInitInstance = initInstance;
 };
 
 export default tips;

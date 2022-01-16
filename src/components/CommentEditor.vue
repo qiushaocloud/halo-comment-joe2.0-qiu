@@ -466,13 +466,13 @@ export default {
       comment.$mount(nodeDom);
     },
     handleFailedToCreateComment(response) {
-      if (response.status === 400) {
-        this.$tips((response.data && response.data.message) || response.message);
-        if (response.data && response.data.data) {
+      if (response.status === 400 && response.data) {
+        this.$tips(response.data.message, 5000, this);
+        if (response.data.data) {
           const errorDetail = response.data.data;
           if (isObject(errorDetail)) {
             Object.keys(errorDetail).forEach((key) => {
-              this.$tips(errorDetail[key]);
+              this.$tips(errorDetail[key], 5000, this);
             });
           }
         }
@@ -527,10 +527,10 @@ export default {
           }
         )
         .then(function(response) {
-          this.$tips(response);
+          this.$tips(response, 5000, this);
         })
         .catch((error) => {
-          this.$tips(error);
+          this.$tips(error, 5000, this);
         });
     },
     handleGetGithubAccessToken() {
@@ -551,11 +551,11 @@ export default {
             let args = response.split("&");
             let arg = args[0].split("=");
             let access_token = arg[1];
-            this.$tips(access_token);
+            this.$tips(access_token, 5000, this);
             return access_token;
           })
           .catch((error) => {
-            this.$tips(error);
+            this.$tips(error, 5000, this);
           });
       }
     },

@@ -27,6 +27,7 @@ export default {
         emailPopup: "您的邮箱将收到回复通知 ๑乛◡乛๑",
         urlPopup: "请不要打小广告哦 (^し^)",
         notComment: "还没有评论哦，快来抢占沙发 ♪(´▽｀)",
+        blogAuthorEmail: ""
       },
     };
   },

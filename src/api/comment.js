@@ -121,14 +121,14 @@ commentApi.createComment = async (target, comment, options = {}) => {
                     throw throwErrJson;
                 }
 
-                adminAuthorization = loginResult.data.access_token;
+                adminAuthorization = loginResult.data.data.access_token;
                 localStorage.setItem('halo__Access-Token', JSON.stringify({
                     expire: Date.now(),
-                    value: loginResult.data
+                    value: loginResult.data.data
                 }));
             }catch (err1) {
-                console.error('身份验证接口调用失败了, err1:', err1);
-                throwErrJson.response.data.message = '身份验证接口调用失败了';
+                console.error('身份验证失败, 您的用户名/密码不正确, err1:', err1, ' ,errResponse:', err1 && err1.response);
+                throwErrJson.response.data.message = '身份验证失败, 您的用户名/密码不正确';
                 throw throwErrJson;
             }
         }
