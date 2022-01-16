@@ -1,6 +1,18 @@
 /*--------------------------------------------------------------
   # Normalize
 --------------------------------------------------------------*/
+html body {
+  --theme: #fb6c28;
+  --scroll-bar: #c0c4cc;
+  --loading-bar: var(--theme);
+  font-family: "Joe Font", "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, "sans-serif";
+}
+html[data-mode='dark'] body {
+  --theme: #9999ff;
+  --scroll-bar: #666;
+  --loading-bar: var(--theme);
+}
+
 html {
   &.disable-scroll {
     height: 100vh;
@@ -33,6 +45,10 @@ div {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.halo-comment.halo-comment__admin .comment-admin-link {
+  display: block !important;
 }
 
 .halo-comment {
@@ -304,7 +320,8 @@ div {
       float: left;
 
       &:hover {
-        .comment-reply-link {
+        .comment-reply-link,
+        .comment-admin-link {
           opacity: 0.9;
         }
       }
@@ -350,8 +367,8 @@ div {
     }
 
     /*--------------------------------------------------------------
-        # CommmentAvatar
-        --------------------------------------------------------------*/
+    # CommmentAvatar
+    --------------------------------------------------------------*/
     .profile {
       float: left;
       margin-right: 10px;
@@ -483,11 +500,14 @@ div {
       }
     }
 
+    /**======================== 管理员功能 ==================*/
+
     /*--------------------------------------------------------------
-        # CommmentReply
-        --------------------------------------------------------------*/
-    .comment-reply-link {
-      font-size: 12px;
+    # Commment Reply or 管理员功能
+    --------------------------------------------------------------*/
+    .comment-reply-link,
+    .comment-admin-link {
+      font-size: 14px;
       display: block;
       margin-left: 10px;
       float: right;
@@ -495,8 +515,8 @@ div {
       color: #fff;
       background-color: var(--theme);
       line-height: 20px;
-      padding: 0 6px;
-      border-radius: 3px;
+      padding: 2px 8px;
+      border-radius: 5px;
       opacity: 0;
 
       &:hover {
@@ -504,8 +524,13 @@ div {
       }
     }
 
+    .comment-admin-link {
+      display: none;
+    }
+
     @media (max-width: 880px) {
-      .comment-reply-link {
+      .comment-reply-link,
+      .comment-admin-link{
         opacity: 1;
       }
     }
@@ -694,7 +719,7 @@ div {
     }
 
     // 取消回复按钮
-    .cancel-comment-reply-link {
+    .cancel-comment-reply-link{
       background: #eee;
       border-radius: 3px;
       padding: 12px 25px;

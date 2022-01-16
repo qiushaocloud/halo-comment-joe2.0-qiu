@@ -208,7 +208,7 @@ export default {
         avatar: "",
         authorUrl: "",
         email: "",
-        content: "",
+        content: ""
       },
       previewMode: false,
       infoes: [],
@@ -220,7 +220,7 @@ export default {
       },
       globalData: globals,
       lockPullAvatar: false,
-      avatar: "",
+      avatar: ""
     };
   },
   computed: {

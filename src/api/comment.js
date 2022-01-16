@@ -1,14 +1,14 @@
 import axios from 'axios'
 import service from '@/utils/service'
 
-const baseUrl = '/api/content'
-const adminUrl = '/api/admin'
+const baseUrl = 'https://www.qiushaocloud.top/api/content'
+const adminUrl = 'https://www.qiushaocloud.top/api/admin'
 
 const commentApi = {};
 
 let cacheLocationResult;
 
-const blogAuthorLogin = async () => {
+const blogAuthorLogin = async (commentConfigs) => {
     const throwErrJson = {
         response: {
             status: 400,
@@ -21,11 +21,15 @@ const blogAuthorLogin = async () => {
     let adminUserName = '';
     let adminUserPwd = '';
 
-    adminUserName = prompt('「身份验证」您是博主，请输入用户名:',"");
-    if (!adminUserName) {
-        console.log('您取消了用户名的输入');
-        throwErrJson.response.data.message = '您取消了用户名的输入';
-        throw throwErrJson;
+    if (commentConfigs && commentConfigs.blogAdminUserName) {
+        adminUserName = commentConfigs.blogAdminUserName;
+    }else {
+        adminUserName = prompt('「身份验证」您是博主，请输入用户名:',"");
+        if (!adminUserName) {
+            console.log('您取消了用户名的输入');
+            throwErrJson.response.data.message = '您取消了用户名的输入';
+            throw throwErrJson;
+        }
     }
 
     adminUserPwd = prompt('「身份验证」您是博主，请输入密码:',"");
@@ -69,22 +73,169 @@ const blogAuthorLogin = async () => {
     } 
 }
 
-commentApi.createComment = async (target, comment, options = {}) => {
-    const {
-        isGetIpLocation,
-        blogAuthorEmail
-    } = options;
+const getCacheAdminAuthorization = () => {
+    let adminAuthorization = undefined;
 
-    const extraJson = {};
-    const reqHeaders = {};
-    const commentCp = Object.assign({}, comment);
-    let cacheSelfIp = undefined;
-    let cacheSelfLocation = undefined;
-    let reqUrl = `${baseUrl}/${target}/comments`;
+    const cacheAdminAccessTokenStr = localStorage.getItem('halo__Access-Token');
+    if (cacheAdminAccessTokenStr) {
+        try{
+            const {
+                expire,
+                value
+            } = JSON.parse(cacheAdminAccessTokenStr);
+
+            if (expire && value && typeof value === 'object') {
+                const {
+                    access_token,
+                    expired_in
+                    // refresh_token
+                } = value;
+                
+                if((expire + (expired_in * 1000)) > Date.now())
+                    adminAuthorization = access_token;
+            }
+        }catch(err){
+            console.error('catch err:', err, ' ,cacheAdminAccessTokenStr:', cacheAdminAccessTokenStr);
+        }
+    }
+
+    return adminAuthorization;
+}
+
+const formatResComment = (resComment) => {
+    // TODO QiuShaoCloud 后台目前没提供数据扩展字段，暂时用 content 来存
+    const contentTmp =  (resComment.content || '').replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&apos;/g, "'");
+    const contentArr = contentTmp.split('<i style="display: none;" class="qiushaocloud_comment_extra_json">');
+    if (contentArr && contentArr.length >= 2) {
+        resComment.content = contentArr[0] || '';
+        const extraJsonStr = contentArr[1];
+        if (extraJsonStr) {
+            try{
+                const {
+                    avatar: avatarFromContent,
+                    ip: cacheSelfIp,
+                    location: cacheSelfLocation
+                } = JSON.parse(window.decodeURIComponent(extraJsonStr.substring(0, extraJsonStr.lastIndexOf('</i>'))));
+    
+                resComment.avatarFromContent = avatarFromContent;
+    
+                if (resComment.ipAddress === cacheSelfIp)
+                    resComment.ipLocation = cacheSelfLocation;
+            }catch(err){
+                console.error('JSON.parse catch err:', err, contentArr, resComment);
+            }
+        }
+    }
+
+    const childrenArr = resComment.children;
+    if (childrenArr && Array.isArray(childrenArr) && childrenArr.length) {
+        for (const childrenComment of childrenArr) {
+            formatResComment(childrenComment);
+        }
+    }
+}
+
+const adminService = async (
+    reqConfig,
+    commentConfigs = {},
+    commentEmail
+) => {
+    reqConfig.headers = reqConfig.headers || {};
+
+    const {
+        blogAuthorEmail
+    } = commentConfigs;
+
+    const cacheEmail = commentEmail || localStorage.getItem('qiushaocloud-halo-comment-email');
+
     let isAdminReq = false;
     let adminAuthorization = '';
     let adminUserName = '';
     let adminUserPwd = '';
+
+
+    if (blogAuthorEmail && cacheEmail && blogAuthorEmail === cacheEmail) {
+        // 首先查 halo__Access-Token 是否存在
+        adminAuthorization = getCacheAdminAuthorization();
+
+        // 没有授权信息，则需要用户输入用户名和密码
+        if (!adminAuthorization) {
+            try{
+                const {
+                    adminUserName: adminUserNameTmp,
+                    adminUserPwd: adminUserPwdTmp,
+                    adminAuthorization: adminAuthorizationTmp
+                } = await blogAuthorLogin(commentConfigs);
+
+                adminUserName = adminUserNameTmp;
+                adminUserPwd = adminUserPwdTmp;
+                adminAuthorization = adminAuthorizationTmp;
+            } catch (throwErrJson) {
+                throw throwErrJson;
+            }
+        }
+
+        reqConfig.headers['Admin-Authorization'] = adminAuthorization;
+        isAdminReq = true;
+    }
+
+    let reqResponse = undefined;
+    let reqError = undefined;
+
+    try{
+        reqResponse = await service(reqConfig);
+    }catch(reqError1) {
+        // 管理员token失效，需要重新验证
+        if (isAdminReq && !adminUserName && !adminUserPwd) {
+            try{
+                const {
+                    adminUserName: adminUserNameTmp,
+                    adminUserPwd: adminUserPwdTmp,
+                    adminAuthorization: adminAuthorizationTmp
+                } = await blogAuthorLogin(commentConfigs);
+
+                adminUserName = adminUserNameTmp;
+                adminUserPwd = adminUserPwdTmp;
+                adminAuthorization = adminAuthorizationTmp;
+            } catch (throwErrJson) {
+                throw throwErrJson;
+            }
+
+            reqConfig.headers['Admin-Authorization'] = adminAuthorization;
+         
+            try{
+                reqResponse = await service(reqConfig);
+            }catch(reqError2) {
+                reqError = reqError2;
+            }
+        }else{
+            reqError = reqError1;
+        }
+    }
+
+    if (reqError)
+        throw reqError;
+
+    return reqResponse;
+}
+
+commentApi.createComment = async (
+    target,
+    comment,
+    commentConfigs = {}
+) => {
+    const {
+        isGetIpLocation,
+        blogAuthorEmail
+    } = commentConfigs;
+
+    const extraJson = {};
+    const commentCp = Object.assign({}, comment);
+    const commentEmail = comment.email;
+    let cacheSelfIp = undefined;
+    let cacheSelfLocation = undefined;
+    let reqUrl = `${baseUrl}/${target}/comments`;
+    let isAdminReq = blogAuthorEmail && blogAuthorEmail === commentEmail;
 
     if (isGetIpLocation) {
         try{
@@ -117,50 +268,8 @@ commentApi.createComment = async (target, comment, options = {}) => {
     }
     
     // 评论邮箱为作者的邮箱，则表明是作者要进行评论
-    if (blogAuthorEmail && blogAuthorEmail === comment.email) {
-        // 首先查 halo__Access-Token 是否存在
-        const cacheAdminAccessTokenStr = localStorage.getItem('halo__Access-Token');
-        if (cacheAdminAccessTokenStr) {
-            try{
-                const {
-                    expire,
-                    value
-                } = JSON.parse(cacheAdminAccessTokenStr);
-                if (expire && value && typeof value === 'object') {
-                    const {
-                        access_token,
-                        expired_in
-                        // refresh_token
-                    } = value;
-                    
-                    if((expire + expired_in) < Date.now())
-                        adminAuthorization = access_token;
-                }
-            }catch(err){
-                console.error('catch err:', err, ' ,cacheAdminAccessTokenStr:', cacheAdminAccessTokenStr);
-            }
-        }
-
-        // 没有授权信息，则需要用户输入用户名和密码
-        if (!adminAuthorization) {
-            try{
-                const {
-                    adminUserName: adminUserNameTmp,
-                    adminUserPwd: adminUserPwdTmp,
-                    adminAuthorization: adminAuthorizationTmp
-                } = await blogAuthorLogin();
-
-                adminUserName = adminUserNameTmp;
-                adminUserPwd = adminUserPwdTmp;
-                adminAuthorization = adminAuthorizationTmp;
-            } catch (throwErrJson) {
-                throw throwErrJson;
-            }
-        }
-
+    if (isAdminReq) {
         reqUrl = `${adminUrl}/${target}/comments`;
-        reqHeaders['Admin-Authorization'] = adminAuthorization;
-        isAdminReq = true;
         delete extraJson.avatar;
     }
 
@@ -175,110 +284,78 @@ commentApi.createComment = async (target, comment, options = {}) => {
     const reqConfig = {
         url: reqUrl,
         method: 'post',
-        data: commentCp,
-        headers: reqHeaders
+        data: commentCp
     };
 
-    let reqResponse = undefined;
-    let reqError = undefined;
 
-    try{
-        reqResponse = await service(reqConfig);
-    }catch(reqError1) {
-        // 管理员token失效，需要重新验证
-        if (isAdminReq && !adminUserName && !adminUserPwd) {
-            try{
-                const {
-                    adminUserName: adminUserNameTmp,
-                    adminUserPwd: adminUserPwdTmp,
-                    adminAuthorization: adminAuthorizationTmp
-                } = await blogAuthorLogin();
+    try {
+        let reqResponse = undefined;
 
-                adminUserName = adminUserNameTmp;
-                adminUserPwd = adminUserPwdTmp;
-                adminAuthorization = adminAuthorizationTmp;
-            } catch (throwErrJson) {
-                throw throwErrJson;
-            }
-
-            reqConfig.headers['Admin-Authorization'] = adminAuthorization;
-         
-            try{
-                reqResponse = await service(reqConfig);
-            }catch(reqError2) {
-                reqError = reqError2;
-            }
-        }else{
-            reqError = reqError1;
+        if (isAdminReq) {
+            reqResponse = await adminService(
+                reqConfig,
+                commentConfigs,
+                commentEmail
+            );
+        }else {
+            reqResponse = await service(reqConfig);
         }
+        
+        const resComment = reqResponse.data.data;
+        formatResComment(resComment);
 
-    }
-
-    if (reqError) {
+        return reqResponse;
+    }catch (reqError){
         console.error('createComment reqError:', reqError);
         throw reqError;
     }
-
-    const reqResComment = reqResponse.data.data;
-
-    // TODO QiuShaoCloud 后台目前没提供数据扩展字段，暂时用 content 来存
-    const contentArr = (reqResComment.content || '').split('<i style="display: none;" class="qiushaocloud_comment_extra_json">');
-    if (contentArr && contentArr.length >= 2) {
-        reqResComment.content = contentArr[0] || '';
-        const extraJsonStr = contentArr[1];
-        if (extraJsonStr) {
-            try{
-                const {
-                    avatar: avatarFromContent,
-                    ip: cacheSelfIp,
-                    location: cacheSelfLocation
-                } = JSON.parse(window.decodeURIComponent(extraJsonStr.substring(0, extraJsonStr.lastIndexOf('</i>'))));
-    
-                reqResComment.avatarFromContent = avatarFromContent;
-    
-                if (reqResComment.ipAddress === cacheSelfIp)
-                    reqResComment.ipLocation = cacheSelfLocation;
-            }catch(err){
-                console.error('JSON.parse catch err:', err, contentArr);
-            }
-        }
-    }
-
-    return reqResponse;
 }
 
-commentApi.listComments = (target, targetId, view = 'tree_view', pagination) => {
+commentApi.deleteComment = async (
+    target,
+    commentId,
+    commentConfigs = {}
+) => {
+    const reqConfig = {
+        url: `${adminUrl}/${target}/comments/${commentId}`,
+        method: 'delete'
+    };
+    return adminService(
+        reqConfig,
+        commentConfigs
+    );
+}
+
+// commentApi.topComment = async (
+//     target,
+//     commentId,
+//     commentConfigs = {}
+// ) => {
+//     const reqConfig = {
+//         url: `${adminUrl}/${target}/comments/${commentId}`,
+//         method: 'delete'
+//     };
+//     return adminService(
+//         reqConfig,
+//         commentConfigs
+//     );
+// }
+
+commentApi.listComments = (
+    target,
+    targetId,
+    view = 'tree_view',
+    pagination
+) => {
     return service({
         url: `${baseUrl}/${target}/${targetId}/comments/${view}`,
         params: pagination,
         method: 'get'
     })
     .then((response) => {
-        const reqResComments = response.data.data.content;
-
-        for (const reqResComment of reqResComments) {
-            // TODO QiuShaoCloud 后台目前没提供数据扩展字段，暂时用 content 来存
-            const contentArr = (reqResComment.content || '').split('<i style="display: none;" class="qiushaocloud_comment_extra_json">');
-            if (contentArr && contentArr.length >= 2) {
-                reqResComment.content = contentArr[0] || '';
-                const extraJsonStr = contentArr[1];
-                if (extraJsonStr) {
-                    try{
-                        const {
-                            avatar: avatarFromContent,
-                            ip: cacheSelfIp,
-                            location: cacheSelfLocation
-                        } = JSON.parse(window.decodeURIComponent(extraJsonStr.substring(0, extraJsonStr.lastIndexOf('</i>'))));
-            
-                        reqResComment.avatarFromContent = avatarFromContent;
-            
-                        if (reqResComment.ipAddress === cacheSelfIp)
-                            reqResComment.ipLocation = cacheSelfLocation;
-                    }catch(err){
-                        console.error('JSON.parse catch err:', err, contentArr);
-                    }
-                }
-            }
+        const resComments = response.data.data.content;
+        for (const resComment of resComments) {
+            formatResComment(resComment);
         }
 
         return response;

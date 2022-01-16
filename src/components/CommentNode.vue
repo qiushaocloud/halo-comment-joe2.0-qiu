@@ -46,6 +46,21 @@
                   </a>
                 </h4>
               </div>
+
+              <a
+                class="comment-admin-link delete-btn"
+                href="javascript:;"
+                @click="handleDeleteClick"
+                >删除</a
+              >
+
+              <a
+                class="comment-admin-link top-btn"
+                href="javascript:;"
+                @click="handleTopClick"
+                >置顶</a
+              >
+
               <a
                 class="comment-reply-link"
                 :style="editing ? 'display:block;' : ''"
@@ -53,6 +68,7 @@
                 @click="handleReplyClick"
                 >回复</a
               >
+
               <div class="right">
                 <div class="info">
                   <time
@@ -111,6 +127,7 @@ import marked from "j-marked";
 import { renderedEmojiHtml } from "@/utils/emojiutil";
 import CommentEditor from "./CommentEditor.vue";
 import globals from "@/utils/globals.js";
+import commentApi from '../api/comment';
 
 export default {
   name: "CommentNode",
@@ -199,6 +216,7 @@ export default {
     },
     compileContent() {
       var at = "";
+
       if (this.parent != undefined) {
         at =
           '<a href="' +
@@ -211,10 +229,13 @@ export default {
         //   this.parent.author +
         //   " </a>";
       }
+
       // 获取转换后的marked
       const markedHtml = marked(at + this.comment.content);
+
       // 处理其中的表情包
       const emoji = renderedEmojiHtml(markedHtml);
+
       // 将回车转换为br
       return return2Br(emoji);
     },
@@ -285,6 +306,23 @@ export default {
       e.stopPropagation();
       // 设置状态为回复状态
       this.globalData.replyId = this.comment.id;
+    },
+    handleDeleteClick(e) {
+      e.stopPropagation();
+
+      commentApi
+        .deleteComment(this.target, this.comment.id, this.configs)
+        .then((response) => {
+          console.log('deleteComment response:', response);
+        })
+        .catch((err) => {
+          console.error('deleteComment err:', err);
+        });
+    },
+    handleTopClick(e) {
+      e.stopPropagation();
+
+      console.error('置顶功能等待开发');
     },
     handleAvatarError(e) {
       const img = e.target || e.srcElement;

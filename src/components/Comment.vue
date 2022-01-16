@@ -2,7 +2,10 @@
   <div
     :class="[
       'halo-comment',
-      { 'halo-comment__small': mergedConfigs.size === 'small' },
+      {
+        'halo-comment__small': mergedConfigs.size === 'small',
+        'halo-comment__admin': isAdmin === true
+      },
     ]"
     id="halo-comment"
   >
@@ -116,6 +119,7 @@ export default {
       globalData: globals,
       showImgPreviewer: false,
       previewImgUrl: "",
+      isAdmin: false
     };
   },
   computed: {
@@ -183,9 +187,12 @@ export default {
         attempt: 1,
       });
     });
+
     if (this.mergedConfigs.autoLoad) {
       this.loadComments();
     }
+
+    this.checkIsAdmin();
   },
   // mounted() {
   //   $("[data-fancybox]").on("click", (e) => {
@@ -228,6 +235,26 @@ export default {
       await sleep(300);
       this.loadComments();
     },
+    // 检测是否是管理者
+    checkIsAdmin () {
+      if (!this.mergedConfigs.blogAuthorEmail)
+        return;
+
+      const oldIsAdmin = this.isAdmin;
+      const cacheEmail = localStorage.getItem('qiushaocloud-halo-comment-email');
+      const nowIsAdmin = this.mergedConfigs.blogAuthorEmail === cacheEmail;
+
+      if (oldIsAdmin !== nowIsAdmin)
+        this.isAdmin = nowIsAdmin;
+
+      this.isAdminTimer && clearTimeout(this.isAdminTimer);
+      this.isAdminTimer = setTimeout(() => {
+        this.isAdminTimer && clearTimeout(this.isAdminTimer);
+        this.isAdminTimer = undefined;
+        
+        this.checkIsAdmin();
+      }, 3000);
+    }
   },
 };
 </script>
