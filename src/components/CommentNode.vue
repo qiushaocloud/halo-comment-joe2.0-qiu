@@ -54,12 +54,12 @@
                 >删除</a
               >
 
-              <a
+              <!-- <a
                 class="comment-admin-link top-btn"
                 href="javascript:;"
                 @click="handleTopClick"
                 >置顶</a
-              >
+              > -->
 
               <a
                 class="comment-reply-link"
@@ -114,6 +114,7 @@
       :replyComment="comment"
       :options="options"
       :configs="configs"
+      @checkIsAdmin="checkIsAdmin"
     />
   </div>
 </template>
@@ -310,13 +311,37 @@ export default {
     handleDeleteClick(e) {
       e.stopPropagation();
 
+      const {
+        id: commentId,
+        parentId
+      } = this.comment;
+
       commentApi
-        .deleteComment(this.target, this.comment.id, this.configs)
+        .deleteComment(this.target, commentId, this.configs)
         .then((response) => {
-          console.log('deleteComment response:', response);
+          console.log('deleteComment response:', response.data, ' ,commentId:', commentId);
+          this.$tips(`删除评论成功`, 5000, this);
+
+          const delDom = document.getElementById(`comment-${commentId}`);
+          const childDom = delDom && delDom.querySelector('ul.children');
+          
+          if (delDom && childDom)
+            delDom.removeChild(childDom);
+
+          if (parentId === 0) {
+            this.$emit('deletedRootCommenNode', commentId);
+          } else {
+            const delDomParentNode = delDom.parentNode;
+            delDomParentNode.removeChild(delDom);
+
+            if (delDomParentNode.className === 'comment-wrp')
+              delDomParentNode.parentNode.removeChild(delDomParentNode);
+          }
         })
         .catch((err) => {
-          console.error('deleteComment err:', err);
+          console.error('deleteComment err:', err.response, ' ,commentId:', commentId);
+          if (err.response && err.response.data && err.response.data.message)
+            this.$tips(`删除评论失败, ${err.response.data.message}`, 5000, this);
         });
     },
     handleTopClick(e) {
@@ -329,6 +354,9 @@ export default {
       img.src = this.configs.avatarError;
       img.onerror = null;
     },
+    checkIsAdmin (...args) {
+      this.$emit('checkIsAdmin', ...args);
+    }
   },
 };
 </script>

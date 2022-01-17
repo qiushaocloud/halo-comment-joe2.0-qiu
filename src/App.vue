@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" style="margin-top: 50px;">
     <Comment :id="4" type="sheet" :configs="configs" />
   </div>
 </template>

@@ -362,6 +362,8 @@ export default {
           localStorage.setItem("qiushaocloud-halo-comment-authorUrl", this.comment.authorUrl);
           localStorage.setItem("qiushaocloud-halo-comment-avatar", this.avatar);
           localStorage.setItem("qiushaocloud-halo-comment-avatar-key", this.comment.author+'###'+this.comment.email);
+          
+          this.$emit('checkIsAdmin');
 
           // clear comment
           this.comment.content = "";
@@ -380,8 +382,14 @@ export default {
       if (createdComment.status === "PUBLISHED") {
         // 成功后直接新增新的评论node
         try {
-          this.createdNewNode(createdComment);
+          if (createdComment.parentId === 0) {
+            this.$emit('createdNewRootCommentNode', createdComment);
+          }else{
+            this.createdNewNode(createdComment);
+          }
+
           this.$tips("评论成功！", 5000, this);
+
           this.$parent.$emit("post-success", {
             target: this.target,
             targetId: this.targetId,
@@ -572,6 +580,8 @@ export default {
       // window.scrollTo(document.body.scrollWidth, offsetTop);
     },
     pullInfo() {
+      this.$emit('checkIsAdmin');
+
       let author = this.comment.author;
       let authorQQ = author;
       const cacheQqStr = window.localStorage.getItem('qiushaocloud-halo-comment-qq');
@@ -672,6 +682,8 @@ export default {
             avatar: data.avatar,
             saveTs: Date.now()
           }));
+
+          _self.$emit('checkIsAdmin');
         })
         .catch(() => {
           errorQQCallback();

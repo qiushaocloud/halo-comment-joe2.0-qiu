@@ -16,6 +16,8 @@
       :options="mergedOptions"
       :configs="mergedConfigs"
       class="bottom-comment"
+      @checkIsAdmin="checkIsAdmin"
+      @createdNewRootCommentNode="createdNewRootCommentNode"
     />
     <div class="comment-load-button" v-if="!mergedConfigs.autoLoad && !loaded">
       <a
@@ -37,6 +39,8 @@
           :configs="mergedConfigs"
           :key="index"
           :depth="1"
+          @deletedRootCommenNode="deletedRootCommenNode"
+          @createdNewRootCommentNode="createdNewRootCommentNode"
         />
       </template>
     </ul>
@@ -246,14 +250,43 @@ export default {
 
       if (oldIsAdmin !== nowIsAdmin)
         this.isAdmin = nowIsAdmin;
+    },
+    deletedRootCommenNode (commentId) {
+      console.log('deletedRootCommenNode commentId:', commentId);
 
-      this.isAdminTimer && clearTimeout(this.isAdminTimer);
-      this.isAdminTimer = setTimeout(() => {
-        this.isAdminTimer && clearTimeout(this.isAdminTimer);
-        this.isAdminTimer = undefined;
-        
-        this.checkIsAdmin();
-      }, 3000);
+      for (let i=this.comments.length-1; i>=0; i--) {
+        const comment = this.comments[i];
+        if (comment.id === commentId) {
+          this.comments.splice(i,1);
+          break;
+        }
+      }
+    },
+    createdNewRootCommentNode (createdComment) {
+      console.log('createdNewRootCommentNode createdComment:', createdComment);
+ 
+      if (createdComment.parentId === 0)
+        this.comments.unshift(createdComment);
+    },
+    _findCommentById (findCommentId) {
+      for (const comment of this.comments) {
+        const findCommentResult = this._findCommentByIdStep(comment, findCommentId);
+        if (findCommentResult)
+          return findCommentResult;
+      }
+    },
+    _findCommentByIdStep (comment, findCommentId) {
+      if (comment.id === findCommentId)
+        return comment;
+
+      if (!comment.children)
+        return undefined;
+
+      for (const childItem of comment.children) {
+        const findCommentResult = this._findCommentByIdStep(childItem, findCommentId);
+        if (findCommentResult)
+          return findCommentResult;
+      }      
     }
   },
 };

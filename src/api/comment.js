@@ -186,7 +186,13 @@ const adminService = async (
         reqResponse = await service(reqConfig);
     }catch(reqError1) {
         // 管理员token失效，需要重新验证
-        if (isAdminReq && !adminUserName && !adminUserPwd) {
+        if (
+            isAdminReq
+            && !adminUserName
+            && !adminUserPwd
+            && reqError1.response
+            && reqError1.response.status === 401
+        ) {
             try{
                 const {
                     adminUserName: adminUserNameTmp,

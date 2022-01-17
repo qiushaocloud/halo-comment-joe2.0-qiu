@@ -806,6 +806,9 @@ div {
           transform-origin: 0 0;
           pointer-events: none;
           transition: all 0.25s;
+          overflow: hidden;
+          text-overflow:ellipsis;
+          white-space: nowrap;
         }
       }
 
