@@ -794,6 +794,9 @@ div {
             background-color: var(--theme);
             transform: scale(0.75) translate(-2px, -37px);
             border-radius: 3px;
+            overflow: hidden;
+            text-overflow:ellipsis;
+            white-space: nowrap;
           }
         }
 
@@ -806,9 +809,6 @@ div {
           transform-origin: 0 0;
           pointer-events: none;
           transition: all 0.25s;
-          overflow: hidden;
-          text-overflow:ellipsis;
-          white-space: nowrap;
         }
       }
 
