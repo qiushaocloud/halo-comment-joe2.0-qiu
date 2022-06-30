@@ -1,13 +1,15 @@
 /*--------------------------------------------------------------
   # Normalize
 --------------------------------------------------------------*/
-html body {
+html body,
+.halo-comment {
   --theme: #fb6c28;
   --scroll-bar: #c0c4cc;
   --loading-bar: var(--theme);
   font-family: "Joe Font", "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, "sans-serif";
 }
-html[data-mode='dark'] body {
+html[data-mode='dark'] body,
+html[data-mode='dark'] .halo-comment {
   --theme: #9999ff;
   --scroll-bar: #666;
   --loading-bar: var(--theme);
