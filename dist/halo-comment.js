@@ -4947,20 +4947,14 @@ var EmojiListvue_type_template_id_5b302dc8_staticRenderFns = []
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.includes.js
 var es_array_includes = __webpack_require__("caad");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"27f816ca-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/EmojiPicker/HahaEmoji.vue?vue&type=template&id=343fcd2e&
-var HahaEmojivue_type_template_id_343fcd2e_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('span',{staticClass:"emoji-item",attrs:{"title":_vm.data.description}},[_c('img',{attrs:{"src":_vm.hahaSrc}})])}
-var HahaEmojivue_type_template_id_343fcd2e_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"27f816ca-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/EmojiPicker/HahaEmoji.vue?vue&type=template&id=0548f460&
+var HahaEmojivue_type_template_id_0548f460_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('span',{staticClass:"emoji-item",attrs:{"title":_vm.data.description}},[_c('img',{attrs:{"src":_vm.hahaSrc}})])}
+var HahaEmojivue_type_template_id_0548f460_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/EmojiPicker/HahaEmoji.vue?vue&type=template&id=343fcd2e&
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.replace.js
-var es_string_replace = __webpack_require__("5319");
+// CONCATENATED MODULE: ./src/components/EmojiPicker/HahaEmoji.vue?vue&type=template&id=0548f460&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/EmojiPicker/HahaEmoji.vue?vue&type=script&lang=js&
-
-
-
 //
 //
 //
@@ -4976,13 +4970,14 @@ var es_string_replace = __webpack_require__("5319");
     url: {
       type: String,
       required: false,
-      default: "https://cdn.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/emoji/haha/"
+      default: "https://cdn.staticaly.com/gh/qiushaocloud/cdn-static@master/halo-comment/emoji/haha/"
     }
   },
   computed: {
-    hahaSrc: function hahaSrc() {
+    hahaSrc() {
       return this.url + "icon_" + this.data.name.replace('ha-', '') + ".png";
     }
+
   }
 });
 // CONCATENATED MODULE: ./src/components/EmojiPicker/HahaEmoji.vue?vue&type=script&lang=js&
@@ -4997,28 +4992,24 @@ var es_string_replace = __webpack_require__("5319");
 
 var HahaEmoji_component = Object(componentNormalizer["a" /* default */])(
   EmojiPicker_HahaEmojivue_type_script_lang_js_,
-  HahaEmojivue_type_template_id_343fcd2e_render,
-  HahaEmojivue_type_template_id_343fcd2e_staticRenderFns,
+  HahaEmojivue_type_template_id_0548f460_render,
+  HahaEmojivue_type_template_id_0548f460_staticRenderFns,
   false,
   null,
   null,
   null
-  
+  ,true
 )
 
 /* harmony default export */ var HahaEmoji = (HahaEmoji_component.exports);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"27f816ca-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/EmojiPicker/BilibiliEmoji.vue?vue&type=template&id=133f4962&
-var BilibiliEmojivue_type_template_id_133f4962_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('span',{staticClass:"emotion-secter emoji-item emotion-select-parent",style:(_vm.biliSpanStyle)},[_c('div',{staticClass:"img emotion-select-child",style:(_vm.biliImgStyle)})])}
-var BilibiliEmojivue_type_template_id_133f4962_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"27f816ca-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/EmojiPicker/BilibiliEmoji.vue?vue&type=template&id=0c3f243c&
+var BilibiliEmojivue_type_template_id_0c3f243c_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('span',{staticClass:"emotion-secter emoji-item emotion-select-parent",style:(_vm.biliSpanStyle)},[_c('div',{staticClass:"img emotion-select-child",style:(_vm.biliImgStyle)})])}
+var BilibiliEmojivue_type_template_id_0c3f243c_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/EmojiPicker/BilibiliEmoji.vue?vue&type=template&id=133f4962&
+// CONCATENATED MODULE: ./src/components/EmojiPicker/BilibiliEmoji.vue?vue&type=template&id=0c3f243c&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/EmojiPicker/BilibiliEmoji.vue?vue&type=script&lang=js&
-
-
-
-
 //
 //
 //
@@ -5034,22 +5025,24 @@ var BilibiliEmojivue_type_template_id_133f4962_staticRenderFns = []
     url: {
       type: String,
       required: false,
-      default: "https://cdn.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/emoji/bili/"
+      default: "https://cdn.staticaly.com/gh/qiushaocloud/cdn-static@master/halo-comment/emoji/bili/"
     }
   },
   computed: {
-    biliSpanStyle: function biliSpanStyle() {
+    biliSpanStyle() {
       return "background-image: url(" + this.url + "hd/ic_emoji_" + this.data.name + ".png);";
     },
-    biliImgStyle: function biliImgStyle() {
-      var background = this.url + this.data.name + ".png";
-      var emoji = this.data;
-      var dataStyle = "";
+
+    biliImgStyle() {
+      let background = this.url + this.data.name + ".png";
+      let emoji = this.data;
+      let dataStyle = "";
       Object.keys(emoji.style).forEach(function (item) {
         dataStyle += item + ":" + emoji.style[item] + ";";
       });
       return "background-image: url(" + background + ");" + dataStyle;
     }
+
   }
 });
 // CONCATENATED MODULE: ./src/components/EmojiPicker/BilibiliEmoji.vue?vue&type=script&lang=js&
@@ -5064,13 +5057,13 @@ var BilibiliEmojivue_type_template_id_133f4962_staticRenderFns = []
 
 var BilibiliEmoji_component = Object(componentNormalizer["a" /* default */])(
   EmojiPicker_BilibiliEmojivue_type_script_lang_js_,
-  BilibiliEmojivue_type_template_id_133f4962_render,
-  BilibiliEmojivue_type_template_id_133f4962_staticRenderFns,
+  BilibiliEmojivue_type_template_id_0c3f243c_render,
+  BilibiliEmojivue_type_template_id_0c3f243c_staticRenderFns,
   false,
   null,
   null,
   null
-  
+  ,true
 )
 
 /* harmony default export */ var BilibiliEmoji = (BilibiliEmoji_component.exports);
@@ -7876,7 +7869,7 @@ var addStylesShadow = __webpack_require__("35d6");
 // EXTERNAL MODULE: ./node_modules/vue-loader/lib/runtime/componentNormalizer.js
 var componentNormalizer = __webpack_require__("2877");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"27f816ca-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Comment.vue?vue&type=template&id=0896de4c&shadow
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"27f816ca-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Comment.vue?vue&type=template&id=07db9e8e&shadow
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:[
     'halo-comment',
     {
@@ -7886,7 +7879,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/Comment.vue?vue&type=template&id=0896de4c&shadow
+// CONCATENATED MODULE: ./src/components/Comment.vue?vue&type=template&id=07db9e8e&shadow
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.error.cause.js
 var es_error_cause = __webpack_require__("d9e2");
@@ -7908,7 +7901,7 @@ var components = __webpack_require__("2af9");
   // gravatar头像源
   gravatarSourceDefault: "https://cn.gravatar.com/avatar",
   // gravatar默认头像源
-  avatarError: "https://cdn.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/default_avatar.jpg",
+  avatarError: "https://cdn.staticaly.com/gh/qiushaocloud/cdn-static@master/halo-comment/default_avatar.jpg",
   // 头像加载错误时展示的图片
   avatarLoading: "",
   // 头像加载时展示的图片
@@ -9917,8 +9910,8 @@ external_Vue_default.a.use(plugins_Tips);
     // await this.loadOptions();
     this.$nextTick(() => {
       external_Vue_default.a.use(vue_lazyload_esm, {
-        error: this.mergedConfigs.avatarError || "https://cdn.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/default_avatar.jpg",
-        loading: this.mergedConfigs.avatarLoading || "https://cdn.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/spinner-preloader.svg",
+        error: this.mergedConfigs.avatarError || "https://cdn.staticaly.com/gh/qiushaocloud/cdn-static@master/halo-comment/default_avatar.jpg",
+        loading: this.mergedConfigs.avatarLoading || "https://cdn.staticaly.com/gh/qiushaocloud/cdn-static@master/halo-comment/spinner-preloader.svg",
         attempt: 1
       });
     });
@@ -18802,30 +18795,15 @@ module.exports = function (key) {
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"27f816ca-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CommentNode.vue?vue&type=template&id=a2245f90&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"27f816ca-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CommentNode.vue?vue&type=template&id=69556c36&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"comment-wrp"},[_c('li',{staticClass:"comment",class:_vm.commentClass,attrs:{"id":'comment-' + _vm.comment.id,"itemtype":"http://schema.org/Comment","itemprop":"comment"}},[_c('div',{staticClass:"contents"},[_c('div',{staticClass:"main shadow"},[_c('div',{staticClass:"profile"},[_c('a',{attrs:{"href":_vm.comment.authorUrl,"rel":"nofollow noopener noreferrer","target":"_blank"}},[_c('img',{directives:[{name:"lazy",rawName:"v-lazy",value:(_vm.comment.isAdmin ? _vm.options.blog_logo : _vm.avatar),expression:"comment.isAdmin ? options.blog_logo : avatar"}],staticClass:"avatar",attrs:{"alt":_vm.comment.author,"height":"80","width":"80"},on:{"error":_vm.handleAvatarError}})])]),_c('div',{staticClass:"commentinfo"},[_c('section',{staticClass:"commeta"},[_c('div',{staticClass:"left"},[_c('h4',{staticClass:"author"},[_c('a',{attrs:{"href":_vm.comment.authorUrl,"rel":"nofollow noopener noreferrer","target":"_blank"}},[_c('img',{directives:[{name:"lazy",rawName:"v-lazy",value:(_vm.comment.isAdmin ? _vm.options.blog_logo : _vm.avatar),expression:"comment.isAdmin ? options.blog_logo : avatar"}],staticClass:"avatar",attrs:{"alt":_vm.comment.author,"height":"24","width":"24"},on:{"error":_vm.handleAvatarError}}),(_vm.comment.isAdmin)?_c('span',{staticClass:"bb-comment isauthor",attrs:{"title":"博主"}},[_vm._v("博主")]):_vm._e(),_vm._v(" "+_vm._s(_vm.comment.author)+" ")])])]),_c('a',{staticClass:"comment-admin-link delete-btn",attrs:{"href":"javascript:;"},on:{"click":_vm.handleDeleteClick}},[_vm._v("删除")]),_c('a',{staticClass:"comment-reply-link",style:(_vm.editing ? 'display:block;' : ''),attrs:{"href":"javascript:;"},on:{"click":_vm.handleReplyClick}},[_vm._v("回复")]),_c('div',{staticClass:"right"},[_c('div',{staticClass:"info"},[_c('time',{staticClass:"comment-time",attrs:{"itemprop":"datePublished","datetime":_vm.comment.createTime}},[_vm._v("发布于 "+_vm._s(_vm.createTimeAgo)+" ")]),(_vm.configs.showUserAgent)?_c('span',{staticClass:"useragent-info",domProps:{"innerHTML":_vm._s(_vm.compileUserAgent)}}):_vm._e()])])])]),_c('div',{staticClass:"body markdown-body"},[_c('div',{staticClass:"markdown-content",domProps:{"innerHTML":_vm._s(_vm.compileContent)}})])])]),(_vm.comment.children)?_c('ul',{staticClass:"children"},[_vm._l((_vm.comment.children),function(children,index){return [_c('CommentNode',{key:index,attrs:{"isChild":true,"targetId":_vm.targetId,"target":_vm.target,"comment":children,"options":_vm.options,"configs":_vm.configs,"depth":_vm.selfAddDepth,"parent":_vm.comment}})]})],2):_vm._e()]),_c('CommentEditor',{attrs:{"targetId":_vm.targetId,"target":_vm.target,"replyComment":_vm.comment,"options":_vm.options,"configs":_vm.configs},on:{"checkIsAdmin":_vm.checkIsAdmin}})],1)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/CommentNode.vue?vue&type=template&id=a2245f90&
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.number.constructor.js
-var es_number_constructor = __webpack_require__("a9e3");
+// CONCATENATED MODULE: ./src/components/CommentNode.vue?vue&type=template&id=69556c36&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.includes.js
 var es_array_includes = __webpack_require__("caad");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.concat.js
-var es_array_concat = __webpack_require__("99af");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.function.name.js
-var es_function_name = __webpack_require__("b0c0");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.exec.js
-var es_regexp_exec = __webpack_require__("ac1f");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.replace.js
-var es_string_replace = __webpack_require__("5319");
 
 // EXTERNAL MODULE: ./src/components/index.js + 10 modules
 var components = __webpack_require__("2af9");
@@ -18854,11 +18832,6 @@ var globals = __webpack_require__("0e4d");
 var comment = __webpack_require__("063c");
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CommentNode.vue?vue&type=script&lang=js&
-
-
-
-
-
 
 //
 //
@@ -19021,47 +18994,52 @@ var comment = __webpack_require__("063c");
       type: String,
       required: false,
       default: "posts",
-      validator: function validator(value) {
+      validator: function (value) {
         return ["posts", "journals", "sheets"].includes(value);
       }
     },
     comment: {
       type: Object,
       required: false,
-      default: function _default() {}
+      default: () => {}
     },
     options: {
       type: Object,
       required: false,
-      default: function _default() {}
+      default: () => {}
     },
     configs: {
       type: Object,
       required: true
     }
   },
-  data: function data() {
+
+  data() {
     return {
       editing: false,
       globalData: globals["a" /* default */]
     };
   },
-  created: function created() {
-    var renderer = {
+
+  created() {
+    const renderer = {
       // eslint-disable-next-line no-unused-vars
-      image: function image(href, title) {
-        return "<a data-fancybox target=\"_blank\" rel=\"noopener noreferrer nofollow\" href=\"".concat(href, "\"><img src=\"").concat(href, "\" class=\"lazyload comment_inline_img\" onerror=\"this.src='https://cdn.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/img_error.svg'\"></a>");
+      image(href, title) {
+        return `<a data-fancybox target="_blank" rel="noopener noreferrer nofollow" href="${href}"><img src="${href}" class="lazyload comment_inline_img" onerror="this.src='https://cdn.staticaly.com/gh/qiushaocloud/cdn-static@master/halo-comment/img_error.svg'"></a>`;
       },
-      link: function link(href, title, text) {
-        return "<a href=\"".concat(href, "\" title=\"").concat(text, "\" target=\"_blank\" rel=\"noopener noreferrer nofollow\">").concat(text, "</a>");
+
+      link(href, title, text) {
+        return `<a href="${href}" title="${text}" target="_blank" rel="noopener noreferrer nofollow">${text}</a>`;
       }
+
     };
     marked_default.a.use({
-      renderer: renderer
+      renderer
     });
   },
+
   computed: {
-    avatar: function avatar() {
+    avatar() {
       // if (this.comment.avatar) {
       //   return this.comment.avatar;
       // } else {
@@ -19069,11 +19047,12 @@ var comment = __webpack_require__("063c");
         return this.comment.avatarFromContent;
       } else {
         // !!优先从主题配置取，取不到才从后台配置取
-        var gravatarSource = this.configs.gravatarSource || this.options.gravatar_source || this.configs.gravatarSourceDefault;
-        return "".concat(gravatarSource, "/").concat(this.comment.gravatarMd5, "?s=256&d=").concat(this.options.comment_gravatar_default);
+        const gravatarSource = this.configs.gravatarSource || this.options.gravatar_source || this.configs.gravatarSourceDefault;
+        return `${gravatarSource}/${this.comment.gravatarMd5}?s=256&d=${this.options.comment_gravatar_default}`;
       }
     },
-    compileContent: function compileContent() {
+
+    compileContent() {
       var at = "";
 
       if (this.parent != undefined) {
@@ -19084,22 +19063,24 @@ var comment = __webpack_require__("063c");
       } // 获取转换后的marked
 
 
-      var markedHtml = marked_default()(at + this.comment.content); // 处理其中的表情包
+      const markedHtml = marked_default()(at + this.comment.content); // 处理其中的表情包
 
-      var emoji = Object(emojiutil["a" /* renderedEmojiHtml */])(markedHtml); // 将回车转换为br
+      const emoji = Object(emojiutil["a" /* renderedEmojiHtml */])(markedHtml); // 将回车转换为br
 
       return Object(util["h" /* return2Br */])(emoji);
     },
-    createTimeAgo: function createTimeAgo() {
+
+    createTimeAgo() {
       return Object(util["j" /* timeAgo */])(this.comment.createTime);
     },
-    compileUserAgent: function compileUserAgent() {
+
+    compileUserAgent() {
       if (!this.comment.userAgent) return "";
       var parser = new ua_parser_default.a();
       parser.setUA(this.comment.userAgent);
       var result = parser.getResult();
       if (!result.browser.name) return "";
-      var browserImg = "https://cdn.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/" + result.browser.name.toLowerCase() + ".svg";
+      var browserImg = "https://cdn.staticaly.com/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/" + result.browser.name.toLowerCase() + ".svg";
       var uaImg = "";
 
       switch (result.os.name) {
@@ -19108,90 +19089,91 @@ var comment = __webpack_require__("063c");
             case "7":
             case "8":
             case "10":
-              uaImg = "https://cdn.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/windows_win" + result.os.version + ".svg";
+              uaImg = "https://cdn.staticaly.com/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/windows_win" + result.os.version + ".svg";
               break;
 
             case "":
-              uaImg = "https://cdn.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/windows_" + result.os.version + ".svg";
+              uaImg = "https://cdn.staticaly.com/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/windows_" + result.os.version + ".svg";
               break;
 
             default:
-              uaImg = "https://cdn.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/windows.svg";
+              uaImg = "https://cdn.staticaly.com/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/windows.svg";
               break;
           }
 
           break;
 
         default:
-          uaImg = "https://cdn.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/" + result.os.name.replace(/\s+/g, "").toLowerCase() + ".svg";
+          uaImg = "https://cdn.staticaly.com/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/" + result.os.name.replace(/\s+/g, "").toLowerCase() + ".svg";
           break;
       }
 
-      var returnStr = "\uFF08<img src=\"".concat(browserImg, "\" onerror=\"this.src='https://cdn.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/unknow.svg'\" alt=\"ua-browser\"/>  ").concat(result.browser.name, " ").concat(result.browser.version, " <img src=\"").concat(uaImg, "\" onerror=\"this.src='https://cdn.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/unknow.svg'\" alt=\"ua-os\"/> ").concat(result.os.name, " ").concat(result.os.version, "\uFF09");
+      let returnStr = `（<img src="${browserImg}" onerror="this.src='https://cdn.staticaly.com/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/unknow.svg'" alt="ua-browser"/>  ${result.browser.name} ${result.browser.version} <img src="${uaImg}" onerror="this.src='https://cdn.staticaly.com/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/unknow.svg'" alt="ua-os"/> ${result.os.name} ${result.os.version}）`;
 
       if (this.configs.isGetIpLocation && this.comment.ipLocation) {
-        returnStr += "\u300C".concat(this.comment.ipLocation, "\u300D");
+        returnStr += `「${this.comment.ipLocation}」`;
       }
 
       return returnStr;
     },
-    selfAddDepth: function selfAddDepth() {
+
+    selfAddDepth() {
       return this.depth + 1;
     },
-    commentClass: function commentClass() {
+
+    commentClass() {
       return "depth-" + this.depth + " comment-" + this.comment.id;
     }
+
   },
   methods: {
-    handleReplyClick: function handleReplyClick(e) {
+    handleReplyClick(e) {
       e.stopPropagation(); // 设置状态为回复状态
 
       this.globalData.replyId = this.comment.id;
     },
-    handleDeleteClick: function handleDeleteClick(e) {
-      var _this = this;
 
+    handleDeleteClick(e) {
       e.stopPropagation();
-      var _this$comment = this.comment,
-          commentId = _this$comment.id,
-          parentId = _this$comment.parentId;
-      comment["a" /* default */].deleteComment(this.target, commentId, this.configs).then(function (response) {
+      const {
+        id: commentId,
+        parentId
+      } = this.comment;
+      comment["a" /* default */].deleteComment(this.target, commentId, this.configs).then(response => {
         console.log('deleteComment response:', response.data, ' ,commentId:', commentId);
-
-        _this.$tips("\u5220\u9664\u8BC4\u8BBA\u6210\u529F", 5000, _this);
-
-        var delDom = document.getElementById("comment-".concat(commentId));
-        var childDom = delDom && delDom.querySelector('ul.children');
+        this.$tips(`删除评论成功`, 5000, this);
+        const delDom = document.getElementById(`comment-${commentId}`);
+        const childDom = delDom && delDom.querySelector('ul.children');
         if (delDom && childDom) delDom.removeChild(childDom);
 
         if (parentId === 0) {
-          _this.$emit('deletedRootCommenNode', commentId);
+          this.$emit('deletedRootCommenNode', commentId);
         } else {
-          var delDomParentNode = delDom.parentNode;
+          const delDomParentNode = delDom.parentNode;
           delDomParentNode.removeChild(delDom);
           if (delDomParentNode.className === 'comment-wrp') delDomParentNode.parentNode.removeChild(delDomParentNode);
         }
-      }).catch(function (err) {
+      }).catch(err => {
         console.error('deleteComment err:', err.response, ' ,commentId:', commentId);
-        if (err.response && err.response.data && err.response.data.message) _this.$tips("\u5220\u9664\u8BC4\u8BBA\u5931\u8D25, ".concat(err.response.data.message), 5000, _this);
+        if (err.response && err.response.data && err.response.data.message) this.$tips(`删除评论失败, ${err.response.data.message}`, 5000, this);
       });
     },
-    handleTopClick: function handleTopClick(e) {
+
+    handleTopClick(e) {
       e.stopPropagation();
       console.error('置顶功能等待开发');
     },
-    handleAvatarError: function handleAvatarError(e) {
-      var img = e.target || e.srcElement;
+
+    handleAvatarError(e) {
+      const img = e.target || e.srcElement;
       img.src = this.configs.avatarError;
       img.onerror = null;
     },
-    checkIsAdmin: function checkIsAdmin() {
-      for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
-      }
 
-      this.$emit.apply(this, ['checkIsAdmin'].concat(args));
+    checkIsAdmin(...args) {
+      this.$emit('checkIsAdmin', ...args);
     }
+
   }
 });
 // CONCATENATED MODULE: ./src/components/CommentNode.vue?vue&type=script&lang=js&
@@ -19215,7 +19197,7 @@ var component = Object(componentNormalizer["a" /* default */])(
   null,
   null,
   null
-  
+  ,true
 )
 
 /* harmony default export */ var CommentNode = __webpack_exports__["default"] = (component.exports);

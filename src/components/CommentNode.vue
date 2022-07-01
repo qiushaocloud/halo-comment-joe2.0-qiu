@@ -189,7 +189,7 @@ export default {
     const renderer = {
       // eslint-disable-next-line no-unused-vars
       image(href, title) {
-        return `<a data-fancybox target="_blank" rel="noopener noreferrer nofollow" href="${href}"><img src="${href}" class="lazyload comment_inline_img" onerror="this.src='https://cdn.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/img_error.svg'"></a>`;
+        return `<a data-fancybox target="_blank" rel="noopener noreferrer nofollow" href="${href}"><img src="${href}" class="lazyload comment_inline_img" onerror="this.src='https://cdn.staticaly.com/gh/qiushaocloud/cdn-static@master/halo-comment/img_error.svg'"></a>`;
       },
       link(href, title, text) {
         return `<a href="${href}" title="${text}" target="_blank" rel="noopener noreferrer nofollow">${text}</a>`;
@@ -251,7 +251,7 @@ export default {
 
       if (!result.browser.name) return "";
       var browserImg =
-        "https://cdn.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/" +
+        "https://cdn.staticaly.com/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/" +
         result.browser.name.toLowerCase() +
         ".svg";
       var uaImg = "";
@@ -263,31 +263,31 @@ export default {
             case "8":
             case "10":
               uaImg =
-                "https://cdn.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/windows_win" +
+                "https://cdn.staticaly.com/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/windows_win" +
                 result.os.version +
                 ".svg";
               break;
             case "":
               uaImg =
-                "https://cdn.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/windows_" +
+                "https://cdn.staticaly.com/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/windows_" +
                 result.os.version +
                 ".svg";
               break;
             default:
               uaImg =
-                "https://cdn.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/windows.svg";
+                "https://cdn.staticaly.com/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/windows.svg";
               break;
           }
           break;
         default:
           uaImg =
-            "https://cdn.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/" +
+            "https://cdn.staticaly.com/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/" +
             result.os.name.replace(/\s+/g, "").toLowerCase() +
             ".svg";
           break;
       }
 
-      let returnStr = `（<img src="${browserImg}" onerror="this.src='https://cdn.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/unknow.svg'" alt="ua-browser"/>  ${result.browser.name} ${result.browser.version} <img src="${uaImg}" onerror="this.src='https://cdn.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/unknow.svg'" alt="ua-os"/> ${result.os.name} ${result.os.version}）`
+      let returnStr = `（<img src="${browserImg}" onerror="this.src='https://cdn.staticaly.com/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/unknow.svg'" alt="ua-browser"/>  ${result.browser.name} ${result.browser.version} <img src="${uaImg}" onerror="this.src='https://cdn.staticaly.com/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/unknow.svg'" alt="ua-os"/> ${result.os.name} ${result.os.version}）`
       
       if (this.configs.isGetIpLocation && this.comment.ipLocation) {
         returnStr += `「${this.comment.ipLocation}」`;
