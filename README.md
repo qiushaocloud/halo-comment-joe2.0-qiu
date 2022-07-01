@@ -90,7 +90,7 @@ configs='${configs}'
 ```html
 <#macro comment target,type>
     <#if !post.disallowComment!false>
-        <script src="//cdn.staticaly.com/npm/vue@2.6.10/dist/vue.min.js"></script>
+        <script src="//unpkg.zhimg.com/vue@2.6.10/dist/vue.min.js"></script>
         <script src="${options.comment_internal_plugin_js!'//cdn.staticaly.com/gh/qiushaocloud/halo-comment-joe2.0-qiu@master/dist/halo-comment.min.js'}"></script>
         <#assign
           configs = '{
@@ -126,8 +126,8 @@ sheet.ftl：
     ...
 
     <#if is_post?? && is_sheet??>
-        <script src="//cdn.staticaly.com/npm/vue@2.6.10/dist/vue.min.js"></script>
-        <script src="${options.comment_internal_plugin_js!'//cdn.staticaly.com/npm/halo-comment-normal@1.1.1/dist/halo-comment.min.js'}"></script>
+        <script src="//unpkg.zhimg.com/vue@2.6.10/dist/vue.min.js"></script>
+        <script src="${options.comment_internal_plugin_js!'//unpkg.zhimg.com/halo-comment-normal@1.1.1/dist/halo-comment.min.js'}"></script>
         <#local
           configs = '{
             "autoLoad": true,
