@@ -70,7 +70,6 @@ import defaultConfig from "@/config/default_config";
 import defaultOption from "@/config/default_option";
 import commentApi from "../api/comment";
 // import ImgPreviewer from "./ImgPreviewer";
-// import optionApi from "../api/option";
 import globals from "@/utils/globals.js";
 import VueLazyload from "vue-lazyload";
 import Tips from "@/plugins/Tips";
@@ -209,7 +208,7 @@ export default {
       this.comments = [];
       this.commentLoading = true;
       commentApi
-        .listComments(this.target, this.id, "tree_view", this.pagination)
+        .listComments(this.target, this.id, "tree_view", this.pagination, this.mergedConfigs)
         .then((response) => {
           this.comments = response.data.data.content;
           this.pagination.size = response.data.data.rpp;
@@ -221,19 +220,6 @@ export default {
           this.loaded = true;
         });
     },
-    // 现在直接从模板中获取了，不需要请求配置了
-    // loadOptions() {
-    //   return new Promise((resolve, reject) => {
-    //     optionApi
-    //       .list()
-    //       .then((response) => {
-    //         const resD = response.data.data;
-    //         this.options = resD;
-    //         resolve(resD);
-    //       })
-    //       .catch((err) => reject(err));
-    //   });
-    // },
     async handlePaginationChange(page) {
       this.pagination.page = page;
       await sleep(300);

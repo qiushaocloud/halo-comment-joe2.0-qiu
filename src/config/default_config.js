@@ -15,6 +15,8 @@ export default {
   notComment: "还没有评论哦，快来抢占沙发 ♪(´▽｀)", // 无数据时展示的文案
   isAllowUploadAvatar: true, // 是否允许上传头像，因为使用的是「即库图床」上传的头像，头像会在该地址(https://img.78al.net/index/gallery.html)上被所有人看到
   isGetIpLocation: true, // 是否获取评论者的地理位置
-  blogAuthorEmail: "qiushaocloud@126.com", // 设置博主邮箱，则允许博主在博客中进行评论，如果没有授权，则需要进行登录授权
-  blogAdminUserName: "qiushaocloud" // 博客管理的用户名，配置后进行登录时免输入用户名
+  blogAuthorEmail: "", // 设置博主邮箱，则允许博主在博客中进行评论，如果没有授权，则需要进行登录授权
+  blogAdminUserName: "", // 博客管理的用户名，配置后进行登录时免输入用户名
+  getIpApiAddr: 'https://www.qiushaocloud.top/get_ip_location', // 获取 IP 的 API 地址，没有配置默认为： https://www.qiushaocloud.top/get_ip_location
+  haloApiHost: '' // 指定 Halo 相关 API 的域名，为 ‘’ 表示使用当前域名，缺省为‘’ 
 };

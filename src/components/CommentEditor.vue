@@ -22,12 +22,12 @@
           required="required"
           aria-required="true"
           tabindex="4"
-          :placeholder="configs.aWord || '欢迎您，请点击此处，动动您的小手指，留下您的👣  ...'"
+          :placeholder="configs.aWord"
           v-model="comment.content"
           class="commentbody"
         ></textarea>
         <label class="input-label">{{
-          configs.aWord || "欢迎您，请点击此处，动动您的小手指，留下您的👣  ..."
+          configs.aWord
         }}</label>
       </div>
       <div

@@ -1,14 +1,14 @@
 import axios from 'axios'
 import service from '@/utils/service'
 
-const baseUrl = 'https://www.qiushaocloud.top/api/content'
-const adminUrl = 'https://www.qiushaocloud.top/api/admin'
+const baseUrl = '/api/content';
+const adminUrl = '/api/admin';
 
 const commentApi = {};
 
 let cacheLocationResult;
 
-const blogAuthorLogin = async (commentConfigs) => {
+const blogAuthorLogin = async (commentConfigs = {}) => {
     const throwErrJson = {
         response: {
             status: 400,
@@ -21,8 +21,13 @@ const blogAuthorLogin = async (commentConfigs) => {
     let adminUserName = '';
     let adminUserPwd = '';
 
-    if (commentConfigs && commentConfigs.blogAdminUserName) {
-        adminUserName = commentConfigs.blogAdminUserName;
+    const {
+        haloApiHost = '',
+        blogAdminUserName
+    } = commentConfigs;
+
+    if (blogAdminUserName) {
+        adminUserName = blogAdminUserName;
     }else {
         adminUserName = prompt('「身份验证」您是博主，请输入用户名:',"");
         if (!adminUserName) {
@@ -41,7 +46,7 @@ const blogAuthorLogin = async (commentConfigs) => {
 
     try {
         const loginResult = await axios.post(
-            `${adminUrl}/login`,
+            `${haloApiHost + adminUrl}/login`,
             {
                 // "authcode": "string",
                 "password": adminUserPwd,
@@ -231,8 +236,10 @@ commentApi.createComment = async (
     commentConfigs = {}
 ) => {
     const {
+        haloApiHost = '',
         isGetIpLocation,
-        blogAuthorEmail
+        blogAuthorEmail,
+        getIpApiAddr = 'https://www.qiushaocloud.top/get_ip_location'
     } = commentConfigs;
 
     const extraJson = {};
@@ -240,20 +247,19 @@ commentApi.createComment = async (
     const commentEmail = comment.email;
     let cacheSelfIp = undefined;
     let cacheSelfLocation = undefined;
-    let reqUrl = `${baseUrl}/${target}/comments`;
+    let reqUrl = `${haloApiHost + baseUrl}/${target}/comments`;
     let isAdminReq = blogAuthorEmail && blogAuthorEmail === commentEmail;
 
     if (isGetIpLocation) {
         try{
             if (!cacheLocationResult) {
-                cacheLocationResult = await axios.get(
-                    `https://www.qiushaocloud.top/get_ip_location`
-                ).then((response)=>{
-                    if (response.status >= 400)
-                        throw response;
-            
-                    return response.data;
-                });
+                cacheLocationResult = await axios.get(`${getIpApiAddr}`)
+                    .then((response)=>{
+                        if (response.status >= 400)
+                            throw response;
+                
+                        return response.data;
+                    });
                 console.log('cacheLocationResult:', cacheLocationResult);
             }
             
@@ -275,7 +281,7 @@ commentApi.createComment = async (
     
     // 评论邮箱为作者的邮箱，则表明是作者要进行评论
     if (isAdminReq) {
-        reqUrl = `${adminUrl}/${target}/comments`;
+        reqUrl = `${haloApiHost + adminUrl}/${target}/comments`;
         delete extraJson.avatar;
     }
 
@@ -322,8 +328,12 @@ commentApi.deleteComment = async (
     commentId,
     commentConfigs = {}
 ) => {
+    const {
+        haloApiHost = ''
+    } = commentConfigs;
+
     const reqConfig = {
-        url: `${adminUrl}/${target}/comments/${commentId}`,
+        url: `${haloApiHost + adminUrl}/${target}/comments/${commentId}`,
         method: 'delete'
     };
     return adminService(
@@ -332,29 +342,19 @@ commentApi.deleteComment = async (
     );
 }
 
-// commentApi.topComment = async (
-//     target,
-//     commentId,
-//     commentConfigs = {}
-// ) => {
-//     const reqConfig = {
-//         url: `${adminUrl}/${target}/comments/${commentId}`,
-//         method: 'delete'
-//     };
-//     return adminService(
-//         reqConfig,
-//         commentConfigs
-//     );
-// }
-
 commentApi.listComments = (
     target,
     targetId,
     view = 'tree_view',
-    pagination
+    pagination,
+    commentConfigs = {}
 ) => {
+    const {
+        haloApiHost = ''
+    } = commentConfigs;
+
     return service({
-        url: `${baseUrl}/${target}/${targetId}/comments/${view}`,
+        url: `${haloApiHost + baseUrl}/${target}/${targetId}/comments/${view}`,
         params: pagination,
         method: 'get'
     })
@@ -369,10 +369,11 @@ commentApi.listComments = (
 }
 
 
-commentApi.getIpLocation = (ip) => {
-    return axios.get(
-        `https://www.qiushaocloud.top/get_ip_location?ip=${ip}`
-    ).then((response) => {
+commentApi.getIpLocation = (
+    ip,
+    getIpApiAddr = 'https://www.qiushaocloud.top/get_ip_location'
+) => {
+    return axios.get(`${getIpApiAddr}?ip=${ip}`).then((response) => {
         if (response.status !== 200)
             throw response;
 

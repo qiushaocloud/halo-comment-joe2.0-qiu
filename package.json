@@ -1,6 +1,6 @@
 {
   "name": "halo-comment-joe2.0-qiu",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": false,
   "scripts": {
     "serve": "cross-env vue-cli-service serve",
@@ -39,12 +39,12 @@
   "main": "babel.config.js",
   "repository": {
     "type": "git",
-    "url": "git+https://gitee.com/duider/halo-comment-joe2.0-qiu.git"
+    "url": "git+https://gitee.com/qiushaocloud/halo-comment-joe2.0-qiu.git"
   },
   "author": "qiushaocloud",
   "license": "MIT",
   "bugs": {
-    "url": "https://gitee.com/duider/halo-comment-joe2.0-qiu/issues"
+    "url": "https://gitee.com/qiushaocloud/halo-comment-joe2.0-qiu/issues"
   },
-  "homepage": "https://gitee.com/duider/halo-comment-joe2.0-qiu#readme"
+  "homepage": "https://gitee.com/qiushaocloud/halo-comment-joe2.0-qiu#readme"
 }

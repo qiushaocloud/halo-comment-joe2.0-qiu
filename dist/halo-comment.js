@@ -672,589 +672,24 @@ module.exports.f = function getOwnPropertyNames(it) {
 
 "use strict";
 
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.js
-var es_symbol = __webpack_require__("a4d3");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.description.js
-var es_symbol_description = __webpack_require__("e01a");
+// EXTERNAL MODULE: ./node_modules/axios/index.js
+var axios = __webpack_require__("bc3a");
+var axios_default = /*#__PURE__*/__webpack_require__.n(axios);
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.to-string.js
 var es_object_to_string = __webpack_require__("d3b7");
 
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.iterator.js
-var es_symbol_iterator = __webpack_require__("d28b");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.iterator.js
-var es_string_iterator = __webpack_require__("3ca3");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/web.dom-collections.iterator.js
-var web_dom_collections_iterator = __webpack_require__("ddb0");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.error.cause.js
-var es_error_cause = __webpack_require__("d9e2");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.slice.js
-var es_array_slice = __webpack_require__("fb6a");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.function.name.js
-var es_function_name = __webpack_require__("b0c0");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.from.js
-var es_array_from = __webpack_require__("a630");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.exec.js
-var es_regexp_exec = __webpack_require__("ac1f");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.test.js
-var es_regexp_test = __webpack_require__("00b4");
-
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/arrayLikeToArray.js
-function _arrayLikeToArray(arr, len) {
-  if (len == null || len > arr.length) len = arr.length;
-
-  for (var i = 0, arr2 = new Array(len); i < len; i++) {
-    arr2[i] = arr[i];
-  }
-
-  return arr2;
-}
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js
-
-
-
-
-
-
-
-
-function _unsupportedIterableToArray(o, minLen) {
-  if (!o) return;
-  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
-  var n = Object.prototype.toString.call(o).slice(8, -1);
-  if (n === "Object" && o.constructor) n = o.constructor.name;
-  if (n === "Map" || n === "Set") return Array.from(o);
-  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
-}
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/createForOfIteratorHelper.js
-
-
-
-
-
-
-
-
-function _createForOfIteratorHelper(o, allowArrayLike) {
-  var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"];
-
-  if (!it) {
-    if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {
-      if (it) o = it;
-      var i = 0;
-
-      var F = function F() {};
-
-      return {
-        s: F,
-        n: function n() {
-          if (i >= o.length) return {
-            done: true
-          };
-          return {
-            done: false,
-            value: o[i++]
-          };
-        },
-        e: function e(_e) {
-          throw _e;
-        },
-        f: F
-      };
-    }
-
-    throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-  }
-
-  var normalCompletion = true,
-      didErr = false,
-      err;
-  return {
-    s: function s() {
-      it = it.call(o);
-    },
-    n: function n() {
-      var step = it.next();
-      normalCompletion = step.done;
-      return step;
-    },
-    e: function e(_e2) {
-      didErr = true;
-      err = _e2;
-    },
-    f: function f() {
-      try {
-        if (!normalCompletion && it["return"] != null) it["return"]();
-      } finally {
-        if (didErr) throw err;
-      }
-    }
-  };
-}
-// EXTERNAL MODULE: ./node_modules/@babel/runtime/helpers/esm/typeof.js
-var esm_typeof = __webpack_require__("53ca");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.async-iterator.js
-var es_symbol_async_iterator = __webpack_require__("b636");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.to-string-tag.js
-var es_symbol_to_string_tag = __webpack_require__("944a");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.json.to-string-tag.js
-var es_json_to_string_tag = __webpack_require__("0c47");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.math.to-string-tag.js
-var es_math_to_string_tag = __webpack_require__("23dc");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.get-prototype-of.js
-var es_object_get_prototype_of = __webpack_require__("3410");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/web.dom-collections.for-each.js
-var web_dom_collections_for_each = __webpack_require__("159b");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.set-prototype-of.js
-var es_object_set_prototype_of = __webpack_require__("131a");
-
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/regeneratorRuntime.js
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function _regeneratorRuntime() {
-  "use strict";
-  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
-
-  _regeneratorRuntime = function _regeneratorRuntime() {
-    return exports;
-  };
-
-  var exports = {},
-      Op = Object.prototype,
-      hasOwn = Op.hasOwnProperty,
-      $Symbol = "function" == typeof Symbol ? Symbol : {},
-      iteratorSymbol = $Symbol.iterator || "@@iterator",
-      asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator",
-      toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
-
-  function define(obj, key, value) {
-    return Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: !0,
-      configurable: !0,
-      writable: !0
-    }), obj[key];
-  }
-
-  try {
-    define({}, "");
-  } catch (err) {
-    define = function define(obj, key, value) {
-      return obj[key] = value;
-    };
-  }
-
-  function wrap(innerFn, outerFn, self, tryLocsList) {
-    var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator,
-        generator = Object.create(protoGenerator.prototype),
-        context = new Context(tryLocsList || []);
-    return generator._invoke = function (innerFn, self, context) {
-      var state = "suspendedStart";
-      return function (method, arg) {
-        if ("executing" === state) throw new Error("Generator is already running");
-
-        if ("completed" === state) {
-          if ("throw" === method) throw arg;
-          return doneResult();
-        }
-
-        for (context.method = method, context.arg = arg;;) {
-          var delegate = context.delegate;
-
-          if (delegate) {
-            var delegateResult = maybeInvokeDelegate(delegate, context);
-
-            if (delegateResult) {
-              if (delegateResult === ContinueSentinel) continue;
-              return delegateResult;
-            }
-          }
-
-          if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) {
-            if ("suspendedStart" === state) throw state = "completed", context.arg;
-            context.dispatchException(context.arg);
-          } else "return" === context.method && context.abrupt("return", context.arg);
-          state = "executing";
-          var record = tryCatch(innerFn, self, context);
-
-          if ("normal" === record.type) {
-            if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue;
-            return {
-              value: record.arg,
-              done: context.done
-            };
-          }
-
-          "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg);
-        }
-      };
-    }(innerFn, self, context), generator;
-  }
-
-  function tryCatch(fn, obj, arg) {
-    try {
-      return {
-        type: "normal",
-        arg: fn.call(obj, arg)
-      };
-    } catch (err) {
-      return {
-        type: "throw",
-        arg: err
-      };
-    }
-  }
-
-  exports.wrap = wrap;
-  var ContinueSentinel = {};
-
-  function Generator() {}
-
-  function GeneratorFunction() {}
-
-  function GeneratorFunctionPrototype() {}
-
-  var IteratorPrototype = {};
-  define(IteratorPrototype, iteratorSymbol, function () {
-    return this;
-  });
-  var getProto = Object.getPrototypeOf,
-      NativeIteratorPrototype = getProto && getProto(getProto(values([])));
-  NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype);
-  var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype);
-
-  function defineIteratorMethods(prototype) {
-    ["next", "throw", "return"].forEach(function (method) {
-      define(prototype, method, function (arg) {
-        return this._invoke(method, arg);
-      });
-    });
-  }
-
-  function AsyncIterator(generator, PromiseImpl) {
-    function invoke(method, arg, resolve, reject) {
-      var record = tryCatch(generator[method], generator, arg);
-
-      if ("throw" !== record.type) {
-        var result = record.arg,
-            value = result.value;
-        return value && "object" == Object(esm_typeof["a" /* default */])(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) {
-          invoke("next", value, resolve, reject);
-        }, function (err) {
-          invoke("throw", err, resolve, reject);
-        }) : PromiseImpl.resolve(value).then(function (unwrapped) {
-          result.value = unwrapped, resolve(result);
-        }, function (error) {
-          return invoke("throw", error, resolve, reject);
-        });
-      }
-
-      reject(record.arg);
-    }
-
-    var previousPromise;
-
-    this._invoke = function (method, arg) {
-      function callInvokeWithMethodAndArg() {
-        return new PromiseImpl(function (resolve, reject) {
-          invoke(method, arg, resolve, reject);
-        });
-      }
-
-      return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg();
-    };
-  }
-
-  function maybeInvokeDelegate(delegate, context) {
-    var method = delegate.iterator[context.method];
-
-    if (undefined === method) {
-      if (context.delegate = null, "throw" === context.method) {
-        if (delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method)) return ContinueSentinel;
-        context.method = "throw", context.arg = new TypeError("The iterator does not provide a 'throw' method");
-      }
-
-      return ContinueSentinel;
-    }
-
-    var record = tryCatch(method, delegate.iterator, context.arg);
-    if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel;
-    var info = record.arg;
-    return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel);
-  }
-
-  function pushTryEntry(locs) {
-    var entry = {
-      tryLoc: locs[0]
-    };
-    1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry);
-  }
-
-  function resetTryEntry(entry) {
-    var record = entry.completion || {};
-    record.type = "normal", delete record.arg, entry.completion = record;
-  }
-
-  function Context(tryLocsList) {
-    this.tryEntries = [{
-      tryLoc: "root"
-    }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0);
-  }
-
-  function values(iterable) {
-    if (iterable) {
-      var iteratorMethod = iterable[iteratorSymbol];
-      if (iteratorMethod) return iteratorMethod.call(iterable);
-      if ("function" == typeof iterable.next) return iterable;
-
-      if (!isNaN(iterable.length)) {
-        var i = -1,
-            next = function next() {
-          for (; ++i < iterable.length;) {
-            if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next;
-          }
-
-          return next.value = undefined, next.done = !0, next;
-        };
-
-        return next.next = next;
-      }
-    }
-
-    return {
-      next: doneResult
-    };
-  }
-
-  function doneResult() {
-    return {
-      value: undefined,
-      done: !0
-    };
-  }
-
-  return GeneratorFunction.prototype = GeneratorFunctionPrototype, define(Gp, "constructor", GeneratorFunctionPrototype), define(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) {
-    var ctor = "function" == typeof genFun && genFun.constructor;
-    return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name));
-  }, exports.mark = function (genFun) {
-    return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun;
-  }, exports.awrap = function (arg) {
-    return {
-      __await: arg
-    };
-  }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () {
-    return this;
-  }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) {
-    void 0 === PromiseImpl && (PromiseImpl = Promise);
-    var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl);
-    return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) {
-      return result.done ? result.value : iter.next();
-    });
-  }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () {
-    return this;
-  }), define(Gp, "toString", function () {
-    return "[object Generator]";
-  }), exports.keys = function (object) {
-    var keys = [];
-
-    for (var key in object) {
-      keys.push(key);
-    }
-
-    return keys.reverse(), function next() {
-      for (; keys.length;) {
-        var key = keys.pop();
-        if (key in object) return next.value = key, next.done = !1, next;
-      }
-
-      return next.done = !0, next;
-    };
-  }, exports.values = values, Context.prototype = {
-    constructor: Context,
-    reset: function reset(skipTempReset) {
-      if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) {
-        "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined);
-      }
-    },
-    stop: function stop() {
-      this.done = !0;
-      var rootRecord = this.tryEntries[0].completion;
-      if ("throw" === rootRecord.type) throw rootRecord.arg;
-      return this.rval;
-    },
-    dispatchException: function dispatchException(exception) {
-      if (this.done) throw exception;
-      var context = this;
-
-      function handle(loc, caught) {
-        return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught;
-      }
-
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i],
-            record = entry.completion;
-        if ("root" === entry.tryLoc) return handle("end");
-
-        if (entry.tryLoc <= this.prev) {
-          var hasCatch = hasOwn.call(entry, "catchLoc"),
-              hasFinally = hasOwn.call(entry, "finallyLoc");
-
-          if (hasCatch && hasFinally) {
-            if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0);
-            if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc);
-          } else if (hasCatch) {
-            if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0);
-          } else {
-            if (!hasFinally) throw new Error("try statement without catch or finally");
-            if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc);
-          }
-        }
-      }
-    },
-    abrupt: function abrupt(type, arg) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-
-        if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) {
-          var finallyEntry = entry;
-          break;
-        }
-      }
-
-      finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null);
-      var record = finallyEntry ? finallyEntry.completion : {};
-      return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record);
-    },
-    complete: function complete(record, afterLoc) {
-      if ("throw" === record.type) throw record.arg;
-      return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel;
-    },
-    finish: function finish(finallyLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel;
-      }
-    },
-    "catch": function _catch(tryLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-
-        if (entry.tryLoc === tryLoc) {
-          var record = entry.completion;
-
-          if ("throw" === record.type) {
-            var thrown = record.arg;
-            resetTryEntry(entry);
-          }
-
-          return thrown;
-        }
-      }
-
-      throw new Error("illegal catch attempt");
-    },
-    delegateYield: function delegateYield(iterable, resultName, nextLoc) {
-      return this.delegate = {
-        iterator: values(iterable),
-        resultName: resultName,
-        nextLoc: nextLoc
-      }, "next" === this.method && (this.arg = undefined), ContinueSentinel;
-    }
-  }, exports;
-}
-// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js
-
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
-  try {
-    var info = gen[key](arg);
-    var value = info.value;
-  } catch (error) {
-    reject(error);
-    return;
-  }
-
-  if (info.done) {
-    resolve(value);
-  } else {
-    Promise.resolve(value).then(_next, _throw);
-  }
-}
-
-function _asyncToGenerator(fn) {
-  return function () {
-    var self = this,
-        args = arguments;
-    return new Promise(function (resolve, reject) {
-      var gen = fn.apply(self, args);
-
-      function _next(value) {
-        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
-      }
-
-      function _throw(err) {
-        asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
-      }
-
-      _next(undefined);
-    });
-  };
-}
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.json.stringify.js
-var es_json_stringify = __webpack_require__("e9c4");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.replace.js
-var es_string_replace = __webpack_require__("5319");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.split.js
-var es_string_split = __webpack_require__("1276");
-
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.keys.js
 var es_object_keys = __webpack_require__("b64b");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.concat.js
-var es_array_concat = __webpack_require__("99af");
-
-// EXTERNAL MODULE: ./node_modules/axios/index.js
-var axios = __webpack_require__("bc3a");
-var axios_default = /*#__PURE__*/__webpack_require__.n(axios);
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.join.js
 var es_array_join = __webpack_require__("a15b");
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.map.js
 var es_array_map = __webpack_require__("d81d");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.concat.js
+var es_array_concat = __webpack_require__("99af");
 
 // CONCATENATED MODULE: ./src/utils/service.js
 
@@ -1365,139 +800,95 @@ var jsonpRequestPromise = function jsonpRequestPromise(url) {
 // CONCATENATED MODULE: ./src/api/comment.js
 
 
+const baseUrl = '/api/content';
+const adminUrl = '/api/admin';
+const commentApi = {};
+let cacheLocationResult;
 
-
-
-
-
-
-
-
-
-
-var baseUrl = 'https://www.qiushaocloud.top/api/content';
-var adminUrl = 'https://www.qiushaocloud.top/api/admin';
-var commentApi = {};
-var cacheLocationResult;
-
-var blogAuthorLogin = /*#__PURE__*/function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(commentConfigs) {
-    var throwErrJson, adminAuthorization, adminUserName, adminUserPwd, loginResult;
-    return _regeneratorRuntime().wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            throwErrJson = {
-              response: {
-                status: 400,
-                data: {
-                  message: 'undefined error'
-                }
-              }
-            };
-            adminAuthorization = '';
-            adminUserName = '';
-            adminUserPwd = '';
-
-            if (!(commentConfigs && commentConfigs.blogAdminUserName)) {
-              _context.next = 8;
-              break;
-            }
-
-            adminUserName = commentConfigs.blogAdminUserName;
-            _context.next = 13;
-            break;
-
-          case 8:
-            adminUserName = prompt('「身份验证」您是博主，请输入用户名:', "");
-
-            if (adminUserName) {
-              _context.next = 13;
-              break;
-            }
-
-            console.log('您取消了用户名的输入');
-            throwErrJson.response.data.message = '您取消了用户名的输入';
-            throw throwErrJson;
-
-          case 13:
-            adminUserPwd = prompt('「身份验证」您是博主，请输入密码:', "");
-
-            if (adminUserPwd) {
-              _context.next = 18;
-              break;
-            }
-
-            console.log('您取消了密码的输入');
-            throwErrJson.response.data.message = '您取消了密码的输入';
-            throw throwErrJson;
-
-          case 18:
-            _context.prev = 18;
-            _context.next = 21;
-            return axios_default.a.post("".concat(adminUrl, "/login"), {
-              // "authcode": "string",
-              "password": adminUserPwd,
-              "username": adminUserName
-            });
-
-          case 21:
-            loginResult = _context.sent;
-
-            if (!(loginResult.status >= 400)) {
-              _context.next = 26;
-              break;
-            }
-
-            console.error('身份验证失败, 您的用户名/密码不正确, loginResult:', loginResult);
-            throwErrJson.response.data.message = '身份验证失败, 您的用户名/密码不正确';
-            throw throwErrJson;
-
-          case 26:
-            adminAuthorization = loginResult.data.data.access_token;
-            localStorage.setItem('halo__Access-Token', JSON.stringify({
-              expire: Date.now(),
-              value: loginResult.data.data
-            }));
-            return _context.abrupt("return", {
-              adminUserName: adminUserName,
-              adminUserPwd: adminUserPwd,
-              adminAuthorization: adminAuthorization
-            });
-
-          case 31:
-            _context.prev = 31;
-            _context.t0 = _context["catch"](18);
-            console.error('身份验证失败, 您的用户名/密码不正确, err1:', _context.t0, ' ,errResponse:', _context.t0 && _context.t0.response);
-            throwErrJson.response.data.message = '身份验证失败, 您的用户名/密码不正确';
-            throw throwErrJson;
-
-          case 36:
-          case "end":
-            return _context.stop();
-        }
+const blogAuthorLogin = async (commentConfigs = {}) => {
+  const throwErrJson = {
+    response: {
+      status: 400,
+      data: {
+        message: 'undefined error'
       }
-    }, _callee, null, [[18, 31]]);
-  }));
-
-  return function blogAuthorLogin(_x) {
-    return _ref.apply(this, arguments);
+    }
   };
-}();
+  let adminAuthorization = '';
+  let adminUserName = '';
+  let adminUserPwd = '';
+  const {
+    haloApiHost = '',
+    blogAdminUserName
+  } = commentConfigs;
 
-var comment_getCacheAdminAuthorization = function getCacheAdminAuthorization() {
-  var adminAuthorization = undefined;
-  var cacheAdminAccessTokenStr = localStorage.getItem('halo__Access-Token');
+  if (blogAdminUserName) {
+    adminUserName = blogAdminUserName;
+  } else {
+    adminUserName = prompt('「身份验证」您是博主，请输入用户名:', "");
+
+    if (!adminUserName) {
+      console.log('您取消了用户名的输入');
+      throwErrJson.response.data.message = '您取消了用户名的输入';
+      throw throwErrJson;
+    }
+  }
+
+  adminUserPwd = prompt('「身份验证」您是博主，请输入密码:', "");
+
+  if (!adminUserPwd) {
+    console.log('您取消了密码的输入');
+    throwErrJson.response.data.message = '您取消了密码的输入';
+    throw throwErrJson;
+  }
+
+  try {
+    const loginResult = await axios_default.a.post(`${haloApiHost + adminUrl}/login`, {
+      // "authcode": "string",
+      "password": adminUserPwd,
+      "username": adminUserName
+    });
+
+    if (loginResult.status >= 400) {
+      console.error('身份验证失败, 您的用户名/密码不正确, loginResult:', loginResult);
+      throwErrJson.response.data.message = '身份验证失败, 您的用户名/密码不正确';
+      throw throwErrJson;
+    }
+
+    adminAuthorization = loginResult.data.data.access_token;
+    localStorage.setItem('halo__Access-Token', JSON.stringify({
+      expire: Date.now(),
+      value: loginResult.data.data
+    }));
+    return {
+      adminUserName,
+      adminUserPwd,
+      adminAuthorization
+    };
+  } catch (err1) {
+    console.error('身份验证失败, 您的用户名/密码不正确, err1:', err1, ' ,errResponse:', err1 && err1.response);
+    throwErrJson.response.data.message = '身份验证失败, 您的用户名/密码不正确';
+    throw throwErrJson;
+  }
+};
+
+const getCacheAdminAuthorization = () => {
+  let adminAuthorization = undefined;
+  const cacheAdminAccessTokenStr = localStorage.getItem('halo__Access-Token');
 
   if (cacheAdminAccessTokenStr) {
     try {
-      var _JSON$parse = JSON.parse(cacheAdminAccessTokenStr),
-          expire = _JSON$parse.expire,
-          value = _JSON$parse.value;
+      const {
+        expire,
+        value
+      } = JSON.parse(cacheAdminAccessTokenStr);
 
-      if (expire && value && Object(esm_typeof["a" /* default */])(value) === 'object') {
-        var access_token = value.access_token,
-            expired_in = value.expired_in;
+      if (expire && value && typeof value === 'object') {
+        const {
+          access_token,
+          expired_in // refresh_token
+
+        } = value;
         if (expire + expired_in * 1000 > Date.now()) adminAuthorization = access_token;
       }
     } catch (err) {
@@ -1508,22 +899,22 @@ var comment_getCacheAdminAuthorization = function getCacheAdminAuthorization() {
   return adminAuthorization;
 };
 
-var comment_formatResComment = function formatResComment(resComment) {
+const formatResComment = resComment => {
   // TODO QiuShaoCloud 后台目前没提供数据扩展字段，暂时用 content 来存
-  var contentTmp = (resComment.content || '').replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&apos;/g, "'");
-  var contentArr = contentTmp.split('<i style="display: none;" class="qiushaocloud_comment_extra_json">');
+  const contentTmp = (resComment.content || '').replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&apos;/g, "'");
+  const contentArr = contentTmp.split('<i style="display: none;" class="qiushaocloud_comment_extra_json">');
 
   if (contentArr && contentArr.length >= 2) {
     resComment.content = contentArr[0] || '';
-    var extraJsonStr = contentArr[1];
+    const extraJsonStr = contentArr[1];
 
     if (extraJsonStr) {
       try {
-        var _JSON$parse2 = JSON.parse(window.decodeURIComponent(extraJsonStr.substring(0, extraJsonStr.lastIndexOf('</i>')))),
-            avatarFromContent = _JSON$parse2.avatar,
-            cacheSelfIp = _JSON$parse2.ip,
-            cacheSelfLocation = _JSON$parse2.location;
-
+        const {
+          avatar: avatarFromContent,
+          ip: cacheSelfIp,
+          location: cacheSelfLocation
+        } = JSON.parse(window.decodeURIComponent(extraJsonStr.substring(0, extraJsonStr.lastIndexOf('</i>'))));
         resComment.avatarFromContent = avatarFromContent;
         if (resComment.ipAddress === cacheSelfIp) resComment.ipLocation = cacheSelfLocation;
       } catch (err) {
@@ -1532,404 +923,202 @@ var comment_formatResComment = function formatResComment(resComment) {
     }
   }
 
-  var childrenArr = resComment.children;
+  const childrenArr = resComment.children;
 
   if (childrenArr && Array.isArray(childrenArr) && childrenArr.length) {
-    var _iterator = _createForOfIteratorHelper(childrenArr),
-        _step;
-
-    try {
-      for (_iterator.s(); !(_step = _iterator.n()).done;) {
-        var childrenComment = _step.value;
-        formatResComment(childrenComment);
-      }
-    } catch (err) {
-      _iterator.e(err);
-    } finally {
-      _iterator.f();
+    for (const childrenComment of childrenArr) {
+      formatResComment(childrenComment);
     }
   }
 };
 
-var adminService = /*#__PURE__*/function () {
-  var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(reqConfig) {
-    var commentConfigs,
-        commentEmail,
-        blogAuthorEmail,
-        cacheEmail,
-        isAdminReq,
-        adminAuthorization,
-        adminUserName,
-        adminUserPwd,
-        _yield$blogAuthorLogi,
-        adminUserNameTmp,
-        adminUserPwdTmp,
-        adminAuthorizationTmp,
-        reqResponse,
-        reqError,
-        _yield$blogAuthorLogi2,
-        _adminUserNameTmp,
-        _adminUserPwdTmp,
-        _adminAuthorizationTmp,
-        _args2 = arguments;
+const adminService = async (reqConfig, commentConfigs = {}, commentEmail) => {
+  reqConfig.headers = reqConfig.headers || {};
+  const {
+    blogAuthorEmail
+  } = commentConfigs;
+  const cacheEmail = commentEmail || localStorage.getItem('qiushaocloud-halo-comment-email');
+  let isAdminReq = false;
+  let adminAuthorization = '';
+  let adminUserName = '';
+  let adminUserPwd = '';
 
-    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-      while (1) {
-        switch (_context2.prev = _context2.next) {
-          case 0:
-            commentConfigs = _args2.length > 1 && _args2[1] !== undefined ? _args2[1] : {};
-            commentEmail = _args2.length > 2 ? _args2[2] : undefined;
-            reqConfig.headers = reqConfig.headers || {};
-            blogAuthorEmail = commentConfigs.blogAuthorEmail;
-            cacheEmail = commentEmail || localStorage.getItem('qiushaocloud-halo-comment-email');
-            isAdminReq = false;
-            adminAuthorization = '';
-            adminUserName = '';
-            adminUserPwd = '';
+  if (blogAuthorEmail && cacheEmail && blogAuthorEmail === cacheEmail) {
+    // 首先查 halo__Access-Token 是否存在
+    adminAuthorization = getCacheAdminAuthorization(); // 没有授权信息，则需要用户输入用户名和密码
 
-            if (!(blogAuthorEmail && cacheEmail && blogAuthorEmail === cacheEmail)) {
-              _context2.next = 29;
-              break;
-            }
-
-            // 首先查 halo__Access-Token 是否存在
-            adminAuthorization = comment_getCacheAdminAuthorization(); // 没有授权信息，则需要用户输入用户名和密码
-
-            if (adminAuthorization) {
-              _context2.next = 27;
-              break;
-            }
-
-            _context2.prev = 12;
-            _context2.next = 15;
-            return blogAuthorLogin(commentConfigs);
-
-          case 15:
-            _yield$blogAuthorLogi = _context2.sent;
-            adminUserNameTmp = _yield$blogAuthorLogi.adminUserName;
-            adminUserPwdTmp = _yield$blogAuthorLogi.adminUserPwd;
-            adminAuthorizationTmp = _yield$blogAuthorLogi.adminAuthorization;
-            adminUserName = adminUserNameTmp;
-            adminUserPwd = adminUserPwdTmp;
-            adminAuthorization = adminAuthorizationTmp;
-            _context2.next = 27;
-            break;
-
-          case 24:
-            _context2.prev = 24;
-            _context2.t0 = _context2["catch"](12);
-            throw _context2.t0;
-
-          case 27:
-            reqConfig.headers['Admin-Authorization'] = adminAuthorization;
-            isAdminReq = true;
-
-          case 29:
-            reqResponse = undefined;
-            reqError = undefined;
-            _context2.prev = 31;
-            _context2.next = 34;
-            return utils_service(reqConfig);
-
-          case 34:
-            reqResponse = _context2.sent;
-            _context2.next = 68;
-            break;
-
-          case 37:
-            _context2.prev = 37;
-            _context2.t1 = _context2["catch"](31);
-
-            if (!(isAdminReq && !adminUserName && !adminUserPwd && _context2.t1.response && _context2.t1.response.status === 401)) {
-              _context2.next = 67;
-              break;
-            }
-
-            _context2.prev = 40;
-            _context2.next = 43;
-            return blogAuthorLogin(commentConfigs);
-
-          case 43:
-            _yield$blogAuthorLogi2 = _context2.sent;
-            _adminUserNameTmp = _yield$blogAuthorLogi2.adminUserName;
-            _adminUserPwdTmp = _yield$blogAuthorLogi2.adminUserPwd;
-            _adminAuthorizationTmp = _yield$blogAuthorLogi2.adminAuthorization;
-            adminUserName = _adminUserNameTmp;
-            adminUserPwd = _adminUserPwdTmp;
-            adminAuthorization = _adminAuthorizationTmp;
-            _context2.next = 55;
-            break;
-
-          case 52:
-            _context2.prev = 52;
-            _context2.t2 = _context2["catch"](40);
-            throw _context2.t2;
-
-          case 55:
-            reqConfig.headers['Admin-Authorization'] = adminAuthorization;
-            _context2.prev = 56;
-            _context2.next = 59;
-            return utils_service(reqConfig);
-
-          case 59:
-            reqResponse = _context2.sent;
-            _context2.next = 65;
-            break;
-
-          case 62:
-            _context2.prev = 62;
-            _context2.t3 = _context2["catch"](56);
-            reqError = _context2.t3;
-
-          case 65:
-            _context2.next = 68;
-            break;
-
-          case 67:
-            reqError = _context2.t1;
-
-          case 68:
-            if (!reqError) {
-              _context2.next = 70;
-              break;
-            }
-
-            throw reqError;
-
-          case 70:
-            return _context2.abrupt("return", reqResponse);
-
-          case 71:
-          case "end":
-            return _context2.stop();
-        }
+    if (!adminAuthorization) {
+      try {
+        const {
+          adminUserName: adminUserNameTmp,
+          adminUserPwd: adminUserPwdTmp,
+          adminAuthorization: adminAuthorizationTmp
+        } = await blogAuthorLogin(commentConfigs);
+        adminUserName = adminUserNameTmp;
+        adminUserPwd = adminUserPwdTmp;
+        adminAuthorization = adminAuthorizationTmp;
+      } catch (throwErrJson) {
+        throw throwErrJson;
       }
-    }, _callee2, null, [[12, 24], [31, 37], [40, 52], [56, 62]]);
-  }));
+    }
 
-  return function adminService(_x2) {
-    return _ref2.apply(this, arguments);
-  };
-}();
+    reqConfig.headers['Admin-Authorization'] = adminAuthorization;
+    isAdminReq = true;
+  }
 
-commentApi.createComment = /*#__PURE__*/function () {
-  var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(target, comment) {
-    var commentConfigs,
-        isGetIpLocation,
-        blogAuthorEmail,
-        extraJson,
-        commentCp,
-        commentEmail,
-        cacheSelfIp,
-        cacheSelfLocation,
-        reqUrl,
-        isAdminReq,
-        content,
-        reqConfig,
-        reqResponse,
-        resComment,
-        _args3 = arguments;
-    return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-      while (1) {
-        switch (_context3.prev = _context3.next) {
-          case 0:
-            commentConfigs = _args3.length > 2 && _args3[2] !== undefined ? _args3[2] : {};
-            isGetIpLocation = commentConfigs.isGetIpLocation, blogAuthorEmail = commentConfigs.blogAuthorEmail;
-            extraJson = {};
-            commentCp = Object.assign({}, comment);
-            commentEmail = comment.email;
-            cacheSelfIp = undefined;
-            cacheSelfLocation = undefined;
-            reqUrl = "".concat(baseUrl, "/").concat(target, "/comments");
-            isAdminReq = blogAuthorEmail && blogAuthorEmail === commentEmail;
+  let reqResponse = undefined;
+  let reqError = undefined;
 
-            if (!isGetIpLocation) {
-              _context3.next = 23;
-              break;
-            }
-
-            _context3.prev = 10;
-
-            if (cacheLocationResult) {
-              _context3.next = 16;
-              break;
-            }
-
-            _context3.next = 14;
-            return axios_default.a.get("https://www.qiushaocloud.top/get_ip_location").then(function (response) {
-              if (response.status >= 400) throw response;
-              return response.data;
-            });
-
-          case 14:
-            cacheLocationResult = _context3.sent;
-            console.log('cacheLocationResult:', cacheLocationResult);
-
-          case 16:
-            cacheSelfIp = cacheLocationResult.ip;
-            cacheSelfLocation = cacheLocationResult.location;
-            _context3.next = 23;
-            break;
-
-          case 20:
-            _context3.prev = 20;
-            _context3.t0 = _context3["catch"](10);
-            console.error('createComment getIpLocation err:', _context3.t0, commentCp);
-
-          case 23:
-            // TODO QiuShaoCloud 后台目前没提供数据扩展字段，暂时用 content 来存
-            if (comment.avatar) extraJson.avatar = comment.avatar;
-
-            if (cacheSelfIp && cacheSelfLocation) {
-              extraJson.ip = cacheSelfIp;
-              extraJson.location = cacheSelfLocation;
-            } // 评论邮箱为作者的邮箱，则表明是作者要进行评论
-
-
-            if (isAdminReq) {
-              reqUrl = "".concat(adminUrl, "/").concat(target, "/comments");
-              delete extraJson.avatar;
-            }
-
-            if (Object.keys(extraJson).length) {
-              content = comment.content || '';
-              commentCp.content = content + '<i style="display: none;" class="qiushaocloud_comment_extra_json">' + window.encodeURIComponent(JSON.stringify(extraJson)) + '</i>';
-            }
-
-            reqConfig = {
-              url: reqUrl,
-              method: 'post',
-              data: commentCp
-            };
-            _context3.prev = 28;
-            reqResponse = undefined;
-
-            if (!isAdminReq) {
-              _context3.next = 36;
-              break;
-            }
-
-            _context3.next = 33;
-            return adminService(reqConfig, commentConfigs, commentEmail);
-
-          case 33:
-            reqResponse = _context3.sent;
-            _context3.next = 39;
-            break;
-
-          case 36:
-            _context3.next = 38;
-            return utils_service(reqConfig);
-
-          case 38:
-            reqResponse = _context3.sent;
-
-          case 39:
-            resComment = reqResponse.data.data;
-            comment_formatResComment(resComment);
-            return _context3.abrupt("return", reqResponse);
-
-          case 44:
-            _context3.prev = 44;
-            _context3.t1 = _context3["catch"](28);
-            console.error('createComment reqError:', _context3.t1);
-            throw _context3.t1;
-
-          case 48:
-          case "end":
-            return _context3.stop();
-        }
+  try {
+    reqResponse = await utils_service(reqConfig);
+  } catch (reqError1) {
+    // 管理员token失效，需要重新验证
+    if (isAdminReq && !adminUserName && !adminUserPwd && reqError1.response && reqError1.response.status === 401) {
+      try {
+        const {
+          adminUserName: adminUserNameTmp,
+          adminUserPwd: adminUserPwdTmp,
+          adminAuthorization: adminAuthorizationTmp
+        } = await blogAuthorLogin(commentConfigs);
+        adminUserName = adminUserNameTmp;
+        adminUserPwd = adminUserPwdTmp;
+        adminAuthorization = adminAuthorizationTmp;
+      } catch (throwErrJson) {
+        throw throwErrJson;
       }
-    }, _callee3, null, [[10, 20], [28, 44]]);
-  }));
 
-  return function (_x3, _x4) {
-    return _ref3.apply(this, arguments);
-  };
-}();
+      reqConfig.headers['Admin-Authorization'] = adminAuthorization;
 
-commentApi.deleteComment = /*#__PURE__*/function () {
-  var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(target, commentId) {
-    var commentConfigs,
-        reqConfig,
-        _args4 = arguments;
-    return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-      while (1) {
-        switch (_context4.prev = _context4.next) {
-          case 0:
-            commentConfigs = _args4.length > 2 && _args4[2] !== undefined ? _args4[2] : {};
-            reqConfig = {
-              url: "".concat(adminUrl, "/").concat(target, "/comments/").concat(commentId),
-              method: 'delete'
-            };
-            return _context4.abrupt("return", adminService(reqConfig, commentConfigs));
-
-          case 3:
-          case "end":
-            return _context4.stop();
-        }
+      try {
+        reqResponse = await utils_service(reqConfig);
+      } catch (reqError2) {
+        reqError = reqError2;
       }
-    }, _callee4);
-  }));
+    } else {
+      reqError = reqError1;
+    }
+  }
 
-  return function (_x5, _x6) {
-    return _ref4.apply(this, arguments);
+  if (reqError) throw reqError;
+  return reqResponse;
+};
+
+commentApi.createComment = async (target, comment, commentConfigs = {}) => {
+  const {
+    haloApiHost = '',
+    isGetIpLocation,
+    blogAuthorEmail,
+    getIpApiAddr = 'https://www.qiushaocloud.top/get_ip_location'
+  } = commentConfigs;
+  const extraJson = {};
+  const commentCp = Object.assign({}, comment);
+  const commentEmail = comment.email;
+  let cacheSelfIp = undefined;
+  let cacheSelfLocation = undefined;
+  let reqUrl = `${haloApiHost + baseUrl}/${target}/comments`;
+  let isAdminReq = blogAuthorEmail && blogAuthorEmail === commentEmail;
+
+  if (isGetIpLocation) {
+    try {
+      if (!cacheLocationResult) {
+        cacheLocationResult = await axios_default.a.get(`${getIpApiAddr}`).then(response => {
+          if (response.status >= 400) throw response;
+          return response.data;
+        });
+        console.log('cacheLocationResult:', cacheLocationResult);
+      }
+
+      cacheSelfIp = cacheLocationResult.ip;
+      cacheSelfLocation = cacheLocationResult.location;
+    } catch (err) {
+      console.error('createComment getIpLocation err:', err, commentCp);
+    }
+  } // TODO QiuShaoCloud 后台目前没提供数据扩展字段，暂时用 content 来存
+
+
+  if (comment.avatar) extraJson.avatar = comment.avatar;
+
+  if (cacheSelfIp && cacheSelfLocation) {
+    extraJson.ip = cacheSelfIp;
+    extraJson.location = cacheSelfLocation;
+  } // 评论邮箱为作者的邮箱，则表明是作者要进行评论
+
+
+  if (isAdminReq) {
+    reqUrl = `${haloApiHost + adminUrl}/${target}/comments`;
+    delete extraJson.avatar;
+  }
+
+  if (Object.keys(extraJson).length) {
+    const content = comment.content || '';
+    commentCp.content = content + '<i style="display: none;" class="qiushaocloud_comment_extra_json">' + window.encodeURIComponent(JSON.stringify(extraJson)) + '</i>';
+  }
+
+  const reqConfig = {
+    url: reqUrl,
+    method: 'post',
+    data: commentCp
   };
-}(); // commentApi.topComment = async (
-//     target,
-//     commentId,
-//     commentConfigs = {}
-// ) => {
-//     const reqConfig = {
-//         url: `${adminUrl}/${target}/comments/${commentId}`,
-//         method: 'delete'
-//     };
-//     return adminService(
-//         reqConfig,
-//         commentConfigs
-//     );
-// }
 
+  try {
+    let reqResponse = undefined;
 
-commentApi.listComments = function (target, targetId) {
-  var view = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'tree_view';
-  var pagination = arguments.length > 3 ? arguments[3] : undefined;
+    if (isAdminReq) {
+      reqResponse = await adminService(reqConfig, commentConfigs, commentEmail);
+    } else {
+      reqResponse = await utils_service(reqConfig);
+    }
+
+    const resComment = reqResponse.data.data;
+    formatResComment(resComment);
+    return reqResponse;
+  } catch (reqError) {
+    console.error('createComment reqError:', reqError);
+    throw reqError;
+  }
+};
+
+commentApi.deleteComment = async (target, commentId, commentConfigs = {}) => {
+  const {
+    haloApiHost = ''
+  } = commentConfigs;
+  const reqConfig = {
+    url: `${haloApiHost + adminUrl}/${target}/comments/${commentId}`,
+    method: 'delete'
+  };
+  return adminService(reqConfig, commentConfigs);
+};
+
+commentApi.listComments = (target, targetId, view = 'tree_view', pagination, commentConfigs = {}) => {
+  const {
+    haloApiHost = ''
+  } = commentConfigs;
   return utils_service({
-    url: "".concat(baseUrl, "/").concat(target, "/").concat(targetId, "/comments/").concat(view),
+    url: `${haloApiHost + baseUrl}/${target}/${targetId}/comments/${view}`,
     params: pagination,
     method: 'get'
-  }).then(function (response) {
-    var resComments = response.data.data.content;
+  }).then(response => {
+    const resComments = response.data.data.content;
 
-    var _iterator2 = _createForOfIteratorHelper(resComments),
-        _step2;
-
-    try {
-      for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-        var resComment = _step2.value;
-        comment_formatResComment(resComment);
-      }
-    } catch (err) {
-      _iterator2.e(err);
-    } finally {
-      _iterator2.f();
+    for (const resComment of resComments) {
+      formatResComment(resComment);
     }
 
     return response;
   });
 };
 
-commentApi.getIpLocation = function (ip) {
-  return axios_default.a.get("https://www.qiushaocloud.top/get_ip_location?ip=".concat(ip)).then(function (response) {
+commentApi.getIpLocation = (ip, getIpApiAddr = 'https://www.qiushaocloud.top/get_ip_location') => {
+  return axios_default.a.get(`${getIpApiAddr}?ip=${ip}`).then(response => {
     if (response.status !== 200) throw response;
     return response.data;
   });
 };
 
-commentApi.uploadAvatar = function (file, token) {
-  var param = new FormData();
+commentApi.uploadAvatar = (file, token) => {
+  const param = new FormData();
   param.append("image", file);
-  var config = {
+  const config = {
     headers: {
       "Content-Type": "multipart/form-data"
     }
@@ -2192,19 +1381,6 @@ module.exports = function (originalArray) {
     }
   } return C === undefined ? $Array : C;
 };
-
-
-/***/ }),
-
-/***/ "0c47":
-/***/ (function(module, exports, __webpack_require__) {
-
-var global = __webpack_require__("da84");
-var setToStringTag = __webpack_require__("d44e");
-
-// JSON[@@toStringTag] property
-// https://tc39.es/ecma262/#sec-json-@@tostringtag
-setToStringTag(global.JSON, 'JSON', true);
 
 
 /***/ }),
@@ -2633,21 +1809,6 @@ fixRegExpWellKnownSymbolLogic('split', function (SPLIT, nativeSplit, maybeCallNa
 
 /***/ }),
 
-/***/ "131a":
-/***/ (function(module, exports, __webpack_require__) {
-
-var $ = __webpack_require__("23e7");
-var setPrototypeOf = __webpack_require__("d2bb");
-
-// `Object.setPrototypeOf` method
-// https://tc39.es/ecma262/#sec-object.setprototypeof
-$({ target: 'Object', stat: true }, {
-  setPrototypeOf: setPrototypeOf
-});
-
-
-/***/ }),
-
 /***/ "13d2":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2870,51 +2031,6 @@ module.exports = getBuiltIn('document', 'documentElement');
 
 /***/ }),
 
-/***/ "1c7e":
-/***/ (function(module, exports, __webpack_require__) {
-
-var wellKnownSymbol = __webpack_require__("b622");
-
-var ITERATOR = wellKnownSymbol('iterator');
-var SAFE_CLOSING = false;
-
-try {
-  var called = 0;
-  var iteratorWithReturn = {
-    next: function () {
-      return { done: !!called++ };
-    },
-    'return': function () {
-      SAFE_CLOSING = true;
-    }
-  };
-  iteratorWithReturn[ITERATOR] = function () {
-    return this;
-  };
-  // eslint-disable-next-line es-x/no-array-from, no-throw-literal -- required for testing
-  Array.from(iteratorWithReturn, function () { throw 2; });
-} catch (error) { /* empty */ }
-
-module.exports = function (exec, SKIP_CLOSING) {
-  if (!SKIP_CLOSING && !SAFE_CLOSING) return false;
-  var ITERATION_SUPPORT = false;
-  try {
-    var object = {};
-    object[ITERATOR] = function () {
-      return {
-        next: function () {
-          return { done: ITERATION_SUPPORT = true };
-        }
-      };
-    };
-    exec(object);
-  } catch (error) { /* empty */ }
-  return ITERATION_SUPPORT;
-};
-
-
-/***/ }),
-
 /***/ "1d2b":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3133,18 +2249,6 @@ module.exports = function (index, length) {
   var integer = toIntegerOrInfinity(index);
   return integer < 0 ? max(integer + length, 0) : min(integer, length);
 };
-
-
-/***/ }),
-
-/***/ "23dc":
-/***/ (function(module, exports, __webpack_require__) {
-
-var setToStringTag = __webpack_require__("d44e");
-
-// Math[@@toStringTag] property
-// https://tc39.es/ecma262/#sec-math-@@tostringtag
-setToStringTag(Math, 'Math', true);
 
 
 /***/ }),
@@ -3636,36 +2740,6 @@ function normalizeComponent (
     options: options
   }
 }
-
-
-/***/ }),
-
-/***/ "2a62":
-/***/ (function(module, exports, __webpack_require__) {
-
-var call = __webpack_require__("c65b");
-var anObject = __webpack_require__("825a");
-var getMethod = __webpack_require__("dc4a");
-
-module.exports = function (iterator, kind, value) {
-  var innerResult, innerError;
-  anObject(iterator);
-  try {
-    innerResult = getMethod(iterator, 'return');
-    if (!innerResult) {
-      if (kind === 'throw') throw value;
-      return value;
-    }
-    innerResult = call(innerResult, iterator);
-  } catch (error) {
-    innerError = true;
-    innerResult = error;
-  }
-  if (kind === 'throw') throw value;
-  if (innerError) throw innerResult;
-  anObject(innerResult);
-  return value;
-};
 
 
 /***/ }),
@@ -5222,29 +4296,6 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 
 /***/ }),
 
-/***/ "3410":
-/***/ (function(module, exports, __webpack_require__) {
-
-var $ = __webpack_require__("23e7");
-var fails = __webpack_require__("d039");
-var toObject = __webpack_require__("7b0b");
-var nativeGetPrototypeOf = __webpack_require__("e163");
-var CORRECT_PROTOTYPE_GETTER = __webpack_require__("e177");
-
-var FAILS_ON_PRIMITIVES = fails(function () { nativeGetPrototypeOf(1); });
-
-// `Object.getPrototypeOf` method
-// https://tc39.es/ecma262/#sec-object.getprototypeof
-$({ target: 'Object', stat: true, forced: FAILS_ON_PRIMITIVES, sham: !CORRECT_PROTOTYPE_GETTER }, {
-  getPrototypeOf: function getPrototypeOf(it) {
-    return nativeGetPrototypeOf(toObject(it));
-  }
-});
-
-
-
-/***/ }),
-
 /***/ "342f":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -5264,25 +4315,6 @@ var MAX_SAFE_INTEGER = 0x1FFFFFFFFFFFFF; // 2 ** 53 - 1 == 9007199254740991
 module.exports = function (it) {
   if (it > MAX_SAFE_INTEGER) throw $TypeError('Maximum allowed index exceeded');
   return it;
-};
-
-
-/***/ }),
-
-/***/ "35a1":
-/***/ (function(module, exports, __webpack_require__) {
-
-var classof = __webpack_require__("f5df");
-var getMethod = __webpack_require__("dc4a");
-var Iterators = __webpack_require__("3f8c");
-var wellKnownSymbol = __webpack_require__("b622");
-
-var ITERATOR = wellKnownSymbol('iterator');
-
-module.exports = function (it) {
-  if (it != undefined) return getMethod(it, ITERATOR)
-    || getMethod(it, '@@iterator')
-    || Iterators[classof(it)];
 };
 
 
@@ -5700,12 +4732,12 @@ if ($defineProperty) {
 
 "use strict";
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"27f816ca-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CommentEditor.vue?vue&type=template&id=4575066a&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.isCurrReply)?_c('section',{ref:"editor",staticClass:"comment-editor",attrs:{"id":_vm.respondId,"role":"form"}},[(_vm.isReply)?_c('h3',{staticClass:"comment-reply-title",attrs:{"id":"reply-title"}},[_c('small',[_c('a',{staticClass:"cancel-comment-reply-link",attrs:{"href":"javascript:;"},on:{"click":_vm.cancelReply}},[_vm._v("取消回复")])])]):_vm._e(),_c('form',{staticClass:"comment-form"},[(!_vm.previewMode)?_c('div',{staticClass:"comment-textarea"},[_c('textarea',{directives:[{name:"model",rawName:"v-model",value:(_vm.comment.content),expression:"comment.content"}],staticClass:"commentbody",attrs:{"required":"required","aria-required":"true","tabindex":"4","placeholder":_vm.configs.aWord || '欢迎您，请点击此处，动动您的小手指，留下您的👣  ...'},domProps:{"value":(_vm.comment.content)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.comment, "content", $event.target.value)}}}),_c('label',{staticClass:"input-label"},[_vm._v(_vm._s(_vm.configs.aWord || "欢迎您，请点击此处，动动您的小手指，留下您的👣 ..."))])]):_c('div',{staticClass:"comment-preview markdown-body",domProps:{"innerHTML":_vm._s(_vm.renderedContent)}}),_c('div',{attrs:{"id":"upload-img-show"}}),_c('p',{staticClass:"no-select",attrs:{"id":"emotion-toggle"}},[_c('span',{on:{"click":_vm.handleToggleDialogEmoji}},[_vm._v(_vm._s(!_vm.emojiDialogVisible ? "戳这里哦，宝宝给您表演表情包 OωO" : "喜欢宝宝的表演吧 ヾ(≧∇≦*)ゝ"))])]),_c('transition',{attrs:{"name":"emoji-fade"}},[(_vm.emojiDialogVisible)?_c('VEmojiPicker',{attrs:{"pack":_vm.emojiPack},on:{"select":_vm.handleSelectEmoji}}):_vm._e()],1),_c('div',{staticClass:"author-info"},[_c('div',{staticClass:"commentator",staticStyle:{"pointer-events":"initial"},on:{"click":_vm.handleAvatarUploadInputOpen}},[_c('input',{ref:"commentAvatarUploadFileInputEle",staticStyle:{"display":"none"},attrs:{"type":"file","accept":"image/*"},on:{"change":function($event){return _vm.handleAvatarUpload($event)}}}),_c('img',{staticClass:"avatar",attrs:{"src":_vm.avatar},on:{"error":_vm.handleAvatarError}}),_c('div',{staticClass:"socila-check",class:[_vm.checkType.back]},[_c('i',{class:[_vm.checkType.icon],attrs:{"aria-hidden":"true"}})])]),_c('PopupInput',{staticClass:"cmt-popup cmt-author",attrs:{"popupStyle":"margin-left: -115px","popupText":_vm.configs.authorPopup || '输入QQ号将自动拉取昵称和头像 ♪(´▽｀)',"inputType":"text","placeholder":"* 昵称","id":"author","localStorageDataCacheKey":"qiushaocloud-halo-comment-author"},on:{"blurInput":_vm.pullInfo},model:{value:(_vm.comment.author),callback:function ($$v) {_vm.$set(_vm.comment, "author", $$v)},expression:"comment.author"}}),_c('PopupInput',{staticClass:"cmt-popup",attrs:{"popupStyle":"margin-left: -65px;","popupText":_vm.configs.emailPopup || '您的邮箱将收到回复通知 ๑乛◡乛๑',"inputType":"text","placeholder":"* 电子邮件","id":"email","localStorageDataCacheKey":"qiushaocloud-halo-comment-email"},on:{"blurInput":_vm.pullInfo},model:{value:(_vm.comment.email),callback:function ($$v) {_vm.$set(_vm.comment, "email", $$v)},expression:"comment.email"}}),_c('PopupInput',{staticClass:"cmt-popup",attrs:{"popupStyle":"margin-left: -55px;","popupText":_vm.configs.urlPopup || '请不要打小广告哦 (^し^)',"inputType":"text","placeholder":"个人站点","id":"url","localStorageDataCacheKey":"qiushaocloud-halo-comment-authorUrl"},model:{value:(_vm.comment.authorUrl),callback:function ($$v) {_vm.$set(_vm.comment, "authorUrl", $$v)},expression:"comment.authorUrl"}})],1),_c('ul',{staticClass:"comment-buttons"},[(_vm.comment.content)?_c('li',{staticClass:"middle",staticStyle:{"margin-right":"5px"}},[_c('a',{staticClass:"button-preview-edit",attrs:{"href":"javascript:;","rel":"nofollow noopener"},on:{"click":_vm.handlePreviewContent}},[_vm._v(_vm._s(_vm.previewMode ? "编辑" : "预览"))])]):_vm._e(),_c('li',{staticClass:"middle"},[_c('a',{staticClass:"button-submit",attrs:{"href":"javascript:;","tabindex":"5","rel":"nofollow noopener"},on:{"click":_vm.handleSubmitClick}},[_vm._v("提交")])])])],1)]):_vm._e()}
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"27f816ca-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CommentEditor.vue?vue&type=template&id=5b8decce&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.isCurrReply)?_c('section',{ref:"editor",staticClass:"comment-editor",attrs:{"id":_vm.respondId,"role":"form"}},[(_vm.isReply)?_c('h3',{staticClass:"comment-reply-title",attrs:{"id":"reply-title"}},[_c('small',[_c('a',{staticClass:"cancel-comment-reply-link",attrs:{"href":"javascript:;"},on:{"click":_vm.cancelReply}},[_vm._v("取消回复")])])]):_vm._e(),_c('form',{staticClass:"comment-form"},[(!_vm.previewMode)?_c('div',{staticClass:"comment-textarea"},[_c('textarea',{directives:[{name:"model",rawName:"v-model",value:(_vm.comment.content),expression:"comment.content"}],staticClass:"commentbody",attrs:{"required":"required","aria-required":"true","tabindex":"4","placeholder":_vm.configs.aWord},domProps:{"value":(_vm.comment.content)},on:{"input":function($event){if($event.target.composing){ return; }_vm.$set(_vm.comment, "content", $event.target.value)}}}),_c('label',{staticClass:"input-label"},[_vm._v(_vm._s(_vm.configs.aWord))])]):_c('div',{staticClass:"comment-preview markdown-body",domProps:{"innerHTML":_vm._s(_vm.renderedContent)}}),_c('div',{attrs:{"id":"upload-img-show"}}),_c('p',{staticClass:"no-select",attrs:{"id":"emotion-toggle"}},[_c('span',{on:{"click":_vm.handleToggleDialogEmoji}},[_vm._v(_vm._s(!_vm.emojiDialogVisible ? "戳这里哦，宝宝给您表演表情包 OωO" : "喜欢宝宝的表演吧 ヾ(≧∇≦*)ゝ"))])]),_c('transition',{attrs:{"name":"emoji-fade"}},[(_vm.emojiDialogVisible)?_c('VEmojiPicker',{attrs:{"pack":_vm.emojiPack},on:{"select":_vm.handleSelectEmoji}}):_vm._e()],1),_c('div',{staticClass:"author-info"},[_c('div',{staticClass:"commentator",staticStyle:{"pointer-events":"initial"},on:{"click":_vm.handleAvatarUploadInputOpen}},[_c('input',{ref:"commentAvatarUploadFileInputEle",staticStyle:{"display":"none"},attrs:{"type":"file","accept":"image/*"},on:{"change":function($event){return _vm.handleAvatarUpload($event)}}}),_c('img',{staticClass:"avatar",attrs:{"src":_vm.avatar},on:{"error":_vm.handleAvatarError}}),_c('div',{staticClass:"socila-check",class:[_vm.checkType.back]},[_c('i',{class:[_vm.checkType.icon],attrs:{"aria-hidden":"true"}})])]),_c('PopupInput',{staticClass:"cmt-popup cmt-author",attrs:{"popupStyle":"margin-left: -115px","popupText":_vm.configs.authorPopup || '输入QQ号将自动拉取昵称和头像 ♪(´▽｀)',"inputType":"text","placeholder":"* 昵称","id":"author","localStorageDataCacheKey":"qiushaocloud-halo-comment-author"},on:{"blurInput":_vm.pullInfo},model:{value:(_vm.comment.author),callback:function ($$v) {_vm.$set(_vm.comment, "author", $$v)},expression:"comment.author"}}),_c('PopupInput',{staticClass:"cmt-popup",attrs:{"popupStyle":"margin-left: -65px;","popupText":_vm.configs.emailPopup || '您的邮箱将收到回复通知 ๑乛◡乛๑',"inputType":"text","placeholder":"* 电子邮件","id":"email","localStorageDataCacheKey":"qiushaocloud-halo-comment-email"},on:{"blurInput":_vm.pullInfo},model:{value:(_vm.comment.email),callback:function ($$v) {_vm.$set(_vm.comment, "email", $$v)},expression:"comment.email"}}),_c('PopupInput',{staticClass:"cmt-popup",attrs:{"popupStyle":"margin-left: -55px;","popupText":_vm.configs.urlPopup || '请不要打小广告哦 (^し^)',"inputType":"text","placeholder":"个人站点","id":"url","localStorageDataCacheKey":"qiushaocloud-halo-comment-authorUrl"},model:{value:(_vm.comment.authorUrl),callback:function ($$v) {_vm.$set(_vm.comment, "authorUrl", $$v)},expression:"comment.authorUrl"}})],1),_c('ul',{staticClass:"comment-buttons"},[(_vm.comment.content)?_c('li',{staticClass:"middle",staticStyle:{"margin-right":"5px"}},[_c('a',{staticClass:"button-preview-edit",attrs:{"href":"javascript:;","rel":"nofollow noopener"},on:{"click":_vm.handlePreviewContent}},[_vm._v(_vm._s(_vm.previewMode ? "编辑" : "预览"))])]):_vm._e(),_c('li',{staticClass:"middle"},[_c('a',{staticClass:"button-submit",attrs:{"href":"javascript:;","tabindex":"5","rel":"nofollow noopener"},on:{"click":_vm.handleSubmitClick}},[_vm._v("提交")])])])],1)]):_vm._e()}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/CommentEditor.vue?vue&type=template&id=4575066a&
+// CONCATENATED MODULE: ./src/components/CommentEditor.vue?vue&type=template&id=5b8decce&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.keys.js
 var es_object_keys = __webpack_require__("b64b");
@@ -6289,10 +5321,10 @@ var emojis2 = __webpack_require__("fb89");
 // EXTERNAL MODULE: ./src/utils/emojiutil.js
 var emojiutil = __webpack_require__("f058");
 
-// EXTERNAL MODULE: ./src/utils/util.js
+// EXTERNAL MODULE: ./src/utils/util.js + 1 modules
 var util = __webpack_require__("ca00");
 
-// EXTERNAL MODULE: ./src/api/comment.js + 6 modules
+// EXTERNAL MODULE: ./src/api/comment.js + 1 modules
 var api_comment = __webpack_require__("063c");
 
 // EXTERNAL MODULE: ./node_modules/axios/index.js
@@ -7926,60 +6958,6 @@ $({ target: 'Array', proto: true, forced: !HAS_SPECIES_SUPPORT }, {
 
 /***/ }),
 
-/***/ "4df4":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var bind = __webpack_require__("0366");
-var call = __webpack_require__("c65b");
-var toObject = __webpack_require__("7b0b");
-var callWithSafeIterationClosing = __webpack_require__("9bdd");
-var isArrayIteratorMethod = __webpack_require__("e95a");
-var isConstructor = __webpack_require__("68ee");
-var lengthOfArrayLike = __webpack_require__("07fa");
-var createProperty = __webpack_require__("8418");
-var getIterator = __webpack_require__("9a1f");
-var getIteratorMethod = __webpack_require__("35a1");
-
-var $Array = Array;
-
-// `Array.from` method implementation
-// https://tc39.es/ecma262/#sec-array.from
-module.exports = function from(arrayLike /* , mapfn = undefined, thisArg = undefined */) {
-  var O = toObject(arrayLike);
-  var IS_CONSTRUCTOR = isConstructor(this);
-  var argumentsLength = arguments.length;
-  var mapfn = argumentsLength > 1 ? arguments[1] : undefined;
-  var mapping = mapfn !== undefined;
-  if (mapping) mapfn = bind(mapfn, argumentsLength > 2 ? arguments[2] : undefined);
-  var iteratorMethod = getIteratorMethod(O);
-  var index = 0;
-  var length, result, step, iterator, next, value;
-  // if the target is not iterable or it's an array with the default iterator - use a simple case
-  if (iteratorMethod && !(this === $Array && isArrayIteratorMethod(iteratorMethod))) {
-    iterator = getIterator(O, iteratorMethod);
-    next = iterator.next;
-    result = IS_CONSTRUCTOR ? new this() : [];
-    for (;!(step = call(next, iterator)).done; index++) {
-      value = mapping ? callWithSafeIterationClosing(iterator, mapfn, [step.value, index], true) : step.value;
-      createProperty(result, index, value);
-    }
-  } else {
-    length = lengthOfArrayLike(O);
-    result = IS_CONSTRUCTOR ? new this(length) : $Array(length);
-    for (;length > index; index++) {
-      value = mapping ? mapfn(O[index], index) : O[index];
-      createProperty(result, index, value);
-    }
-  }
-  result.length = index;
-  return result;
-};
-
-
-/***/ }),
-
 /***/ "5018":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -8371,41 +7349,6 @@ fixRegExpWellKnownSymbolLogic('replace', function (_, nativeReplace, maybeCallNa
   ];
 }, !REPLACE_SUPPORTS_NAMED_GROUPS || !REPLACE_KEEPS_$0 || REGEXP_REPLACE_SUBSTITUTES_UNDEFINED_CAPTURE);
 
-
-/***/ }),
-
-/***/ "53ca":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return _typeof; });
-/* harmony import */ var core_js_modules_es_symbol_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("a4d3");
-/* harmony import */ var core_js_modules_es_symbol_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_symbol_js__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var core_js_modules_es_symbol_description_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("e01a");
-/* harmony import */ var core_js_modules_es_symbol_description_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_symbol_description_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("d3b7");
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var core_js_modules_es_symbol_iterator_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("d28b");
-/* harmony import */ var core_js_modules_es_symbol_iterator_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_symbol_iterator_js__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var core_js_modules_es_string_iterator_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__("3ca3");
-/* harmony import */ var core_js_modules_es_string_iterator_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_iterator_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var core_js_modules_web_dom_collections_iterator_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__("ddb0");
-/* harmony import */ var core_js_modules_web_dom_collections_iterator_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_web_dom_collections_iterator_js__WEBPACK_IMPORTED_MODULE_5__);
-
-
-
-
-
-
-function _typeof(obj) {
-  "@babel/helpers - typeof";
-
-  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
-    return typeof obj;
-  } : function (obj) {
-    return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-  }, _typeof(obj);
-}
 
 /***/ }),
 
@@ -8933,7 +7876,7 @@ var addStylesShadow = __webpack_require__("35d6");
 // EXTERNAL MODULE: ./node_modules/vue-loader/lib/runtime/componentNormalizer.js
 var componentNormalizer = __webpack_require__("2877");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"27f816ca-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Comment.vue?vue&type=template&id=38f9fdd1&shadow
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"27f816ca-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Comment.vue?vue&type=template&id=0896de4c&shadow
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:[
     'halo-comment',
     {
@@ -8943,7 +7886,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/components/Comment.vue?vue&type=template&id=38f9fdd1&shadow
+// CONCATENATED MODULE: ./src/components/Comment.vue?vue&type=template&id=0896de4c&shadow
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.error.cause.js
 var es_error_cause = __webpack_require__("d9e2");
@@ -8985,9 +7928,13 @@ var components = __webpack_require__("2af9");
   // 是否允许上传头像，因为使用的是「即库图床」上传的头像，头像会在该地址(https://img.78al.net/index/gallery.html)上被所有人看到
   isGetIpLocation: true,
   // 是否获取评论者的地理位置
-  blogAuthorEmail: "qiushaocloud@126.com",
+  blogAuthorEmail: "",
   // 设置博主邮箱，则允许博主在博客中进行评论，如果没有授权，则需要进行登录授权
-  blogAdminUserName: "qiushaocloud" // 博客管理的用户名，配置后进行登录时免输入用户名
+  blogAdminUserName: "",
+  // 博客管理的用户名，配置后进行登录时免输入用户名
+  getIpApiAddr: 'https://www.qiushaocloud.top/get_ip_location',
+  // 获取 IP 的 API 地址，没有配置默认为： https://www.qiushaocloud.top/get_ip_location
+  haloApiHost: '' // 指定 Halo 相关 API 的域名，为 ‘’ 表示使用当前域名，缺省为‘’ 
 
 });
 // CONCATENATED MODULE: ./src/config/default_option.js
@@ -8996,7 +7943,7 @@ var components = __webpack_require__("2af9");
   gravatar_source: "",
   comment_gravatar_default: "mm"
 });
-// EXTERNAL MODULE: ./src/api/comment.js + 6 modules
+// EXTERNAL MODULE: ./src/api/comment.js + 1 modules
 var comment = __webpack_require__("063c");
 
 // EXTERNAL MODULE: ./src/utils/globals.js
@@ -10774,7 +9721,7 @@ tips.install = function (Vue) {
 };
 
 /* harmony default export */ var plugins_Tips = (tips);
-// EXTERNAL MODULE: ./src/utils/util.js
+// EXTERNAL MODULE: ./src/utils/util.js + 1 modules
 var util = __webpack_require__("ca00");
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/Comment.vue?vue&type=script&lang=js&shadow
@@ -10850,7 +9797,6 @@ var util = __webpack_require__("ca00");
 
 
  // import ImgPreviewer from "./ImgPreviewer";
-// import optionApi from "../api/option";
 
 
 
@@ -10994,7 +9940,7 @@ external_Vue_default.a.use(plugins_Tips);
     loadComments() {
       this.comments = [];
       this.commentLoading = true;
-      comment["a" /* default */].listComments(this.target, this.id, "tree_view", this.pagination).then(response => {
+      comment["a" /* default */].listComments(this.target, this.id, "tree_view", this.pagination, this.mergedConfigs).then(response => {
         this.comments = response.data.data.content;
         this.pagination.size = response.data.data.rpp;
         this.pagination.total = response.data.data.total;
@@ -11005,19 +9951,6 @@ external_Vue_default.a.use(plugins_Tips);
       });
     },
 
-    // 现在直接从模板中获取了，不需要请求配置了
-    // loadOptions() {
-    //   return new Promise((resolve, reject) => {
-    //     optionApi
-    //       .list()
-    //       .then((response) => {
-    //         const resD = response.data.data;
-    //         this.options = resD;
-    //         resolve(resD);
-    //       })
-    //       .catch((err) => reject(err));
-    //   });
-    // },
     async handlePaginationChange(page) {
       this.pagination.page = page;
       await Object(util["i" /* sleep */])(300);
@@ -12826,24 +11759,6 @@ module.exports = patchedExec;
 
 /***/ }),
 
-/***/ "944a":
-/***/ (function(module, exports, __webpack_require__) {
-
-var getBuiltIn = __webpack_require__("d066");
-var defineWellKnownSymbol = __webpack_require__("746f");
-var setToStringTag = __webpack_require__("d44e");
-
-// `Symbol.toStringTag` well-known symbol
-// https://tc39.es/ecma262/#sec-symbol.tostringtag
-defineWellKnownSymbol('toStringTag');
-
-// `Symbol.prototype[@@toStringTag]` property
-// https://tc39.es/ecma262/#sec-symbol.prototype-@@tostringtag
-setToStringTag(getBuiltIn('Symbol'), 'Symbol');
-
-
-/***/ }),
-
 /***/ "94ca":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -13001,26 +11916,6 @@ $({ target: 'Array', proto: true, arity: 1, forced: FORCED }, {
 
 /***/ }),
 
-/***/ "9a1f":
-/***/ (function(module, exports, __webpack_require__) {
-
-var call = __webpack_require__("c65b");
-var aCallable = __webpack_require__("59ed");
-var anObject = __webpack_require__("825a");
-var tryToString = __webpack_require__("0d51");
-var getIteratorMethod = __webpack_require__("35a1");
-
-var $TypeError = TypeError;
-
-module.exports = function (argument, usingIterator) {
-  var iteratorMethod = arguments.length < 2 ? getIteratorMethod(argument) : usingIterator;
-  if (aCallable(iteratorMethod)) return anObject(call(iteratorMethod, argument));
-  throw $TypeError(tryToString(argument) + ' is not iterable');
-};
-
-
-/***/ }),
-
 /***/ "9a63":
 /***/ (function(module, exports) {
 
@@ -13057,24 +11952,6 @@ var charenc = {
 };
 
 module.exports = charenc;
-
-
-/***/ }),
-
-/***/ "9bdd":
-/***/ (function(module, exports, __webpack_require__) {
-
-var anObject = __webpack_require__("825a");
-var iteratorClose = __webpack_require__("2a62");
-
-// call something on iterator step with safe closing on error
-module.exports = function (iterator, fn, value, ENTRIES) {
-  try {
-    return ENTRIES ? fn(anObject(value)[0], value[1]) : fn(value);
-  } catch (error) {
-    iteratorClose(iterator, 'throw', error);
-  }
-};
 
 
 /***/ }),
@@ -13255,27 +12132,6 @@ __webpack_require__("b4f8");
 __webpack_require__("c513");
 __webpack_require__("e9c4");
 __webpack_require__("5a47");
-
-
-/***/ }),
-
-/***/ "a630":
-/***/ (function(module, exports, __webpack_require__) {
-
-var $ = __webpack_require__("23e7");
-var from = __webpack_require__("4df4");
-var checkCorrectnessOfIteration = __webpack_require__("1c7e");
-
-var INCORRECT_ITERATION = !checkCorrectnessOfIteration(function (iterable) {
-  // eslint-disable-next-line es-x/no-array-from -- required for testing
-  Array.from(iterable);
-});
-
-// `Array.from` method
-// https://tc39.es/ecma262/#sec-array.from
-$({ target: 'Array', stat: true, forced: INCORRECT_ITERATION }, {
-  from: from
-});
 
 
 /***/ }),
@@ -14087,18 +12943,6 @@ module.exports = function (name) {
     }
   } return WellKnownSymbolsStore[name];
 };
-
-
-/***/ }),
-
-/***/ "b636":
-/***/ (function(module, exports, __webpack_require__) {
-
-var defineWellKnownSymbol = __webpack_require__("746f");
-
-// `Symbol.asyncIterator` well-known symbol
-// https://tc39.es/ecma262/#sec-symbol.asynciterator
-defineWellKnownSymbol('asyncIterator');
 
 
 /***/ }),
@@ -14983,43 +13827,89 @@ module.exports = function isMatchRecord(record) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return timeAgo; });
-/* unused harmony export isUrl */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return isEmpty; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return isObject; });
-/* unused harmony export validEmail */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return isQQ; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return queryStringify; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getUrlKey; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return return2Br; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return isInVisibleArea; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return removeJsonEmpty; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return sleep; });
-/* harmony import */ var _Users_qiushao_Desktop_qiushao_git_codes_halo_comment_joe2_0_qiu_node_modules_babel_runtime_helpers_esm_typeof_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("53ca");
-/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("ac1f");
-/* harmony import */ var core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_exec_js__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var core_js_modules_es_regexp_test_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("00b4");
-/* harmony import */ var core_js_modules_es_regexp_test_js__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_test_js__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("5319");
-/* harmony import */ var core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_string_replace_js__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var core_js_modules_es_regexp_constructor_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__("4d63");
-/* harmony import */ var core_js_modules_es_regexp_constructor_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_constructor_js__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var core_js_modules_es_regexp_dot_all_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__("c607");
-/* harmony import */ var core_js_modules_es_regexp_dot_all_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_dot_all_js__WEBPACK_IMPORTED_MODULE_5__);
-/* harmony import */ var core_js_modules_es_regexp_sticky_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__("2c3e");
-/* harmony import */ var core_js_modules_es_regexp_sticky_js__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_sticky_js__WEBPACK_IMPORTED_MODULE_6__);
-/* harmony import */ var core_js_modules_es_regexp_to_string_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__("25f0");
-/* harmony import */ var core_js_modules_es_regexp_to_string_js__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_regexp_to_string_js__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var core_js_modules_es_array_join_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__("a15b");
-/* harmony import */ var core_js_modules_es_array_join_js__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_join_js__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var core_js_modules_es_array_map_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__("d81d");
-/* harmony import */ var core_js_modules_es_array_map_js__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_map_js__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__("b64b");
-/* harmony import */ var core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_keys_js__WEBPACK_IMPORTED_MODULE_10__);
-/* harmony import */ var core_js_modules_es_array_concat_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__("99af");
-/* harmony import */ var core_js_modules_es_array_concat_js__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_array_concat_js__WEBPACK_IMPORTED_MODULE_11__);
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__("d3b7");
-/* harmony import */ var core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(core_js_modules_es_object_to_string_js__WEBPACK_IMPORTED_MODULE_12__);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, "j", function() { return /* binding */ timeAgo; });
+__webpack_require__.d(__webpack_exports__, "b", function() { return /* binding */ isEmpty; });
+__webpack_require__.d(__webpack_exports__, "d", function() { return /* binding */ isObject; });
+__webpack_require__.d(__webpack_exports__, "e", function() { return /* binding */ isQQ; });
+__webpack_require__.d(__webpack_exports__, "f", function() { return /* binding */ queryStringify; });
+__webpack_require__.d(__webpack_exports__, "a", function() { return /* binding */ getUrlKey; });
+__webpack_require__.d(__webpack_exports__, "h", function() { return /* binding */ return2Br; });
+__webpack_require__.d(__webpack_exports__, "c", function() { return /* binding */ isInVisibleArea; });
+__webpack_require__.d(__webpack_exports__, "g", function() { return /* binding */ removeJsonEmpty; });
+__webpack_require__.d(__webpack_exports__, "i", function() { return /* binding */ sleep; });
+
+// UNUSED EXPORTS: isUrl, validEmail
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.js
+var es_symbol = __webpack_require__("a4d3");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.description.js
+var es_symbol_description = __webpack_require__("e01a");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.to-string.js
+var es_object_to_string = __webpack_require__("d3b7");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.iterator.js
+var es_symbol_iterator = __webpack_require__("d28b");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.iterator.js
+var es_string_iterator = __webpack_require__("3ca3");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/web.dom-collections.iterator.js
+var web_dom_collections_iterator = __webpack_require__("ddb0");
+
+// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/typeof.js
+
+
+
+
+
+
+function _typeof(obj) {
+  "@babel/helpers - typeof";
+
+  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) {
+    return typeof obj;
+  } : function (obj) {
+    return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+  }, _typeof(obj);
+}
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.exec.js
+var es_regexp_exec = __webpack_require__("ac1f");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.test.js
+var es_regexp_test = __webpack_require__("00b4");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.replace.js
+var es_string_replace = __webpack_require__("5319");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.constructor.js
+var es_regexp_constructor = __webpack_require__("4d63");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.dot-all.js
+var es_regexp_dot_all = __webpack_require__("c607");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.sticky.js
+var es_regexp_sticky = __webpack_require__("2c3e");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.regexp.to-string.js
+var es_regexp_to_string = __webpack_require__("25f0");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.join.js
+var es_array_join = __webpack_require__("a15b");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.map.js
+var es_array_map = __webpack_require__("d81d");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.keys.js
+var es_object_keys = __webpack_require__("b64b");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.concat.js
+var es_array_concat = __webpack_require__("99af");
+
+// CONCATENATED MODULE: ./src/utils/util.js
 
 
 
@@ -15116,7 +14006,7 @@ function isEmpty(content) {
   return !content;
 }
 function isObject(value) {
-  return value && Object(_Users_qiushao_Desktop_qiushao_git_codes_halo_comment_joe2_0_qiu_node_modules_babel_runtime_helpers_esm_typeof_js__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(value) === "object" && value.constructor === Object;
+  return value && _typeof(value) === "object" && value.constructor === Object;
 }
 function validEmail(email) {
   var re = /^[A-Za-z1-9]+([-_.][A-Za-z1-9]+)*@([A-Za-z1-9]+[-.])+[A-Za-z]{2,8}$/;
@@ -19501,23 +18391,6 @@ module.exports = Array.isArray || function isArray(argument) {
 
 /***/ }),
 
-/***/ "e95a":
-/***/ (function(module, exports, __webpack_require__) {
-
-var wellKnownSymbol = __webpack_require__("b622");
-var Iterators = __webpack_require__("3f8c");
-
-var ITERATOR = wellKnownSymbol('iterator');
-var ArrayPrototype = Array.prototype;
-
-// check on default Array iterator
-module.exports = function (it) {
-  return it !== undefined && (Iterators.Array === it || ArrayPrototype[ITERATOR] === it);
-};
-
-
-/***/ }),
-
 /***/ "e9ac":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -19957,7 +18830,7 @@ var es_string_replace = __webpack_require__("5319");
 // EXTERNAL MODULE: ./src/components/index.js + 10 modules
 var components = __webpack_require__("2af9");
 
-// EXTERNAL MODULE: ./src/utils/util.js
+// EXTERNAL MODULE: ./src/utils/util.js + 1 modules
 var util = __webpack_require__("ca00");
 
 // EXTERNAL MODULE: ./node_modules/ua-parser-js/src/ua-parser.js
@@ -19977,7 +18850,7 @@ var CommentEditor = __webpack_require__("3f17");
 // EXTERNAL MODULE: ./src/utils/globals.js
 var globals = __webpack_require__("0e4d");
 
-// EXTERNAL MODULE: ./src/api/comment.js + 6 modules
+// EXTERNAL MODULE: ./src/api/comment.js + 1 modules
 var comment = __webpack_require__("063c");
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CommentNode.vue?vue&type=script&lang=js&
@@ -20346,63 +19219,6 @@ var component = Object(componentNormalizer["a" /* default */])(
 )
 
 /* harmony default export */ var CommentNode = __webpack_exports__["default"] = (component.exports);
-
-/***/ }),
-
-/***/ "fb6a":
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var $ = __webpack_require__("23e7");
-var isArray = __webpack_require__("e8b5");
-var isConstructor = __webpack_require__("68ee");
-var isObject = __webpack_require__("861d");
-var toAbsoluteIndex = __webpack_require__("23cb");
-var lengthOfArrayLike = __webpack_require__("07fa");
-var toIndexedObject = __webpack_require__("fc6a");
-var createProperty = __webpack_require__("8418");
-var wellKnownSymbol = __webpack_require__("b622");
-var arrayMethodHasSpeciesSupport = __webpack_require__("1dde");
-var un$Slice = __webpack_require__("f36a");
-
-var HAS_SPECIES_SUPPORT = arrayMethodHasSpeciesSupport('slice');
-
-var SPECIES = wellKnownSymbol('species');
-var $Array = Array;
-var max = Math.max;
-
-// `Array.prototype.slice` method
-// https://tc39.es/ecma262/#sec-array.prototype.slice
-// fallback for not array-like ES3 strings and DOM objects
-$({ target: 'Array', proto: true, forced: !HAS_SPECIES_SUPPORT }, {
-  slice: function slice(start, end) {
-    var O = toIndexedObject(this);
-    var length = lengthOfArrayLike(O);
-    var k = toAbsoluteIndex(start, length);
-    var fin = toAbsoluteIndex(end === undefined ? length : end, length);
-    // inline `ArraySpeciesCreate` for usage native `Array#slice` where it's possible
-    var Constructor, result, n;
-    if (isArray(O)) {
-      Constructor = O.constructor;
-      // cross-realm fallback
-      if (isConstructor(Constructor) && (Constructor === $Array || isArray(Constructor.prototype))) {
-        Constructor = undefined;
-      } else if (isObject(Constructor)) {
-        Constructor = Constructor[SPECIES];
-        if (Constructor === null) Constructor = undefined;
-      }
-      if (Constructor === $Array || Constructor === undefined) {
-        return un$Slice(O, k, fin);
-      }
-    }
-    result = new (Constructor === undefined ? $Array : Constructor)(max(fin - k, 0));
-    for (n = 0; k < fin; k++, n++) if (k in O) createProperty(result, n, O[k]);
-    result.length = n;
-    return result;
-  }
-});
-
 
 /***/ }),
 

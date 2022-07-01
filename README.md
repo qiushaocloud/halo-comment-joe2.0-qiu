@@ -1,4 +1,4 @@
-<h1 align="center"><a href="https://gitee.com/duider/halo-comment-joe2.0-qiu" target="_blank">halo-comment-joe2.0-qiu 邱少修改版</a></h1>
+<h1 align="center"><a href="https://gitee.com/qiushaocloud/halo-comment-joe2.0-qiu" target="_blank">halo-comment-joe2.0-qiu 邱少修改版</a></h1>
 <p align="center">
   <a href="https://github.com/qiushaocloud/halo-theme-joe2.0-qiu"><img alt="Build Status" src="https://img.shields.io/badge/build-positive-brightgreen?style=for-the-badge"></a>
   <a href="https://github.com/prettier/prettier"><img alt="Code Style: Prettier" src="https://img.shields.io/badge/release-1.0.0-blue?style=for-the-badge"></a>
