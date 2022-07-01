@@ -183,10 +183,10 @@ export default {
       Vue.use(VueLazyload, {
         error:
           this.mergedConfigs.avatarError ||
-          "https://cdn.staticaly.com/gh/qiushaocloud/cdn-static@master/halo-comment/default_avatar.jpg",
+          "https://originfastly.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/default_avatar.jpg",
         loading:
           this.mergedConfigs.avatarLoading ||
-          "https://cdn.staticaly.com/gh/qiushaocloud/cdn-static@master/halo-comment/spinner-preloader.svg",
+          "https://originfastly.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/spinner-preloader.svg",
         attempt: 1,
       });
     });

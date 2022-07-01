@@ -24,7 +24,7 @@
 
 1. 进入 `后台 -> 系统 -> 博客设置 -> 评论设置`
 
-2. 将 `评论模块 JS` 修改为：`https://cdn.staticaly.com/gh/qiushaocloud/halo-theme-joe2.0-qiu@master/source/lib/halo-comment/halo-comment.min.js` -->
+2. 将 `评论模块 JS` 修改为：`https://originfastly.jsdelivr.net/gh/qiushaocloud/halo-theme-joe2.0-qiu@master/source/lib/halo-comment/halo-comment.min.js` -->
 
 ### 自定义配置
 
@@ -90,8 +90,8 @@ configs='${configs}'
 ```html
 <#macro comment target,type>
     <#if !post.disallowComment!false>
-        <script src="//unpkg.zhimg.com/vue@2.6.10/dist/vue.min.js"></script>
-        <script src="${options.comment_internal_plugin_js!'//cdn.staticaly.com/gh/qiushaocloud/halo-comment-joe2.0-qiu@master/dist/halo-comment.min.js'}"></script>
+        <script src="//originfastly.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"></script>
+        <script src="${options.comment_internal_plugin_js!'//originfastly.jsdelivr.net/gh/qiushaocloud/halo-comment-joe2.0-qiu@master/dist/halo-comment.min.js'}"></script>
         <#assign
           configs = '{
             "autoLoad": true,
@@ -126,7 +126,7 @@ sheet.ftl：
     ...
 
     <#if is_post?? && is_sheet??>
-        <script src="//unpkg.zhimg.com/vue@2.6.10/dist/vue.min.js"></script>
+        <script src="//originfastly.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"></script>
         <script src="${options.comment_internal_plugin_js!'//cdn.jsdelivr.net/npm/halo-comment-normal@1.1.1/dist/halo-comment.min.js'}"></script>
         <#local
           configs = '{
