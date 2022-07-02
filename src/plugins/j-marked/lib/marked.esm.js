@@ -15,7 +15,7 @@ function createCommonjsModule(fn, module) {
 
 var defaults = createCommonjsModule(function (module) {
 function getDefaults() {
-  const baseUrl = 'https://gcore.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment';
+  const baseUrl = 'https://gcore.jsdelivr.net/gh/qiushaocloud/halo-comment-joe2.0-qiu@master';
   return {
     baseUrl: null,
     breaks: false,
