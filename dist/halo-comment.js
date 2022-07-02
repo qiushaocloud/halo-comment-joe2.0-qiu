@@ -4970,7 +4970,7 @@ var HahaEmojivue_type_template_id_48ef283e_staticRenderFns = []
     url: {
       type: String,
       required: false,
-      default: "https://originfastly.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/emoji/haha/"
+      default: "https://gcore.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/emoji/haha/"
     }
   },
   computed: {
@@ -5025,7 +5025,7 @@ var BilibiliEmojivue_type_template_id_d120e03a_staticRenderFns = []
     url: {
       type: String,
       required: false,
-      default: "https://originfastly.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/emoji/bili/"
+      default: "https://gcore.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/emoji/bili/"
     }
   },
   computed: {
@@ -7901,7 +7901,7 @@ var components = __webpack_require__("2af9");
   // gravatar头像源
   gravatarSourceDefault: "https://cn.gravatar.com/avatar",
   // gravatar默认头像源
-  avatarError: "https://originfastly.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/default_avatar.jpg",
+  avatarError: "https://gcore.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/default_avatar.jpg",
   // 头像加载错误时展示的图片
   avatarLoading: "",
   // 头像加载时展示的图片
@@ -9910,8 +9910,8 @@ external_Vue_default.a.use(plugins_Tips);
     // await this.loadOptions();
     this.$nextTick(() => {
       external_Vue_default.a.use(vue_lazyload_esm, {
-        error: this.mergedConfigs.avatarError || "https://originfastly.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/default_avatar.jpg",
-        loading: this.mergedConfigs.avatarLoading || "https://originfastly.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/spinner-preloader.svg",
+        error: this.mergedConfigs.avatarError || "https://gcore.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/default_avatar.jpg",
+        loading: this.mergedConfigs.avatarLoading || "https://gcore.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/spinner-preloader.svg",
         attempt: 1
       });
     });
@@ -19025,7 +19025,7 @@ var comment = __webpack_require__("063c");
     const renderer = {
       // eslint-disable-next-line no-unused-vars
       image(href, title) {
-        return `<a data-fancybox target="_blank" rel="noopener noreferrer nofollow" href="${href}"><img src="${href}" class="lazyload comment_inline_img" onerror="this.src='https://originfastly.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/img_error.svg'"></a>`;
+        return `<a data-fancybox target="_blank" rel="noopener noreferrer nofollow" href="${href}"><img src="${href}" class="lazyload comment_inline_img" onerror="this.src='https://gcore.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/img_error.svg'"></a>`;
       },
 
       link(href, title, text) {
@@ -19080,7 +19080,7 @@ var comment = __webpack_require__("063c");
       parser.setUA(this.comment.userAgent);
       var result = parser.getResult();
       if (!result.browser.name) return "";
-      var browserImg = "https://originfastly.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/" + result.browser.name.toLowerCase() + ".svg";
+      var browserImg = "https://gcore.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/" + result.browser.name.toLowerCase() + ".svg";
       var uaImg = "";
 
       switch (result.os.name) {
@@ -19089,26 +19089,26 @@ var comment = __webpack_require__("063c");
             case "7":
             case "8":
             case "10":
-              uaImg = "https://originfastly.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/windows_win" + result.os.version + ".svg";
+              uaImg = "https://gcore.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/windows_win" + result.os.version + ".svg";
               break;
 
             case "":
-              uaImg = "https://originfastly.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/windows_" + result.os.version + ".svg";
+              uaImg = "https://gcore.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/windows_" + result.os.version + ".svg";
               break;
 
             default:
-              uaImg = "https://originfastly.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/windows.svg";
+              uaImg = "https://gcore.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/windows.svg";
               break;
           }
 
           break;
 
         default:
-          uaImg = "https://originfastly.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/" + result.os.name.replace(/\s+/g, "").toLowerCase() + ".svg";
+          uaImg = "https://gcore.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/" + result.os.name.replace(/\s+/g, "").toLowerCase() + ".svg";
           break;
       }
 
-      let returnStr = `（<img src="${browserImg}" onerror="this.src='https://originfastly.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/unknow.svg'" alt="ua-browser"/>  ${result.browser.name} ${result.browser.version} <img src="${uaImg}" onerror="this.src='https://originfastly.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/unknow.svg'" alt="ua-os"/> ${result.os.name} ${result.os.version}）`;
+      let returnStr = `（<img src="${browserImg}" onerror="this.src='https://gcore.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/unknow.svg'" alt="ua-browser"/>  ${result.browser.name} ${result.browser.version} <img src="${uaImg}" onerror="this.src='https://gcore.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/ua/svg/unknow.svg'" alt="ua-os"/> ${result.os.name} ${result.os.version}）`;
 
       if (this.configs.isGetIpLocation && this.comment.ipLocation) {
         returnStr += `「${this.comment.ipLocation}」`;

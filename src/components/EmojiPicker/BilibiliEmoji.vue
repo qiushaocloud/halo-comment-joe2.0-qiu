@@ -14,7 +14,7 @@ export default {
     url: {
       type: String,
       required: false,
-      default: "https://originfastly.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/emoji/bili/",
+      default: "https://gcore.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/emoji/bili/",
     },
   },
   computed: {

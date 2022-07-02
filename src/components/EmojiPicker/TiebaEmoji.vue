@@ -15,7 +15,7 @@ export default {
       type: String,
       required: false,
       default:
-        "https://originfastly.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/emoji/smilies/",
+        "https://gcore.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/emoji/smilies/",
     },
   },
   computed: {
