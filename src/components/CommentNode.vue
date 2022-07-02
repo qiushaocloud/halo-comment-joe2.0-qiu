@@ -122,7 +122,7 @@
 import "./index";
 import { timeAgo, return2Br } from "@/utils/util";
 import ua from "ua-parser-js";
-import marked from "j-marked";
+import marked from "../plugins/j-marked";
 import { renderedEmojiHtml } from "@/utils/emojiutil";
 import CommentEditor from "./CommentEditor.vue";
 import globals from "@/utils/globals.js";

@@ -145,7 +145,7 @@
 <script>
 /* eslint-disable no-unused-vars */
 import Vue from "vue";
-import marked from "j-marked/lib/marked";
+import marked from "../plugins/j-marked/lib/marked";
 import md5 from "md5";
 import VEmojiPicker from "./EmojiPicker/VEmojiPicker";
 import emojiData from "./EmojiPicker/data/emojis2.js";
