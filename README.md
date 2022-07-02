@@ -127,7 +127,7 @@ sheet.ftl：
 
     <#if is_post?? && is_sheet??>
         <script src="//gcore.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"></script>
-        <script src="${options.comment_internal_plugin_js!'//cdn.jsdelivr.net/npm/halo-comment-normal@1.1.1/dist/halo-comment.min.js'}"></script>
+        <script src="${options.comment_internal_plugin_js!'//gcore.jsdelivr.net/npm/halo-comment-normal@1.1.1/dist/halo-comment.min.js'}"></script>
         <#local
           configs = '{
             "autoLoad": true,
