@@ -22,7 +22,7 @@
     <div class="comment-load-button" v-if="!mergedConfigs.autoLoad && !loaded">
       <a
         class="button-load"
-        href="javascript:void(0)"
+        href="javascript:;"
         rel="nofollow noopener"
         @click="loadComments"
         >加载评论</a

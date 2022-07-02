@@ -122,7 +122,7 @@
           >
             <a
               class="button-preview-edit"
-              href="javascript:void(0)"
+              href="javascript:;"
               rel="nofollow noopener"
               @click="handleGithubLogin"
             >Github 登陆</a>

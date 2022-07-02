@@ -40,6 +40,10 @@ div {
   transition: top 0.8s ease;
 }
 
+a[href="javascript:;"] {
+  cursor: default;
+}
+
 .no-select {
   -webkit-touch-callout: none;
   -webkit-user-select: none;

@@ -10,8 +10,7 @@
       <div class="contents">
         <div class="main shadow">
           <div class="profile">
-            <a :href="comment.authorUrl" rel="nofollow noopener noreferrer" target="_blank">
-            <!-- <a href="javascript:;" rel="nofollow noopener noreferrer"> -->
+            <a :href="comment.authorUrl || 'javascript:;'" rel="nofollow noopener noreferrer" target="_blank">
               <img
                 :alt="comment.author"
                 v-lazy="comment.isAdmin ? options.blog_logo : avatar"
@@ -26,8 +25,7 @@
             <section class="commeta">
               <div class="left">
                 <h4 class="author">
-                  <a :href="comment.authorUrl" rel="nofollow noopener noreferrer" target="_blank">
-                  <!-- <a href="javascript:;" rel="noopener noreferrer nofollow"> -->
+                  <a :href="comment.authorUrl || 'javascript:;'" rel="nofollow noopener noreferrer" target="_blank">
                     <img
                       :alt="comment.author"
                       v-lazy="comment.isAdmin ? options.blog_logo : avatar"
@@ -220,9 +218,7 @@ export default {
 
       if (this.parent != undefined) {
         at =
-          '<a href="' +
-          this.parent.authorUrl +
-          '" class="comment-at" rel="noopener noreferrer nofollow"> @' +
+          '<a href="' + (this.parent.authorUrl || 'javascript:;') +'" class="comment-at" rel="noopener noreferrer nofollow"> @' +
           this.parent.author +
           " </a>";
         // at =
