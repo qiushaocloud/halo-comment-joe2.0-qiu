@@ -14,7 +14,7 @@ export default {
     url: {
       type: String,
       required: false,
-      default: "https://gcore.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/emoji/bili/",
+      default: "https://gcore.jsdelivr.net/gh/qiushaocloud/halo-comment-joe2.0-qiu@master/assets/emoji/bili/",
     },
   },
   computed: {

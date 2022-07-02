@@ -5,7 +5,7 @@ export default {
   gravatarType: "mm", // gravatar头像类型（可在后台管理里设置）
   gravatarSource: "https://sdn.geekzu.org/avatar", // gravatar头像源
   gravatarSourceDefault: "https://cn.gravatar.com/avatar", // gravatar默认头像源
-  avatarError: "https://gcore.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/default_avatar.jpg", // 头像加载错误时展示的图片
+  avatarError: "https://gcore.jsdelivr.net/gh/qiushaocloud/halo-comment-joe2.0-qiu@master/assets/default_avatar.jpg", // 头像加载错误时展示的图片
   avatarLoading: "", // 头像加载时展示的图片
   loadingStyle: "default", // 评论加载时的loading样式
   aWord: "欢迎您，请点击此处，动动您的小手指，留下您的👣  ...", // 输入框聚焦时提示的一言

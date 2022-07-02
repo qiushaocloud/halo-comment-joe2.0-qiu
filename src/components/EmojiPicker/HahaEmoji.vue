@@ -15,7 +15,7 @@ export default {
       type: String,
       required: false,
       default:
-        "https://gcore.jsdelivr.net/gh/qiushaocloud/cdn-static@master/halo-comment/emoji/haha/",
+        "https://gcore.jsdelivr.net/gh/qiushaocloud/halo-comment-joe2.0-qiu@master/assets/emoji/haha/",
     },
   },
   computed: {
