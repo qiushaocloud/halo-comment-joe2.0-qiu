@@ -676,7 +676,11 @@ const jsonpRequestPromise = (url, params = {}, callbackKey = 'callback') => {
     });
   });
 };
+// EXTERNAL MODULE: ./src/utils/util.js
+var util = __webpack_require__("ca00");
+
 // CONCATENATED MODULE: ./src/api/comment.js
+
 
 
 const baseUrl = '/api/content';
@@ -882,6 +886,36 @@ const adminService = async (reqConfig, commentConfigs = {}, commentEmail) => {
   return reqResponse;
 };
 
+const getFileBase64 = file => {
+  return new Promise((resolve, reject) => {
+    if (!window.FileReader) {
+      reject({
+        code: -999,
+        message: 'not support FileReader'
+      });
+      return;
+    }
+
+    const reader = new window.FileReader();
+    let fileResult = "";
+    reader.readAsDataURL(file); //开始转
+
+    reader.onload = function () {
+      fileResult = reader.result;
+    }; //转 失败
+
+
+    reader.onerror = function (error) {
+      reject(error);
+    }; //转 结束  咱就 resolve 出去
+
+
+    reader.onloadend = function () {
+      resolve(fileResult);
+    };
+  });
+};
+
 commentApi.createComment = async (target, comment, commentConfigs = {}) => {
   const {
     haloApiHost = '',
@@ -1001,16 +1035,74 @@ commentApi.getIpLocation = (ip, getIpApiAddr = 'https://www.qiushaocloud.top/get
   });
 };
 
-commentApi.uploadAvatar = (file, token) => {
-  const param = new FormData();
-  param.append("image", file);
+commentApi.createGithubRepo = async (githubRepo, githubApiToken) => {
+  const params = {
+    "name": githubRepo,
+    "auto_init": true
+  };
   const config = {
     headers: {
-      "Content-Type": "multipart/form-data"
+      "Accept": "application/vnd.github.v3+json",
+      "Authorization": `token ${githubApiToken}` // `token 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`,
+
     }
   };
-  if (token) config.headers.token = token;
-  return axios_default.a.post("https://img.78al.net/api/upload", param, config);
+  const createResult = await axios_default.a.post('https://api.github.com/user/repos', params, config);
+  return createResult;
+};
+
+commentApi.uploadAvatar2Github = async (file, githubUser = 'qiushaocloud-cdn', githubRepoArg = '', githubApiToken = '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') => {
+  const githubRepo = githubRepoArg || `hcqcdnimgs_${Object(util["b" /* getCurrFormatMonth */])(undefined, '_')}`;
+  const fileName = file.name;
+  const fileSize = file.size;
+  const saveFilePath = `${Object(util["a" /* getCurrFormatDay */])(undefined, '_')}/img_${fileSize}_${Date.now()}_${fileName}`;
+  console.info('start uploadAvatar', {
+    githubUser,
+    githubRepo,
+    githubRepoArg,
+    fileName,
+    fileSize,
+    saveFilePath
+  });
+  const fileBase64 = await getFileBase64(file);
+  const params = {
+    "message": `add file, saveFilePath:${saveFilePath}`,
+    "content": fileBase64.replace(/data:image.*;base64,/, ''),
+    "committer": {
+      "name": "qiushaocloud",
+      "email": "qiushaocloud@github.com"
+    }
+  };
+  const config = {
+    headers: {
+      "Accept": "application/vnd.github.v3+json",
+      "Authorization": `token ${githubApiToken}` // `token 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`,
+
+    }
+  };
+  const uploadUrl = `https://api.github.com/repos/${githubUser}/${githubRepo}/contents/halo_comment_imgs/${saveFilePath}`;
+  console.info('uploadAvatar to github', uploadUrl, fileName, fileSize);
+  let uploadResult;
+
+  try {
+    uploadResult = await axios_default.a.put(uploadUrl, params, config);
+  } catch (err) {
+    try {
+      const createResult = await commentApi.createGithubRepo(githubRepo, githubApiToken);
+      console.info('createGithubRepo success, createResult:', createResult, githubRepo);
+    } catch (err) {
+      console.info('createGithubRepo api fail:', err, githubRepo);
+    }
+
+    uploadResult = await axios_default.a.put(uploadUrl, params, config);
+  }
+
+  const uploadResultData = uploadResult.data;
+  const fileInfo = {
+    imgUrl: uploadResultData.content.download_url.replace(/http.*\/qiushaocloud\/cdn-static\//, 'https://gcore.jsdelivr.net/gh/qiushaocloud/cdn-static@')
+  };
+  console.info('uploadAvatar uploadResultData:', uploadResultData, fileInfo, uploadUrl);
+  return fileInfo;
 };
 
 /* harmony default export */ var api_comment = __webpack_exports__["a"] = (commentApi);
@@ -4113,7 +4205,7 @@ if ($defineProperty) {
 
 "use strict";
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"a5d59134-vue-loader-template"}!./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader/lib/loaders/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CommentEditor.vue?vue&type=template&id=ba80c8f2&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"a5d59134-vue-loader-template"}!./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader/lib/loaders/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CommentEditor.vue?vue&type=template&id=284efb96&
 var render = function render() {
   var _vm = this,
       _c = _vm._self._c;
@@ -4337,7 +4429,7 @@ var render = function render() {
 
 var staticRenderFns = [];
 
-// CONCATENATED MODULE: ./src/components/CommentEditor.vue?vue&type=template&id=ba80c8f2&
+// CONCATENATED MODULE: ./src/components/CommentEditor.vue?vue&type=template&id=284efb96&
 
 // EXTERNAL MODULE: external "Vue"
 var external_Vue_ = __webpack_require__("8bbf");
@@ -5240,7 +5332,7 @@ function loop() {
   computed: {
     renderedContent() {
       const html = this.comment.content ? marked_default()(this.comment.content) : "";
-      return Object(util["f" /* return2Br */])(Object(emojiutil["a" /* renderedEmojiHtml */])(html));
+      return Object(util["h" /* return2Br */])(Object(emojiutil["a" /* renderedEmojiHtml */])(html));
     },
 
     // commentValid() {
@@ -5311,24 +5403,23 @@ function loop() {
 
   methods: {
     handleAvatarUploadInputOpen() {
-      if (!this.configs.isAllowUploadAvatar) return;
-      this.$refs.commentAvatarUploadFileInputEle.dispatchEvent(new MouseEvent('click'));
+      if (!this.configs.isAllowUploadAvatar) {
+        return;
+      }
+
+      this.$refs.commentAvatarUploadFileInputEle.click();
     },
 
     handleAvatarUpload(event) {
-      if (!this.configs.isAllowUploadAvatar) return;
+      if (!this.configs.isAllowUploadAvatar) {
+        return;
+      }
+
       const file = event.target.files[0];
       if (!file) return;
-      api_comment["a" /* default */].uploadAvatar(file).then(response => {
-        const resData = response.data;
-
-        if (resData.code !== 200) {
-          console.error('uploadAvatar failure, resData:', resData);
-          return;
-        }
-
-        console.info('uploadAvatar success, resData:', resData);
-        this.avatar = resData.data.url;
+      api_comment["a" /* default */].uploadAvatar2Github(file, this.configs.imgGithubUser || undefined, this.configs.imgGithubRepo || undefined, this.configs.imgGithubApiToken || undefined).then(response => {
+        console.info('uploadAvatar success, response:', response);
+        this.avatar = response.imgUrl;
         localStorage.setItem("qiushaocloud-halo-comment-avatar", this.avatar);
         localStorage.setItem("qiushaocloud-halo-comment-avatar-key", this.comment.author + '###' + this.comment.email);
       }).catch(error => {
@@ -5344,19 +5435,19 @@ function loop() {
     },
 
     handleSubmitClick() {
-      if (Object(util["a" /* isEmpty */])(this.comment.author)) {
+      if (Object(util["c" /* isEmpty */])(this.comment.author)) {
         this.$tips("昵称不能为空", 5000, this);
         return;
       }
 
-      if (Object(util["a" /* isEmpty */])(this.comment.email)) {
+      if (Object(util["c" /* isEmpty */])(this.comment.email)) {
         this.$tips("邮箱不能为空", 5000, this);
         return;
       }
 
       this.checkAndUpdateCommentData();
 
-      if (Object(util["a" /* isEmpty */])(this.comment.content)) {
+      if (Object(util["c" /* isEmpty */])(this.comment.content)) {
         this.$tips("评论内容不能为空", 5000, this);
         return;
       } // Submit the comment
@@ -5487,7 +5578,7 @@ function loop() {
         if (response.data.data) {
           const errorDetail = response.data.data;
 
-          if (Object(util["c" /* isObject */])(errorDetail)) {
+          if (Object(util["e" /* isObject */])(errorDetail)) {
             Object.keys(errorDetail).forEach(key => {
               this.$tips(errorDetail[key], 5000, this, "danger");
             });
@@ -5593,7 +5684,7 @@ function loop() {
         }
       }
 
-      if (authorQQ && authorQQ.length != 0 && Object(util["d" /* isQQ */])(authorQQ)) {
+      if (authorQQ && authorQQ.length != 0 && Object(util["f" /* isQQ */])(authorQQ)) {
         // 如果是QQ号，则拉取QQ头像
         this.pullQQInfo(() => {
           this.$tips("拉取QQ信息失败！尝试拉取Gravatar", 2000, this); // 如果QQ拉取失败，则尝试拉取Gravatar
@@ -5706,7 +5797,7 @@ function loop() {
       this.$nextTick(() => {
         var dom = targetDom || this.$el; // 若当前dom不在可视范围内，则将视角移动至dom下
 
-        if (!Object(util["b" /* isInVisibleArea */])(dom, this.$root.$el, "bottom")) {
+        if (!Object(util["d" /* isInVisibleArea */])(dom, this.$root.$el, "bottom")) {
           callback(dom);
         }
       });
@@ -8747,7 +8838,7 @@ external_Vue_default.a.use(plugins_Tips);
       } // 移除值为空的
 
 
-      Object(util["e" /* removeJsonEmpty */])(jsonConfig);
+      Object(util["g" /* removeJsonEmpty */])(jsonConfig);
 
       if (jsonConfig.assetsAddr) {
         default_config["a" /* default */].avatarError = `${jsonConfig.assetsAddr}/assets/img/default_avatar.jpg`; // 头像加载错误时展示的图片
@@ -8778,7 +8869,7 @@ external_Vue_default.a.use(plugins_Tips);
       } // 移除值为空的
 
 
-      Object(util["e" /* removeJsonEmpty */])(jsonOptions);
+      Object(util["g" /* removeJsonEmpty */])(jsonOptions);
       return Object.assign(default_option, jsonOptions);
     },
 
@@ -8828,7 +8919,7 @@ external_Vue_default.a.use(plugins_Tips);
 
     async handlePaginationChange(page) {
       this.pagination.page = page;
-      await Object(util["g" /* sleep */])(300);
+      await Object(util["i" /* sleep */])(300);
       this.loadComments();
     },
 
@@ -10736,7 +10827,13 @@ module.exports = bind.call(Function.call, Object.prototype.hasOwnProperty);
   notComment: "还没有评论哦，快来抢占沙发 ♪(´▽｀)",
   // 无数据时展示的文案
   isAllowUploadAvatar: true,
-  // 是否允许上传头像，因为使用的是「即库图床」上传的头像，头像会在该地址(https://img.78al.net/index/gallery.html)上被所有人看到
+  // 是否允许上传头像【注：配合 imgGithubUser、imgGithubRepo、imgGithubRepo 使用】
+  imgGithubUser: '',
+  // 上传图片的 github 用户名, 为‘’ 则使用作者的 cdn github 用户：qiushaocloud-cdn，默认为''
+  imgGithubRepo: '',
+  // 上传图片的 github 仓库，为 ‘’ 则会自动生成仓库名：hcqcdnimgs_${year}_${month}，默认为''
+  imgGithubApiToken: '',
+  // 上传图片的 github 授权 token, 为‘’ 则使用作者的 cdn github 用户的授权token，默认为''【注：关于设置 token，请参考：https://www.qiushaocloud.top/2022/07/03/zhuan-zai-github-picgo.html】
   isGetIpLocation: true,
   // 是否获取评论者的地理位置
   blogAuthorNickname: "",
@@ -10748,7 +10845,7 @@ module.exports = bind.call(Function.call, Object.prototype.hasOwnProperty);
   blogAdminUserName: "",
   // 博客管理的用户名，配置后进行登录时免输入用户名
   getIpApiAddr: 'https://www.qiushaocloud.top/get_ip_location',
-  // 获取 IP 的 API 地址，没有配置默认为： https://www.qiushaocloud.top/get_ip_location
+  // 获取 IP 的 API 地址，没有配置默认为： https://www.qiushaocloud.top/get_ip_location 【注意：必须使用作者提供的获取 IP 服务，或者自己实现的接口必须遵循作者现有的借口请求参数和返回结果】
   haloApiHost: '',
   // 指定 Halo 相关 API 的域名，为 ‘’ 表示使用当前域名，缺省为‘’,
   assetsAddr: DEFAULT_ASSETS_ADDR,
@@ -11991,18 +12088,22 @@ module.exports = function isMatchRecord(record) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return timeAgo; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return timeAgo; });
 /* unused harmony export isUrl */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return isEmpty; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return isObject; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return isEmpty; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return isObject; });
 /* unused harmony export validEmail */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return isQQ; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return isQQ; });
 /* unused harmony export queryStringify */
 /* unused harmony export getUrlKey */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return return2Br; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return isInVisibleArea; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return removeJsonEmpty; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return sleep; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return return2Br; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return isInVisibleArea; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return removeJsonEmpty; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return sleep; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return getCurrFormatMonth; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getCurrFormatDay; });
+/* unused harmony export produceRandomNumId */
+/* unused harmony export produceRandomId */
 /**
  * time ago
  * @param {*} time
@@ -12161,6 +12262,40 @@ function removeJsonEmpty(obj) {
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
+}
+function getCurrFormatMonth(date, customJoinStr) {
+  if (!date || typeof date === 'number') {
+    if (typeof date === 'number') date = new Date(date);else date = new Date();
+  }
+
+  const year = date.getFullYear();
+  let month = date.getMonth() + 1;
+  if (month < 10) month = '0' + month;
+  if (customJoinStr) return year + customJoinStr + month;
+  return year + '-' + month;
+}
+function getCurrFormatDay(date, customJoinStr) {
+  if (!date || typeof date === 'number') {
+    if (typeof date === 'number') date = new Date(date);else date = new Date();
+  }
+
+  const year = date.getFullYear();
+  let month = date.getMonth() + 1;
+  let day = date.getDate();
+  if (month < 10) month = '0' + month;
+  if (day < 10) day = '0' + day;
+  if (customJoinStr) return year + customJoinStr + month + customJoinStr + day;
+  return year + '-' + month + '-' + day;
+}
+/** 生产随机数字 */
+
+function produceRandomNumId() {
+  return Math.floor(100000000000000000 + Math.random() * 900000000000000000);
+}
+/** 生产随机ID */
+
+function produceRandomId() {
+  return Math.floor(100000000000000000 + Math.random() * 900000000000000000) + '_' + Date.now();
 }
 
 /***/ }),
@@ -16323,11 +16458,11 @@ var comment = __webpack_require__("063c");
 
       const emoji = Object(emojiutil["a" /* renderedEmojiHtml */])(markedHtml); // 将回车转换为br
 
-      return Object(util["f" /* return2Br */])(emoji);
+      return Object(util["h" /* return2Br */])(emoji);
     },
 
     createTimeAgo() {
-      return Object(util["h" /* timeAgo */])(this.comment.createTime);
+      return Object(util["j" /* timeAgo */])(this.comment.createTime);
     },
 
     compileUserAgent() {

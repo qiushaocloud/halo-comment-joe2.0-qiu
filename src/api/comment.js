@@ -1,5 +1,6 @@
 import axios from 'axios'
 import service from '@/utils/service'
+import { getCurrFormatDay, getCurrFormatMonth } from '../utils/util';
 
 const baseUrl = '/api/content';
 const adminUrl = '/api/admin';
@@ -230,6 +231,36 @@ const adminService = async (
     return reqResponse;
 }
 
+const getFileBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+        if (!window.FileReader) {
+            reject({code: -999, message: 'not support FileReader'});
+            return;
+        }
+
+        const reader = new window.FileReader();
+
+        let fileResult = "";
+        reader.readAsDataURL(file);
+        
+        //开始转
+        reader.onload = function() {
+            fileResult = reader.result;
+        };
+
+        //转 失败
+        reader.onerror = function(error) {
+            reject(error);
+        };
+
+        //转 结束  咱就 resolve 出去
+        reader.onloadend = function() {
+            resolve(fileResult);
+        };
+    });
+}
+
+
 commentApi.createComment = async (
     target,
     comment,
@@ -388,22 +419,94 @@ commentApi.getIpLocation = (
     });
 };
 
-commentApi.uploadAvatar = (file, token) => {
-    const param = new FormData();
-    param.append("image", file);
-  
+commentApi.createGithubRepo = async (
+    githubRepo,
+    githubApiToken
+) => {
+    const params = {
+        "name": githubRepo,
+        "auto_init": true
+    }
+
     const config = {
-        headers: { "Content-Type": "multipart/form-data" }
+        headers: {
+            "Accept": "application/vnd.github.v3+json",
+            "Authorization": `token ${githubApiToken}` // `token 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`,
+        }
     };
 
-    if (token)
-        config.headers.token = token;
-
-    return axios.post(
-        "https://img.78al.net/api/upload",
-        param,
+    const createResult = await axios.post(
+        'https://api.github.com/user/repos',
+        params,
         config
     );
+
+    return createResult;
+}
+
+commentApi.uploadAvatar2Github = async (
+    file,
+    githubUser = 'qiushaocloud-cdn',
+    githubRepoArg = '',
+    githubApiToken = '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'
+) => {
+    const githubRepo = githubRepoArg || `hcqcdnimgs_${getCurrFormatMonth(undefined, '_')}`;
+    const fileName = file.name;
+    const fileSize = file.size;
+    const saveFilePath = `${getCurrFormatDay(undefined, '_')}/img_${fileSize}_${Date.now()}_${fileName}`;
+    console.info('start uploadAvatar', {githubUser, githubRepo, githubRepoArg, fileName, fileSize, saveFilePath});
+    const fileBase64 = await getFileBase64(file);
+
+    const params = {
+        "message": `add file, saveFilePath:${saveFilePath}`,
+        "content": fileBase64.replace(/data:image.*;base64,/, ''),
+        "committer": {
+            "name": "qiushaocloud",
+            "email": "qiushaocloud@github.com"
+        }
+    }
+
+    const config = {
+        headers: {
+            "Accept": "application/vnd.github.v3+json",
+            "Authorization": `token ${githubApiToken}` // `token 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`,
+        }
+    };
+
+    const uploadUrl =  `https://api.github.com/repos/${githubUser}/${githubRepo}/contents/halo_comment_imgs/${saveFilePath}`;
+    console.info('uploadAvatar to github', uploadUrl, fileName, fileSize);
+
+    let uploadResult;
+    try{
+        uploadResult = await axios.put(
+            uploadUrl,
+            params,
+            config
+        );
+    } catch (err) {
+        try {
+            const createResult = await commentApi.createGithubRepo(githubRepo, githubApiToken);
+            console.info('createGithubRepo success, createResult:', createResult, githubRepo);
+        } catch (err) {
+            console.info('createGithubRepo api fail:', err, githubRepo);
+        }
+
+        uploadResult = await axios.put(
+            uploadUrl,
+            params,
+            config
+        );
+    }
+  
+    const uploadResultData = uploadResult.data;
+
+    const fileInfo = {
+        imgUrl: uploadResultData.content.download_url.replace(/http.*\/qiushaocloud\/cdn-static\//, 'https://gcore.jsdelivr.net/gh/qiushaocloud/cdn-static@')
+    };
+
+    console.info('uploadAvatar uploadResultData:', uploadResultData, fileInfo, uploadUrl);
+
+    return fileInfo;
 };
 
 export default commentApi

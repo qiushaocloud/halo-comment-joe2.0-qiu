@@ -282,31 +282,32 @@ export default {
   },
   methods: {
     handleAvatarUploadInputOpen() {
-      if (!this.configs.isAllowUploadAvatar)
+      if (!this.configs.isAllowUploadAvatar) {
         return;
+      }
 
-      this.$refs.commentAvatarUploadFileInputEle.dispatchEvent(new MouseEvent('click'))
+      this.$refs.commentAvatarUploadFileInputEle.click();
     },
     handleAvatarUpload(event) {
-      if (!this.configs.isAllowUploadAvatar)
-      return;
+      if (!this.configs.isAllowUploadAvatar) {
+        return;
+      }
         
       const file = event.target.files[0];
       if (!file)
         return;
 
       commentApi
-        .uploadAvatar(file)
+        .uploadAvatar2Github(
+          file,
+          this.configs.imgGithubUser || undefined,
+          this.configs.imgGithubRepo || undefined,
+          this.configs.imgGithubApiToken || undefined
+        )
         .then((response) => {
-          const resData = response.data;
-          if (resData.code !== 200) {
-            console.error('uploadAvatar failure, resData:', resData);
-            return;
-          }
+          console.info('uploadAvatar success, response:', response);
 
-          console.info('uploadAvatar success, resData:', resData);
-
-          this.avatar = resData.data.url;
+          this.avatar = response.imgUrl;
 
           localStorage.setItem("qiushaocloud-halo-comment-avatar", this.avatar);
           localStorage.setItem("qiushaocloud-halo-comment-avatar-key", this.comment.author+'###'+this.comment.email);
@@ -327,7 +328,7 @@ export default {
         this.$tips("昵称不能为空", 5000, this);
         return;
       }
-      
+
       if (isEmpty(this.comment.email)) {
         this.$tips("邮箱不能为空", 5000, this);
         return;

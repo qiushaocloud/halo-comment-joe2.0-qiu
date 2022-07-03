@@ -168,3 +168,52 @@ export function removeJsonEmpty(obj) {
 export function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+export function getCurrFormatMonth(date, customJoinStr) {
+  if (!date || typeof date === 'number') {
+      if (typeof date === 'number')
+          date = new Date(date);
+      else
+          date = new Date();
+  }
+  const year = date.getFullYear();
+  let month = date.getMonth() + 1;
+  if (month < 10)
+      month = '0' + month;
+
+  if (customJoinStr)
+    return  year + customJoinStr + month;
+
+  return year + '-' + month;
+}
+
+export function getCurrFormatDay(date, customJoinStr) {
+  if (!date || typeof date === 'number') {
+      if (typeof date === 'number')
+          date = new Date(date);
+      else
+          date = new Date();
+  }
+  const year = date.getFullYear();
+  let month = date.getMonth() + 1;
+  let day = date.getDate();
+  if (month < 10)
+      month = '0' + month;
+  if (day < 10)
+      day = '0' + day;
+
+  if (customJoinStr)
+    return  year + customJoinStr + month + customJoinStr + day;
+
+  return year + '-' + month + '-' + day;
+}
+
+/** 生产随机数字 */
+export function produceRandomNumId() {
+  return Math.floor(100000000000000000 + Math.random() * 900000000000000000);
+}
+
+/** 生产随机ID */
+export function produceRandomId() {
+  return Math.floor(100000000000000000 + Math.random() * 900000000000000000) + '_' + Date.now();
+}
