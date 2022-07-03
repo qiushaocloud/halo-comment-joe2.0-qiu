@@ -23,5 +23,6 @@ export default {
   blogAdminUserName: "", // 博客管理的用户名，配置后进行登录时免输入用户名
   getIpApiAddr: 'https://www.qiushaocloud.top/get_ip_location', // 获取 IP 的 API 地址，没有配置默认为： https://www.qiushaocloud.top/get_ip_location
   haloApiHost: '', // 指定 Halo 相关 API 的域名，为 ‘’ 表示使用当前域名，缺省为‘’,
-  assetsAddr: DEFAULT_ASSETS_ADDR // 评论组件所需的 assets 资源地址，没有配置则采用默认为: https://gcore.jsdelivr.net/gh/qiushaocloud/halo-comment-joe2.0-qiu@master
+  assetsAddr: DEFAULT_ASSETS_ADDR, // 评论组件所需的 assets 资源地址，没有配置则采用默认为: https://gcore.jsdelivr.net/gh/qiushaocloud/halo-comment-joe2.0-qiu@master
+  isDelete2Recycle: true // 博主点击删除评论，是否只将评论放入回收站，如果为 true 则放入回收站，为 false 则永久删除，默认为true
 };

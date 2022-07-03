@@ -329,6 +329,7 @@ commentApi.deleteComment = async (
     commentConfigs = {}
 ) => {
     const {
+        isDelete2Recycle = false,
         haloApiHost = ''
     } = commentConfigs;
 
@@ -336,6 +337,12 @@ commentApi.deleteComment = async (
         url: `${haloApiHost + adminUrl}/${target}/comments/${commentId}`,
         method: 'delete'
     };
+
+    if (isDelete2Recycle) {
+        reqConfig.method = 'put';
+        reqConfig.url =  `${haloApiHost + adminUrl}/${target}/comments/${commentId}/status/RECYCLE`;
+    }
+
     return adminService(
         reqConfig,
         commentConfigs
