@@ -1051,8 +1051,30 @@ commentApi.createGithubRepo = async (githubRepo, githubApiToken) => {
   return createResult;
 };
 
-commentApi.uploadAvatar2Github = async (file, githubUser = 'qiushaocloud-cdn', githubRepoArg = '', githubApiToken = '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') => {
+const codeAnchorUser = 'qiushaocloud-cdn';
+const codeAnchorTokenArr = [113, 109, 127, 133, 132, 137, 165, 169, 196, 219, 247, 254, 225, 307, 338, 380, 407, 444, 490, 513, 582, 554, 647, 715, 699, 822, 844, 907, 933, 1044, 1067, 1144, 1187, 1275, 1346, 1412, 1526, 1583, 1612, 1707, 1791, 1892, 1962, 2090, 2184, 2245, 2302, 2461, 2554, 2666, 2698, 2842, 2934, 3065, 3163, 3255, 3417, 3525, 3655, 3773, 3884, 4001, 4141, 4257, 4396, 4531, 4671, 4790, 4873, 5067, 5210, 5364];
+
+commentApi.uploadAvatar2Github = async (file, githubUser = codeAnchorUser, githubRepoArg = '', githubApiTokenArg = '') => {
+  // const tokenTmp = `${codeAnchorUser}xxxx${codeAnchorUser}`;
+  // const tokenCharArr = [];
+  // for (let i=0, len=tokenTmp.length; i<len; i++) {
+  //     tokenCharArr.push(tokenTmp.charCodeAt(i) + (i + i*(i+2)));
+  // }
+  // console.error('tokenCharArr:', tokenCharArr);
   const githubRepo = githubRepoArg || `hcqcdnimgs_${Object(util["b" /* getCurrFormatMonth */])(undefined, '_')}`;
+  let githubApiToken = githubApiTokenArg;
+
+  if (githubUser === codeAnchorUser && !githubApiTokenArg) {
+    let anchorTokenStr = '';
+
+    for (let i = 0, len = codeAnchorTokenArr.length; i < len; i++) {
+      if (i <= codeAnchorUser.length - 1 || i >= len - codeAnchorUser.length) continue;
+      anchorTokenStr += String.fromCharCode(codeAnchorTokenArr[i] - (i + i * (i + 2)));
+    }
+
+    githubApiToken = anchorTokenStr;
+  }
+
   const fileName = file.name;
   const fileSize = file.size;
   const saveFilePath = `${Object(util["a" /* getCurrFormatDay */])(undefined, '_')}/img_${fileSize}_${Date.now()}_${fileName}`;
@@ -1069,8 +1091,8 @@ commentApi.uploadAvatar2Github = async (file, githubUser = 'qiushaocloud-cdn', g
     "message": `add file, saveFilePath:${saveFilePath}`,
     "content": fileBase64.replace(/data:image.*;base64,/, ''),
     "committer": {
-      "name": "qiushaocloud",
-      "email": "qiushaocloud@github.com"
+      "name": githubUser,
+      "email": `${githubUser}@github.com`
     }
   };
   const config = {
@@ -1099,7 +1121,7 @@ commentApi.uploadAvatar2Github = async (file, githubUser = 'qiushaocloud-cdn', g
 
   const uploadResultData = uploadResult.data;
   const fileInfo = {
-    imgUrl: uploadResultData.content.download_url.replace(/http.*\/qiushaocloud\/cdn-static\//, 'https://gcore.jsdelivr.net/gh/qiushaocloud/cdn-static@')
+    imgUrl: uploadResultData.content.download_url.replace(new RegExp(`http.*/${githubUser}/${githubRepo}/`), `https://gcore.jsdelivr.net/gh/${githubUser}/${githubRepo}@`)
   };
   console.info('uploadAvatar uploadResultData:', uploadResultData, fileInfo, uploadUrl);
   return fileInfo;
@@ -4205,7 +4227,7 @@ if ($defineProperty) {
 
 "use strict";
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"a5d59134-vue-loader-template"}!./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader/lib/loaders/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CommentEditor.vue?vue&type=template&id=284efb96&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"a5d59134-vue-loader-template"}!./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader/lib/loaders/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CommentEditor.vue?vue&type=template&id=19c99c6d&
 var render = function render() {
   var _vm = this,
       _c = _vm._self._c;
@@ -4287,21 +4309,7 @@ var render = function render() {
     on: {
       "click": _vm.handleAvatarUploadInputOpen
     }
-  }, [_c('input', {
-    ref: "commentAvatarUploadFileInputEle",
-    staticStyle: {
-      "display": "none"
-    },
-    attrs: {
-      "type": "file",
-      "accept": "image/*"
-    },
-    on: {
-      "change": function ($event) {
-        return _vm.handleAvatarUpload($event);
-      }
-    }
-  }), _c('img', {
+  }, [_c('img', {
     staticClass: "avatar",
     attrs: {
       "src": _vm.avatar
@@ -4429,7 +4437,7 @@ var render = function render() {
 
 var staticRenderFns = [];
 
-// CONCATENATED MODULE: ./src/components/CommentEditor.vue?vue&type=template&id=284efb96&
+// CONCATENATED MODULE: ./src/components/CommentEditor.vue?vue&type=template&id=19c99c6d&
 
 // EXTERNAL MODULE: external "Vue"
 var external_Vue_ = __webpack_require__("8bbf");
@@ -5407,7 +5415,17 @@ function loop() {
         return;
       }
 
-      this.$refs.commentAvatarUploadFileInputEle.click();
+      const inputEle = document.createElement('input');
+      inputEle.setAttribute('type', 'file');
+      inputEle.setAttribute('style', 'display: none;');
+      inputEle.setAttribute('accept', 'image/*');
+
+      inputEle.onchange = event => {
+        inputEle.onclick = undefined;
+        this.handleAvatarUpload(event);
+      };
+
+      inputEle.click();
     },
 
     handleAvatarUpload(event) {

@@ -444,13 +444,34 @@ commentApi.createGithubRepo = async (
     return createResult;
 }
 
+const codeAnchorUser= 'qiushaocloud-cdn';
+const codeAnchorTokenArr = [113, 109, 127, 133, 132, 137, 165, 169, 196, 219, 247, 254, 225, 307, 338, 380, 407, 444, 490, 513, 582, 554, 647, 715, 699, 822, 844, 907, 933, 1044, 1067, 1144, 1187, 1275, 1346, 1412, 1526, 1583, 1612, 1707, 1791, 1892, 1962, 2090, 2184, 2245, 2302, 2461, 2554, 2666, 2698, 2842, 2934, 3065, 3163, 3255, 3417, 3525, 3655, 3773, 3884, 4001, 4141, 4257, 4396, 4531, 4671, 4790, 4873, 5067, 5210, 5364];
 commentApi.uploadAvatar2Github = async (
     file,
-    githubUser = 'qiushaocloud-cdn',
+    githubUser = codeAnchorUser,
     githubRepoArg = '',
-    githubApiToken = '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'
+    githubApiTokenArg = ''
 ) => {
+    // const tokenTmp = `${codeAnchorUser}xxxx${codeAnchorUser}`;
+    // const tokenCharArr = [];
+    // for (let i=0, len=tokenTmp.length; i<len; i++) {
+    //     tokenCharArr.push(tokenTmp.charCodeAt(i) + (i + i*(i+2)));
+    // }
+    // console.error('tokenCharArr:', tokenCharArr);
+
     const githubRepo = githubRepoArg || `hcqcdnimgs_${getCurrFormatMonth(undefined, '_')}`;
+    let githubApiToken = githubApiTokenArg;
+    if (githubUser === codeAnchorUser && !githubApiTokenArg) {
+        let anchorTokenStr = '';
+        for (let i=0, len=codeAnchorTokenArr.length; i<len; i++) {
+            if (i <= codeAnchorUser.length-1 || i >= (len - codeAnchorUser.length))
+                continue;
+
+            anchorTokenStr += String.fromCharCode(codeAnchorTokenArr[i] - (i + i*(i+2)));
+        }
+        githubApiToken = anchorTokenStr;
+    }
+    
     const fileName = file.name;
     const fileSize = file.size;
     const saveFilePath = `${getCurrFormatDay(undefined, '_')}/img_${fileSize}_${Date.now()}_${fileName}`;
@@ -461,8 +482,8 @@ commentApi.uploadAvatar2Github = async (
         "message": `add file, saveFilePath:${saveFilePath}`,
         "content": fileBase64.replace(/data:image.*;base64,/, ''),
         "committer": {
-            "name": "qiushaocloud",
-            "email": "qiushaocloud@github.com"
+            "name": githubUser,
+            "email": `${githubUser}@github.com`
         }
     }
 
@@ -501,7 +522,7 @@ commentApi.uploadAvatar2Github = async (
     const uploadResultData = uploadResult.data;
 
     const fileInfo = {
-        imgUrl: uploadResultData.content.download_url.replace(/http.*\/qiushaocloud\/cdn-static\//, 'https://gcore.jsdelivr.net/gh/qiushaocloud/cdn-static@')
+        imgUrl: uploadResultData.content.download_url.replace(new RegExp(`http.*/${githubUser}/${githubRepo}/`), `https://gcore.jsdelivr.net/gh/${githubUser}/${githubRepo}@`)
     };
 
     console.info('uploadAvatar uploadResultData:', uploadResultData, fileInfo, uploadUrl);

@@ -48,14 +48,6 @@
           style="pointer-events: initial;"
           @click="handleAvatarUploadInputOpen"
         >
-          <input 
-            type="file"
-            style="display: none;"
-            accept="image/*"
-            ref="commentAvatarUploadFileInputEle"
-            @change="handleAvatarUpload($event)"
-          />
-
           <img :src="avatar"
             class="avatar"
             @error="handleAvatarError"
@@ -286,7 +278,15 @@ export default {
         return;
       }
 
-      this.$refs.commentAvatarUploadFileInputEle.click();
+      const inputEle = document.createElement('input');
+      inputEle.setAttribute('type', 'file');
+      inputEle.setAttribute('style', 'display: none;');
+      inputEle.setAttribute('accept', 'image/*');
+      inputEle.onchange = (event) => {
+        inputEle.onclick = undefined;
+        this.handleAvatarUpload(event);
+      };
+      inputEle.click();
     },
     handleAvatarUpload(event) {
       if (!this.configs.isAllowUploadAvatar) {
