@@ -6,6 +6,7 @@
     />
     <keep-alive>
     <EmojiList
+      :assetsAddr="assetsAddr"
       :data="emojis"
       :category="category"
       @select="onSelectEmoji(arguments)"
@@ -23,6 +24,11 @@ export default {
   props: {
     pack: { type: Array, required: true },
     showCategory: { type: Boolean, default: true },
+    assetsAddr: {
+      type: String,
+      required: false,
+      default: ''
+    }
   },
   components: {
     Categories,

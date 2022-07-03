@@ -100,6 +100,7 @@ a[href="javascript:;"] {
 .halo-comment {
   position: relative;
   box-sizing: border-box;
+  text-align: left;
   font-size: 14px;
   font-weight: normal;
   line-height: 1.5;
@@ -107,7 +108,6 @@ a[href="javascript:;"] {
   text-rendering: geometricPrecision;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  box-sizing: content-box;
   animation: main 0.6s;
 
   input[type="text"],
@@ -128,7 +128,7 @@ a[href="javascript:;"] {
   textarea {
     color: #666;
     border: 1px solid #ccc;
-    border-radius: 3px;
+    border-radius: 5px;
   }
 
   .avatar {
@@ -303,7 +303,7 @@ a[href="javascript:;"] {
       }
     }
 
-    @media screen and (max-width:500px) {
+    @media screen and (max-width: 500px) {
       .children {
         padding-left: 20px;
       }
@@ -315,10 +315,6 @@ a[href="javascript:;"] {
     padding: 0;
     overflow: hidden;
     list-style: none;
-
-    .comment-reply-title {
-      text-align: right;
-    }
 
     .contents {
       width: 100%;
@@ -343,30 +339,14 @@ a[href="javascript:;"] {
       padding: 0;
 
       &.shadow {
-        &:hover {
-          img {
-            &.avatar {
-              -webkit-transform: rotate(360deg);
-              -moz-transform: rotate(360deg);
-              -ms-transform: rotate(360deg);
-              -o-transform: rotate(360deg);
-              transform: rotate(360deg);
-            }
-          }
+        img.avatar {
+          transition: all ease 1s;
+          box-shadow: 0 1px 10px -6px rgba(0, 0, 0, 0.5);
         }
 
-        img {
-          &.avatar {
-            transform: rotate(0deg);
-            -webkit-transform: rotate(0deg);
-            -moz-transform: rotate(0deg);
-            -o-transform: rotate(0deg);
-            -ms-transform: rotate(0deg);
-            transition: all ease 1s;
-            -webkit-transition: all ease 1s;
-            -moz-transition: all ease 1s;
-            -o-transition: all ease 1s;
-            box-shadow: 0 1px 10px -6px rgba(0, 0, 0, 0.5);
+        .profile:hover {
+          img.avatar {
+            transform: rotate(360deg);
           }
         }
       }
@@ -379,6 +359,12 @@ a[href="javascript:;"] {
       float: left;
       margin-right: 10px;
       margin-top: 6px;
+
+      a {
+        &.disabled {
+          pointer-events: none;
+        }
+      }
 
       img {
         width: 100%;
@@ -488,6 +474,10 @@ a[href="javascript:;"] {
         color: var(--theme);
         font-size: 14px;
         font-weight: 600;
+
+        &.disabled {
+          pointer-events: none;
+        }
 
         &:hover {
           color: var(--theme);
@@ -606,7 +596,7 @@ a[href="javascript:;"] {
   }
 
   .markdown-body {
-    padding-left: 50px;
+    margin-bottom: 15px;
     line-height: 1;
     white-space: pre-line;
     word-break: break-all;
@@ -618,6 +608,21 @@ a[href="javascript:;"] {
       word-break: break-all;
       background: var(--sub-background);
       border-radius: 0 8px 8px;
+
+      &.blink {
+        animation: blink 0.3s linear infinite alternate;
+      }
+    }
+
+    @keyframes blink {
+      from {
+        filter: brightness(1);
+      }
+
+      from {
+        filter: brightness(0.5);
+      }
+
     }
 
     img {
@@ -630,7 +635,6 @@ a[href="javascript:;"] {
       overflow: hidden;
       color: #333;
       background-color: transparent;
-      ;
 
       @media (max-width: 860px) {
         transform: scale(0.8);
@@ -689,7 +693,7 @@ a[href="javascript:;"] {
       border-radius: 4px;
     }
 
-    @media screen and (max-width:880px) {
+    @media screen and (max-width: 880px) {
       padding-left: 0;
     }
   }
@@ -724,14 +728,6 @@ a[href="javascript:;"] {
       }
     }
 
-    // 取消回复按钮
-    .cancel-comment-reply-link{
-      background: #eee;
-      border-radius: 3px;
-      padding: 12px 25px;
-      font-size: 12px;
-      color: #454545;
-    }
 
     /*--------------------------------------------------------------
       # Commment Reply Form 
@@ -756,6 +752,7 @@ a[href="javascript:;"] {
         float: none;
         width: 100%;
         height: 180px;
+        min-height: 100px;
         margin-bottom: 10px;
         color: #535a63;
 
@@ -799,7 +796,7 @@ a[href="javascript:;"] {
             color: #fff;
             background-color: var(--theme);
             transform: scale(0.75) translate(-2px, -37px);
-            border-radius: 3px;
+            border-radius: 5px;
             overflow: hidden;
             text-overflow:ellipsis;
             white-space: nowrap;
@@ -956,12 +953,14 @@ a[href="javascript:;"] {
         .button-preview-edit {
           opacity: 0.9;
           display: inline-block;
+          margin-left: 5px;
           color: #fff;
           font-weight: 500;
-          padding: 4px 16px;
+          padding: 4px 12px;
           text-transform: uppercase;
           border: none;
           background: $color;
+          border: 1px solid var(--theme);
           border-radius: 4px;
           animation: bottom20 500ms;
           transition: all 0.3s ease 0s;
@@ -970,8 +969,28 @@ a[href="javascript:;"] {
             opacity: 1;
             font-weight: 700;
             letter-spacing: 3px;
-            -webkit-box-shadow: 0px 5px 40px -10px rgba(0, 0, 0, 0.57);
-            -moz-box-shadow: 0px 5px 40px -10px rgba(0, 0, 0, 0.57);
+            box-shadow: 0px 5px 40px -10px rgba(0, 0, 0, 0.57);
+            transition: all 0.3s ease 0s;
+          }
+        }
+
+        .button-cancel-reply {
+          opacity: .9;
+          display: inline-block;
+          color: var(--minor);
+          font-weight: 500;
+          padding: 4px 12px;
+          text-transform: uppercase;
+          background: transparent;
+          border: 1px solid var(--minor);
+          border-radius: 4px;
+          animation: bottom20 .5s;
+          transition: all .3s ease 0s;
+
+          &:hover {
+            opacity: 1;
+            font-weight: 700;
+            letter-spacing: 3px;
             box-shadow: 0px 5px 40px -10px rgba(0, 0, 0, 0.57);
             transition: all 0.3s ease 0s;
           }
@@ -1036,6 +1055,7 @@ a[href="javascript:;"] {
         &:hover {
           color: var(--theme);
           border-color: var(--theme);
+
           svg {
             fill: var(--theme);
           }
@@ -1044,14 +1064,14 @@ a[href="javascript:;"] {
         &.prev-button {
           &:before {
             display: block;
-            content: '上一页';
+            content: "上一页";
           }
         }
 
         &.next-button {
           &:before {
             display: block;
-            content: '下一页';
+            content: "下一页";
           }
         }
       }
@@ -1071,6 +1091,7 @@ a[href="javascript:;"] {
           &.prev-button {
             position: relative;
             top: 4px;
+
             &:before {
               display: none;
             }
@@ -1083,6 +1104,7 @@ a[href="javascript:;"] {
           &.next-button {
             position: relative;
             top: 4px;
+
             &:before {
               display: none;
             }
@@ -1146,10 +1168,6 @@ a[href="javascript:;"] {
 
     .comment-wrp {
       border-color: #4e4e4e;
-
-      .cancel-comment-reply-link {
-        background: #c7c7c7;
-      }
 
       .commeta {
         .info {
@@ -1448,29 +1466,36 @@ a[href="javascript:;"] {
 # Default Tips
 --------------------------------------------------------------*/
 .butterBar {
-  position: fixed;
+  position: absolute;
   text-align: center;
-  top: 0;
-  left: 0;
-  right: 0;
-  width: 100%;
-  z-index: 10000;
+  top: 10px;
+  right: 0px;
+  z-index: 1000;
 
   &.butterBar-center {
     margin: auto;
   }
 
   .butterBar-message {
-    background: #fe9600;
-    color: #fff;
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
     display: inline-block;
+    margin: 0;
+    padding: 8px 20px;
     font-size: 14px;
-    margin-bottom: 0;
-    padding: 12px 25px;
-    z-index: 10000;
-    margin-top: -4px;
+    color: #fff;
+    background: #fe9600;
+    border-radius: 18px 0 0 18px;
+    box-shadow: -2px 4px 10px -5px #f74009;
+    animation: dung 0.3s 0.1s 2 linear;
+
+    &.success {
+      background: #31c560;
+      box-shadow: -2px 4px 10px -5px #07600a;
+    }
+
+    &.danger {
+      background: #e74b32;
+      box-shadow: -2px 4px 10px -5px #e10000;
+    }
   }
 }
 
@@ -1485,6 +1510,38 @@ a[href="javascript:;"] {
 
   100% {
     opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes dung {
+  0% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+
+  30% {
+    -webkit-transform: translateY(-3px);
+    transform: translateY(-3px);
+  }
+
+  60% {
+    -webkit-transform: translateY(2px);
+    transform: translateY(2px);
+  }
+
+  80% {
+    -webkit-transform: translateY(-1px);
+    transform: translateY(-1px);
+  }
+
+  90% {
+    -webkit-transform: translateY(1px);
+    transform: translateY(1px);
+  }
+
+  100% {
+    -webkit-transform: translateY(0);
     transform: translateY(0);
   }
 }

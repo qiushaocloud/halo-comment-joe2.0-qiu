@@ -20,11 +20,6 @@
 
 #### 👀 [有疑问或者功能需求，请点击此处前往](https://www.qiushaocloud.top/2022/01/13/joe20halo-comment-qiu-shao-xiu-gai-ban.html)
 
-<!-- ### 使用指南
-
-1. 进入 `后台 -> 系统 -> 博客设置 -> 评论设置`
-
-2. 将 `评论模块 JS` 修改为：`https://gcore.jsdelivr.net/gh/qiushaocloud/halo-theme-joe2.0-qiu@master/source/lib/halo-comment/halo-comment.min.js` -->
 
 ### 自定义配置
 
@@ -48,6 +43,8 @@
 | isGetIpLocation  | 是否获取评论者的地理位置  | `true`     | `true` `false` |
 | blogAuthorEmail  | 设置博主邮箱，则允许博主在博客中进行评论，如果没有授权，则需要进行登录授权  | `""`     | - |
 | blogAdminUserName  | 博客管理的用户名，配置后进行登录时免输入用户名  | `""`     | - |
+| haloApiHost  | 指定 Halo 相关 API 的域名，为 ‘’ 表示使用当前域名  | `""`     | - |
+| assetsAddr  | 评论组件所需的 assets 资源地址  | `"https://gcore.jsdelivr.net/gh/qiushaocloud/halo-comment-joe2.0-qiu@master"`     | - |
 
 
 配置方法：
@@ -108,13 +105,15 @@ configs='${configs}'
 post.ftl：
 
 ```html
-<#include "comment.ftl"> <@comment target=post type="post" />
+<#include "comment.ftl">
+<@comment target=post type="post" />
 ```
 
 sheet.ftl：
 
 ```html
-<#include "comment.ftl"> <@comment target=sheet type="sheet" />
+<#include "comment.ftl">
+<@comment target=sheet type="sheet" />
 ```
 
 #### 方法二
@@ -248,8 +247,12 @@ for (var i = 0; i < comments.length; i++) {
 
 ### 关于emoji
 
-项目中的 emoji 解析依赖了 [j-marked](https://gitee.com/duider/j-marked) 这个包。
+项目中的 emoji 解析依赖了 [j-marked](https://github.com/qinhua/j-marked) 这个包。
 
+
+### 打包
+
+开发完毕后，你可以执行 `npm run build:wc` 编译出用于生产环境的 `webcomponent` 组件
 
 
 #### 开源不易，如果对您有帮助，请您动一动您的小手，给作者点 Star，也请您多多关注分享者「[邱少羽梦](https://www.qiushaocloud.top)」

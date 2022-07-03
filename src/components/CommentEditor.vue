@@ -6,16 +6,6 @@
     ref="editor"
     v-if="isCurrReply"
   >
-    <h3 id="reply-title" class="comment-reply-title" v-if="isReply">
-      <small>
-        <a
-          href="javascript:;"
-          class="cancel-comment-reply-link"
-          @click="cancelReply"
-          >取消回复</a
-        >
-      </small>
-    </h3>
     <form class="comment-form">
       <div class="comment-textarea" v-if="!previewMode">
         <textarea
@@ -45,6 +35,7 @@
       </p>
       <transition name="emoji-fade">
         <VEmojiPicker
+          :assetsAddr="configs.assetsAddr"
           :pack="emojiPack"
           @select="handleSelectEmoji"
           v-if="emojiDialogVisible"
@@ -89,7 +80,7 @@
           popupStyle="margin-left: -65px;"
           :popupText="configs.emailPopup || '您的邮箱将收到回复通知 ๑乛◡乛๑'"
           inputType="text"
-          placeholder="* 电子邮件"
+          placeholder="* 邮箱"
           id="email"
           localStorageDataCacheKey="qiushaocloud-halo-comment-email"
           v-model="comment.email"
@@ -107,6 +98,15 @@
         />
       </div>
       <ul class="comment-buttons">
+        <li class="middle" id="reply-title" v-if="isReply">
+          <a
+            href="javascript:;"
+            class="button-cancel-reply"
+            @click="cancelReply"
+            >取消回复</a
+          >
+        </li>
+
         <li v-if="comment.content" class="middle" style="margin-right: 5px">
           <a
             class="button-preview-edit"
@@ -116,17 +116,6 @@
             >{{ previewMode ? "编辑" : "预览" }}</a
           >
         </li>
-        <!-- <li
-            class="middle"
-            style="margin-right:5px"
-          >
-            <a
-              class="button-preview-edit"
-              href="javascript:;"
-              rel="nofollow noopener"
-              @click="handleGithubLogin"
-            >Github 登陆</a>
-        </li>-->
         <li class="middle">
           <a
             class="button-submit"
@@ -146,9 +135,10 @@
 /* eslint-disable no-unused-vars */
 import Vue from "vue";
 import marked from "../plugins/j-marked/lib/marked";
+// import marked from "j-marked/lib/marked";
 import md5 from "md5";
 import VEmojiPicker from "./EmojiPicker/VEmojiPicker";
-import emojiData from "./EmojiPicker/data/emojis2.js";
+import emojiData from "./EmojiPicker/data/emojis.js";
 import { renderedEmojiHtml } from "@/utils/emojiutil";
 import {
   isEmpty,
@@ -388,17 +378,17 @@ export default {
             this.createdNewNode(createdComment);
           }
 
-          this.$tips("评论成功！", 5000, this);
+          this.$tips("评论成功！", 3500, this, 'success');
 
           this.$parent.$emit("post-success", {
             target: this.target,
             targetId: this.targetId,
           });
         } catch {
-          this.$tips("评论成功，刷新即可显示最新评论！", 5000, this);
+          this.$tips("评论成功，刷新即可显示最新评论！", 5000, this, 'success');
         }
       } else {
-        this.$tips("您的评论已经投递至博主，等待博主审核！", 5000, this);
+        this.$tips("您的评论已经投递至博主，等待博主审核！", 5000, this, 'success');
       }
     },
     handleAvatarError(e) {
@@ -475,12 +465,12 @@ export default {
     },
     handleFailedToCreateComment(response) {
       if (response.status === 400 && response.data) {
-        this.$tips(response.data.message, 5000, this);
+        this.$tips(response.data.message, 5000, this, "danger");
         if (response.data.data) {
           const errorDetail = response.data.data;
           if (isObject(errorDetail)) {
             Object.keys(errorDetail).forEach((key) => {
-              this.$tips(errorDetail[key], 5000, this);
+              this.$tips(errorDetail[key], 5000, this, "danger");
             });
           }
         }
@@ -513,59 +503,6 @@ export default {
         }
       }
       this.comment.content += " " + emojiComment + " ";
-    },
-    handleGithubLogin() {
-      const githubOauthUrl = "http://github.com/login/oauth/authorize";
-      const query = {
-        client_id: "a1aacd842bc158abd65b",
-        redirect_uri: window.location.href,
-        scope: "public_repo",
-      };
-      window.location.href = `${githubOauthUrl}?${queryStringify(query)}`;
-    },
-    handleGetGithubUser() {
-      const accessToken = this.handleGetGithubAccessToken();
-      axios
-        .get(
-          "https://cors-anywhere.herokuapp.com/https://api.github.com/user",
-          {
-            params: {
-              access_token: accessToken,
-            },
-          }
-        )
-        .then(function(response) {
-          this.$tips(response, 5000, this);
-        })
-        .catch((error) => {
-          this.$tips(error, 5000, this);
-        });
-    },
-    handleGetGithubAccessToken() {
-      const code = getUrlKey("code");
-      if (code) {
-        axios
-          .get(
-            "https://cors-anywhere.herokuapp.com/https://github.com/login/oauth/access_token",
-            {
-              params: {
-                client_id: "a1aacd842bc158abd65b",
-                client_secret: "0daedb3923a4cdeb72620df511bdb11685dfe282",
-                code: code,
-              },
-            }
-          )
-          .then(function(response) {
-            let args = response.split("&");
-            let arg = args[0].split("=");
-            let access_token = arg[1];
-            this.$tips(access_token, 5000, this);
-            return access_token;
-          })
-          .catch((error) => {
-            this.$tips(error, 5000, this);
-          });
-      }
     },
     cancelReply(e) {
       e.stopPropagation();
@@ -661,7 +598,7 @@ export default {
             return;
           }
 
-          _self.$tips("拉取QQ头像成功！", 2000, _self);
+          _self.$tips("拉取QQ头像成功！", 2000, _self, "success");
           _self.comment.author = data.nickname;
           _self.comment.email = data.email;
           _self.avatar = data.avatar;
@@ -707,7 +644,7 @@ export default {
       const avatar = cacheAvatar || (
         gravatarSource +
         `${gravatarMd5}?s=256&d=` +
-        this.options.comment_gravatar_default
+        this.options.comment_gravatar_default || 'mm'
       );
 
       if (!isDefault) {

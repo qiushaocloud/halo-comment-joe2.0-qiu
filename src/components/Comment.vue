@@ -149,6 +149,11 @@ export default {
       // 移除值为空的
       removeJsonEmpty(jsonConfig);
 
+      if (jsonConfig.assetsAddr) {
+        defaultConfig.avatarError = `${jsonConfig.assetsAddr}/assets/img/default_avatar.jpg`; // 头像加载错误时展示的图片
+        defaultConfig.avatarLoading = `${jsonConfig.assetsAddr}/assets/svg/spinner-preloader.svg`; // 头像加载时展示的图片
+      }
+
       return Object.assign(defaultConfig, jsonConfig);
     },
     mergedOptions() {
@@ -181,12 +186,8 @@ export default {
     // await this.loadOptions();
     this.$nextTick(() => {
       Vue.use(VueLazyload, {
-        error:
-          this.mergedConfigs.avatarError ||
-          "https://gcore.jsdelivr.net/gh/qiushaocloud/halo-comment-joe2.0-qiu@master/assets/default_avatar.jpg",
-        loading:
-          this.mergedConfigs.avatarLoading ||
-          "https://gcore.jsdelivr.net/gh/qiushaocloud/halo-comment-joe2.0-qiu@master/assets/spinner-preloader.svg",
+        error: this.mergedConfigs.avatarError,
+        loading: this.mergedConfigs.avatarLoading,
         attempt: 1,
       });
     });

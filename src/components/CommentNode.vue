@@ -10,13 +10,18 @@
       <div class="contents">
         <div class="main shadow">
           <div class="profile">
-            <a :href="comment.authorUrl || 'javascript:;'" rel="nofollow noopener noreferrer" target="_blank">
+            <a
+              :class="{ disabled: invalidUrl(comment.authorUrl) }"
+              :href="comment.authorUrl || 'javascript:;'"
+              rel="nofollow noopener noreferrer"
+              target="_blank"
+            >
               <img
-                :alt="comment.author"
                 v-lazy="comment.isAdmin ? options.blog_logo : avatar"
                 class="avatar"
                 height="80"
                 width="80"
+                :alt="comment.author"
                 @error="handleAvatarError"
               />
             </a>
@@ -25,7 +30,12 @@
             <section class="commeta">
               <div class="left">
                 <h4 class="author">
-                  <a :href="comment.authorUrl || 'javascript:;'" rel="nofollow noopener noreferrer" target="_blank">
+                  <a
+                    :class="{ disabled: invalidUrl(comment.authorUrl) }"
+                    :href="comment.authorUrl || 'javascript:;'"
+                    rel="nofollow noopener noreferrer"
+                    target="_blank"
+                  >
                     <img
                       :alt="comment.author"
                       v-lazy="comment.isAdmin ? options.blog_logo : avatar"
@@ -122,6 +132,7 @@
 import "./index";
 import { timeAgo, return2Br } from "@/utils/util";
 import ua from "ua-parser-js";
+// import marked from "j-marked";
 import marked from "../plugins/j-marked";
 import { renderedEmojiHtml } from "@/utils/emojiutil";
 import CommentEditor from "./CommentEditor.vue";
@@ -181,13 +192,16 @@ export default {
     return {
       editing: false,
       globalData: globals,
+      error_img: `${this.configs.assetsAddr}/assets/svg/img_error.svg`,
+      unknow_ua: `${this.configs.assetsAddr}/assets/ua/unknow.svg`,
+      empty_img: "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==",
     };
   },
   created() {
     const renderer = {
       // eslint-disable-next-line no-unused-vars
       image(href, title) {
-        return `<a data-fancybox target="_blank" rel="noopener noreferrer nofollow" href="${href}"><img src="${href}" class="lazyload comment_inline_img" onerror="this.src='https://gcore.jsdelivr.net/gh/qiushaocloud/halo-comment-joe2.0-qiu@master/assets/img_error.svg'"></a>`;
+        return `<a data-fancybox target="_blank" rel="noopener noreferrer nofollow" href="${href}"><img src="${href}" class="lazyload comment_inline_img" onerror="this.src='${this.error_img}'"></a>`;
       },
       link(href, title, text) {
         return `<a href="${href}" title="${text}" target="_blank" rel="noopener noreferrer nofollow">${text}</a>`;
@@ -210,7 +224,7 @@ export default {
           this.options.gravatar_source ||
           this.configs.gravatarSourceDefault;
 
-        return `${gravatarSource}/${this.comment.gravatarMd5}?s=256&d=${this.options.comment_gravatar_default}`;
+        return `${gravatarSource}/${this.comment.gravatarMd5}?s=256&d=${this.options.comment_gravatar_default || 'mm'}`;
       }
     },
     compileContent() {
@@ -246,10 +260,7 @@ export default {
       var result = parser.getResult();
 
       if (!result.browser.name) return "";
-      var browserImg =
-        "https://gcore.jsdelivr.net/gh/qiushaocloud/halo-comment-joe2.0-qiu@master/assets/ua/svg/" +
-        result.browser.name.toLowerCase() +
-        ".svg";
+      var browserImg = `${this.configs.assetsAddr}/assets/ua/${decodeURIComponent(result.browser.name.toLowerCase())}.svg`;
       var uaImg = "";
 
       switch (result.os.name) {
@@ -258,33 +269,24 @@ export default {
             case "7":
             case "8":
             case "10":
-              uaImg =
-                "https://gcore.jsdelivr.net/gh/qiushaocloud/halo-comment-joe2.0-qiu@master/assets/ua/svg/windows_win" +
-                result.os.version +
-                ".svg";
+                uaImg = `${this.configs.assetsAddr}/assets/ua/windows_win${decodeURIComponent(result.os.version)}.svg`;
               break;
             case "":
-              uaImg =
-                "https://gcore.jsdelivr.net/gh/qiushaocloud/halo-comment-joe2.0-qiu@master/assets/ua/svg/windows_" +
-                result.os.version +
-                ".svg";
+                uaImg = `${this.configs.assetsAddr}/assets/ua/windows_${decodeURIComponent(result.os.version)}.svg`;
               break;
             default:
-              uaImg =
-                "https://gcore.jsdelivr.net/gh/qiushaocloud/halo-comment-joe2.0-qiu@master/assets/ua/svg/windows.svg";
+                uaImg = `${this.configs.assetsAddr}/assets/ua/windows.svg`;
               break;
           }
           break;
         default:
-          uaImg =
-            "https://gcore.jsdelivr.net/gh/qiushaocloud/halo-comment-joe2.0-qiu@master/assets/ua/svg/" +
-            result.os.name.replace(/\s+/g, "").toLowerCase() +
-            ".svg";
+          uaImg = `${this.configs.assetsAddr}/assets/ua/${decodeURIComponent(result.os.name)
+            .replace(/\s+/g, "")
+            .toLowerCase()}.svg`;
           break;
       }
 
-      let returnStr = `（<img src="${browserImg}" onerror="this.src='https://gcore.jsdelivr.net/gh/qiushaocloud/halo-comment-joe2.0-qiu@master/assets/ua/svg/unknow.svg'" alt="ua-browser"/>  ${result.browser.name} ${result.browser.version} <img src="${uaImg}" onerror="this.src='https://gcore.jsdelivr.net/gh/qiushaocloud/halo-comment-joe2.0-qiu@master/assets/ua/svg/unknow.svg'" alt="ua-os"/> ${result.os.name} ${result.os.version}）`
-      
+      let returnStr = `（<img src="${browserImg}" onerror="this.src='${this.unknow_ua}'" alt="ua-browser"/>  ${result.browser.name} ${result.browser.version} <img src="${uaImg}" onerror="this.src='${this.unknow_ua}'" alt="ua-os"/> ${result.os.name} ${result.os.version}）`;
       if (this.configs.isGetIpLocation && this.comment.ipLocation) {
         returnStr += `「${this.comment.ipLocation}」`;
       }
@@ -299,6 +301,12 @@ export default {
     },
   },
   methods: {
+    invalidUrl(url) {
+      if (!url)
+        return true;
+        
+      return !/^http(s)?:\/\//.test(url);
+    },
     handleReplyClick(e) {
       e.stopPropagation();
       // 设置状态为回复状态
@@ -316,7 +324,7 @@ export default {
         .deleteComment(this.target, commentId, this.configs)
         .then((response) => {
           console.log('deleteComment response:', response.data, ' ,commentId:', commentId);
-          this.$tips(`删除评论成功`, 5000, this);
+          this.$tips(`删除评论成功`, 5000, this, 'success');
 
           const delDom = document.getElementById(`comment-${commentId}`);
           const childDom = delDom && delDom.querySelector('ul.children');
@@ -337,7 +345,7 @@ export default {
         .catch((err) => {
           console.error('deleteComment err:', err.response, ' ,commentId:', commentId);
           if (err.response && err.response.data && err.response.data.message)
-            this.$tips(`删除评论失败, ${err.response.data.message}`, 5000, this);
+            this.$tips(`删除评论失败, ${err.response.data.message}`, 5000, this, "danger");
         });
     },
     handleTopClick(e) {

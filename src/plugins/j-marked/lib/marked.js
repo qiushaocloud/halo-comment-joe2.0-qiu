@@ -74,7 +74,7 @@
 
   var defaults = createCommonjsModule(function (module) {
     function getDefaults() {
-      var baseUrl = 'https://gcore.jsdelivr.net/gh/qiushaocloud/halo-comment-joe2.0-qiu@master';
+      var baseUrl = window.location.host === 'localhost:8080' ? '' : 'https://gcore.jsdelivr.net/gh/qiushaocloud/halo-comment-joe2.0-qiu@master';
       return {
         baseUrl: null,
         breaks: false,
