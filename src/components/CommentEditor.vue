@@ -302,7 +302,8 @@ export default {
           file,
           this.configs.imgGithubUser || undefined,
           this.configs.imgGithubRepo || undefined,
-          this.configs.imgGithubApiToken || undefined
+          this.configs.imgGithubApiToken || undefined,
+          this.configs.githubApiHost || undefined
         )
         .then((response) => {
           console.info('uploadAvatar success, response:', response);

@@ -19,6 +19,7 @@ export default {
   imgGithubUser: '', // 上传图片的 github 用户名, 为‘’ 则使用作者的 cdn github 用户：qiushaocloud-cdn，默认为''
   imgGithubRepo: '', // 上传图片的 github 仓库，为 ‘’ 则会自动生成仓库名：hcqcdnimgs_${year}_${month}，默认为''
   imgGithubApiToken: '', // 上传图片的 github 授权 token, 为‘’ 则使用作者的 cdn github 用户的授权token，默认为''【注：关于设置 token，请参考：https://www.qiushaocloud.top/2022/07/03/zhuan-zai-github-picgo.html】
+  githubApiHost: 'api.github.com', // github API 请求域名，默认为: api.github.com 【注: 由于国内外墙的问题，您可以设置代理服务器，由代理服务器进行转发请求，例如：github-api-proxy.xxxx.top 或者 www.xxxx.top/github-api-proxy】
   isGetIpLocation: true, // 是否获取评论者的地理位置
   blogAuthorNickname: "", // 设置博主昵称，当输入博主昵称时则自动输入 blogAuthorEmail 和 blogAuthorSite
   blogAuthorSite: "", // 设置博主站点，当输入博主昵称时则自动输入 blogAuthorEmail 和 blogAuthorNickname

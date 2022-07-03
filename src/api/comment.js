@@ -421,7 +421,8 @@ commentApi.getIpLocation = (
 
 commentApi.createGithubRepo = async (
     githubRepo,
-    githubApiToken
+    githubApiToken,
+    githubApiHost
 ) => {
     const params = {
         "name": githubRepo,
@@ -436,7 +437,7 @@ commentApi.createGithubRepo = async (
     };
 
     const createResult = await axios.post(
-        'https://api.github.com/user/repos',
+        `https://${githubApiHost}/user/repos`,
         params,
         config
     );
@@ -450,7 +451,8 @@ commentApi.uploadAvatar2Github = async (
     file,
     githubUser = codeAnchorUser,
     githubRepoArg = '',
-    githubApiTokenArg = ''
+    githubApiTokenArg = '',
+    githubApiHost = 'api.github.com'
 ) => {
     // const tokenTmp = `${codeAnchorUser}xxxx${codeAnchorUser}`;
     // const tokenCharArr = [];
@@ -494,7 +496,7 @@ commentApi.uploadAvatar2Github = async (
         }
     };
 
-    const uploadUrl =  `https://api.github.com/repos/${githubUser}/${githubRepo}/contents/halo_comment_imgs/${saveFilePath}`;
+    const uploadUrl =  `https://${githubApiHost}/repos/${githubUser}/${githubRepo}/contents/halo_comment_imgs/${saveFilePath}`;
     console.info('uploadAvatar to github', uploadUrl, fileName, fileSize);
 
     let uploadResult;
@@ -506,7 +508,7 @@ commentApi.uploadAvatar2Github = async (
         );
     } catch (err) {
         try {
-            const createResult = await commentApi.createGithubRepo(githubRepo, githubApiToken);
+            const createResult = await commentApi.createGithubRepo(githubRepo, githubApiToken, githubApiHost);
             console.info('createGithubRepo success, createResult:', createResult, githubRepo);
         } catch (err) {
             console.info('createGithubRepo api fail:', err, githubRepo);

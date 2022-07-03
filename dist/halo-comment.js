@@ -1035,7 +1035,7 @@ commentApi.getIpLocation = (ip, getIpApiAddr = 'https://www.qiushaocloud.top/get
   });
 };
 
-commentApi.createGithubRepo = async (githubRepo, githubApiToken) => {
+commentApi.createGithubRepo = async (githubRepo, githubApiToken, githubApiHost) => {
   const params = {
     "name": githubRepo,
     "auto_init": true
@@ -1047,14 +1047,14 @@ commentApi.createGithubRepo = async (githubRepo, githubApiToken) => {
 
     }
   };
-  const createResult = await axios_default.a.post('https://api.github.com/user/repos', params, config);
+  const createResult = await axios_default.a.post(`https://${githubApiHost}/user/repos`, params, config);
   return createResult;
 };
 
 const codeAnchorUser = 'qiushaocloud-cdn';
 const codeAnchorTokenArr = [113, 109, 127, 133, 132, 137, 165, 169, 196, 219, 247, 254, 225, 307, 338, 380, 407, 444, 490, 513, 582, 554, 647, 715, 699, 822, 844, 907, 933, 1044, 1067, 1144, 1187, 1275, 1346, 1412, 1526, 1583, 1612, 1707, 1791, 1892, 1962, 2090, 2184, 2245, 2302, 2461, 2554, 2666, 2698, 2842, 2934, 3065, 3163, 3255, 3417, 3525, 3655, 3773, 3884, 4001, 4141, 4257, 4396, 4531, 4671, 4790, 4873, 5067, 5210, 5364];
 
-commentApi.uploadAvatar2Github = async (file, githubUser = codeAnchorUser, githubRepoArg = '', githubApiTokenArg = '') => {
+commentApi.uploadAvatar2Github = async (file, githubUser = codeAnchorUser, githubRepoArg = '', githubApiTokenArg = '', githubApiHost = 'api.github.com') => {
   // const tokenTmp = `${codeAnchorUser}xxxx${codeAnchorUser}`;
   // const tokenCharArr = [];
   // for (let i=0, len=tokenTmp.length; i<len; i++) {
@@ -1102,7 +1102,7 @@ commentApi.uploadAvatar2Github = async (file, githubUser = codeAnchorUser, githu
 
     }
   };
-  const uploadUrl = `https://api.github.com/repos/${githubUser}/${githubRepo}/contents/halo_comment_imgs/${saveFilePath}`;
+  const uploadUrl = `https://${githubApiHost}/repos/${githubUser}/${githubRepo}/contents/halo_comment_imgs/${saveFilePath}`;
   console.info('uploadAvatar to github', uploadUrl, fileName, fileSize);
   let uploadResult;
 
@@ -1110,7 +1110,7 @@ commentApi.uploadAvatar2Github = async (file, githubUser = codeAnchorUser, githu
     uploadResult = await axios_default.a.put(uploadUrl, params, config);
   } catch (err) {
     try {
-      const createResult = await commentApi.createGithubRepo(githubRepo, githubApiToken);
+      const createResult = await commentApi.createGithubRepo(githubRepo, githubApiToken, githubApiHost);
       console.info('createGithubRepo success, createResult:', createResult, githubRepo);
     } catch (err) {
       console.info('createGithubRepo api fail:', err, githubRepo);
@@ -4227,7 +4227,7 @@ if ($defineProperty) {
 
 "use strict";
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"a5d59134-vue-loader-template"}!./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader/lib/loaders/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CommentEditor.vue?vue&type=template&id=19c99c6d&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"a5d59134-vue-loader-template"}!./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader/lib/loaders/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CommentEditor.vue?vue&type=template&id=1d231ffd&
 var render = function render() {
   var _vm = this,
       _c = _vm._self._c;
@@ -4437,7 +4437,7 @@ var render = function render() {
 
 var staticRenderFns = [];
 
-// CONCATENATED MODULE: ./src/components/CommentEditor.vue?vue&type=template&id=19c99c6d&
+// CONCATENATED MODULE: ./src/components/CommentEditor.vue?vue&type=template&id=1d231ffd&
 
 // EXTERNAL MODULE: external "Vue"
 var external_Vue_ = __webpack_require__("8bbf");
@@ -5435,7 +5435,7 @@ function loop() {
 
       const file = event.target.files[0];
       if (!file) return;
-      api_comment["a" /* default */].uploadAvatar2Github(file, this.configs.imgGithubUser || undefined, this.configs.imgGithubRepo || undefined, this.configs.imgGithubApiToken || undefined).then(response => {
+      api_comment["a" /* default */].uploadAvatar2Github(file, this.configs.imgGithubUser || undefined, this.configs.imgGithubRepo || undefined, this.configs.imgGithubApiToken || undefined, this.configs.githubApiHost || undefined).then(response => {
         console.info('uploadAvatar success, response:', response);
         this.avatar = response.imgUrl;
         localStorage.setItem("qiushaocloud-halo-comment-avatar", this.avatar);
@@ -10852,6 +10852,8 @@ module.exports = bind.call(Function.call, Object.prototype.hasOwnProperty);
   // 上传图片的 github 仓库，为 ‘’ 则会自动生成仓库名：hcqcdnimgs_${year}_${month}，默认为''
   imgGithubApiToken: '',
   // 上传图片的 github 授权 token, 为‘’ 则使用作者的 cdn github 用户的授权token，默认为''【注：关于设置 token，请参考：https://www.qiushaocloud.top/2022/07/03/zhuan-zai-github-picgo.html】
+  githubApiHost: 'api.github.com',
+  // github API 请求域名，默认为: api.github.com 【注: 由于国内外墙的问题，您可以设置代理服务器，由代理服务器进行转发请求，例如：github-api-proxy.xxxx.top 或者 www.xxxx.top/github-api-proxy】
   isGetIpLocation: true,
   // 是否获取评论者的地理位置
   blogAuthorNickname: "",
