@@ -1,4 +1,4 @@
-const DEFAULT_ASSETS_ADDR = process.env.BASE_URL !== 'wc' ? '' : 'https://gcore.jsdelivr.net/gh/qiushaocloud/halo-comment-joe2.0-qiu@master';
+const DEFAULT_ASSETS_ADDR = !(process && process.env && process.env.NODE_ENV === 'production') ? '' : 'https://gcore.jsdelivr.net/gh/qiushaocloud/halo-comment-joe2.0-qiu@master';
 
 export default {
   size: "normal", // 组件尺寸，normal/small

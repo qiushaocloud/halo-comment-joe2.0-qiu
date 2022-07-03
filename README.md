@@ -252,7 +252,7 @@ for (var i = 0; i < comments.length; i++) {
 
 ### 打包
 
-开发完毕后，你可以执行 `npm run build:wc` 编译出用于生产环境的 `webcomponent` 组件
+开发完毕后，你可以执行 `npm run build-comment` 编译出用于生产环境的 `webcomponent` 组件
 
 
 #### 开源不易，如果对您有帮助，请您动一动您的小手，给作者点 Star，也请您多多关注分享者「[邱少羽梦](https://www.qiushaocloud.top)」

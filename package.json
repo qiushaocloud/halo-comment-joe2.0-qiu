@@ -6,7 +6,7 @@
     "emoji": "node src/utils/emoji-generator/run.js",
     "serve": "cross-env vue-cli-service serve",
     "build": "cross-env vue-cli-service build",
-    "build-wc": "cross-env NODE_ENV=wc npx vue-cli-service build --target wc --name halo-comment 'src/components/Comment.vue'",
+    "build-comment": "cross-env NODE_ENV=production npx vue-cli-service build --target wc --name halo-comment 'src/components/Comment.vue'",
     "lint": "cross-env vue-cli-service lint"
   },
   "dependencies": {
