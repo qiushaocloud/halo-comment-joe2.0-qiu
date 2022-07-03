@@ -9,7 +9,8 @@ html body,
   font-family: "Joe Font", "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, "sans-serif";
 }
 html[data-mode='dark'] body,
-html[data-mode='dark'] .halo-comment {
+html[data-mode='dark'] .halo-comment,
+.halo-comment.dark{
   --theme: #9999ff;
   --scroll-bar: #666;
   --loading-bar: var(--theme);
