@@ -73,7 +73,7 @@
           id="author"
           localStorageDataCacheKey="qiushaocloud-halo-comment-author"
           v-model="comment.author"
-          @blurInput="pullInfo"
+          @blurInput="onPopupInputBlur('author')"
         />
         <PopupInput
           class="cmt-popup"
@@ -84,7 +84,7 @@
           id="email"
           localStorageDataCacheKey="qiushaocloud-halo-comment-email"
           v-model="comment.email"
-          @blurInput="pullInfo"
+          @blurInput="onPopupInputBlur('email')"
         />
         <PopupInput
           class="cmt-popup"
@@ -95,6 +95,7 @@
           id="url"
           localStorageDataCacheKey="qiushaocloud-halo-comment-authorUrl"
           v-model="comment.authorUrl"
+          @blurInput="onPopupInputBlur('authorUrl')"
         />
       </div>
       <ul class="comment-buttons">
@@ -326,14 +327,19 @@ export default {
         this.$tips("昵称不能为空", 5000, this);
         return;
       }
+      
       if (isEmpty(this.comment.email)) {
         this.$tips("邮箱不能为空", 5000, this);
         return;
       }
+
+      this.checkAndUpdateCommentData();
+
       if (isEmpty(this.comment.content)) {
         this.$tips("评论内容不能为空", 5000, this);
         return;
       }
+
 
       // Submit the comment
       this.comment.avatar = this.avatar;
@@ -343,18 +349,13 @@ export default {
         // Set parent id if available
         this.comment.parentId = this.replyComment.id;
       }
+
+      localStorage.setItem("qiushaocloud-halo-comment-avatar", this.avatar);
+      localStorage.setItem("qiushaocloud-halo-comment-avatar-key", this.comment.author+'###'+this.comment.email);
+      
       commentApi
         .createComment(this.target, this.comment, this.configs)
         .then((response) => {
-          // Store comment author, email, authorUrl
-          localStorage.setItem("qiushaocloud-halo-comment-author", this.comment.author);
-          localStorage.setItem("qiushaocloud-halo-comment-email", this.comment.email);
-          localStorage.setItem("qiushaocloud-halo-comment-authorUrl", this.comment.authorUrl);
-          localStorage.setItem("qiushaocloud-halo-comment-avatar", this.avatar);
-          localStorage.setItem("qiushaocloud-halo-comment-avatar-key", this.comment.author+'###'+this.comment.email);
-          
-          this.$emit('checkIsAdmin');
-
           // clear comment
           this.comment.content = "";
           this.previewMode = false;
@@ -516,7 +517,56 @@ export default {
       // var offsetTop = targetDom.offsetTop + this.$root.$el.offsetTop;
       // window.scrollTo(document.body.scrollWidth, offsetTop);
     },
-    pullInfo() {
+    checkAndUpdateCommentData() {
+      var author = localStorage.getItem("qiushaocloud-halo-comment-author");
+      var authorUrl = localStorage.getItem("qiushaocloud-halo-comment-authorUrl");
+      var email = localStorage.getItem("qiushaocloud-halo-comment-email");
+      
+      if (
+        (this.configs.blogAuthorNickname && this.configs.blogAuthorNickname === author)
+        || (this.configs.blogAuthorSite && this.configs.blogAuthorSite === authorUrl)
+        || (this.configs.blogAuthorEmail && this.configs.blogAuthorEmail === email)
+      ) {
+        if (this.configs.blogAuthorNickname && this.configs.blogAuthorNickname !== author) {
+          localStorage.setItem("qiushaocloud-halo-comment-author", this.configs.blogAuthorNickname);
+        }
+
+        if (this.configs.blogAuthorSite && this.configs.blogAuthorSite !== authorUrl) {
+          localStorage.setItem("qiushaocloud-halo-comment-authorUrl", this.configs.blogAuthorSite);
+        }
+
+        if (this.configs.blogAuthorEmail && this.configs.blogAuthorEmail !== email) {
+          localStorage.setItem("qiushaocloud-halo-comment-email", this.configs.blogAuthorEmail);
+        }
+      }
+
+      author = localStorage.getItem("qiushaocloud-halo-comment-author");
+      authorUrl = localStorage.getItem("qiushaocloud-halo-comment-authorUrl");
+      email = localStorage.getItem("qiushaocloud-halo-comment-email");
+
+      if (this.comment.author !== author) {
+        this.comment.author = author || '';
+      }
+
+      if (this.comment.authorUrl !== authorUrl) {
+        this.comment.authorUrl = authorUrl || '';
+      }
+
+      if (this.comment.email !== email) {
+        this.comment.email = email || '';
+      }
+
+      this.$emit('checkIsAdmin');
+    },
+    onPopupInputBlur(type) {
+      if (
+        (type === 'author' && this.configs.blogAuthorNickname && this.configs.blogAuthorNickname === localStorage.getItem("qiushaocloud-halo-comment-author"))
+         || (type === 'authorUrl' && this.configs.blogAuthorSite && this.configs.blogAuthorSite === localStorage.getItem("qiushaocloud-halo-comment-authorUrl"))
+        || (type === 'email' && this.configs.blogAuthorEmail && this.configs.blogAuthorEmail === localStorage.getItem("qiushaocloud-halo-comment-email"))
+      ) {
+        this.checkAndUpdateCommentData();
+      }
+
       this.$emit('checkIsAdmin');
 
       let author = this.comment.author;

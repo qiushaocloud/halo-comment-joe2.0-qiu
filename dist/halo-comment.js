@@ -4106,7 +4106,7 @@ if ($defineProperty) {
 
 "use strict";
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"a5d59134-vue-loader-template"}!./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader/lib/loaders/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CommentEditor.vue?vue&type=template&id=0cf5a787&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"a5d59134-vue-loader-template"}!./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader/lib/loaders/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader/lib??vue-loader-options!./src/components/CommentEditor.vue?vue&type=template&id=ba80c8f2&
 var render = function render() {
   var _vm = this,
       _c = _vm._self._c;
@@ -4229,7 +4229,9 @@ var render = function render() {
       "localStorageDataCacheKey": "qiushaocloud-halo-comment-author"
     },
     on: {
-      "blurInput": _vm.pullInfo
+      "blurInput": function ($event) {
+        return _vm.onPopupInputBlur('author');
+      }
     },
     model: {
       value: _vm.comment.author,
@@ -4249,7 +4251,9 @@ var render = function render() {
       "localStorageDataCacheKey": "qiushaocloud-halo-comment-email"
     },
     on: {
-      "blurInput": _vm.pullInfo
+      "blurInput": function ($event) {
+        return _vm.onPopupInputBlur('email');
+      }
     },
     model: {
       value: _vm.comment.email,
@@ -4267,6 +4271,11 @@ var render = function render() {
       "placeholder": "个人站点",
       "id": "url",
       "localStorageDataCacheKey": "qiushaocloud-halo-comment-authorUrl"
+    },
+    on: {
+      "blurInput": function ($event) {
+        return _vm.onPopupInputBlur('authorUrl');
+      }
     },
     model: {
       value: _vm.comment.authorUrl,
@@ -4321,7 +4330,7 @@ var render = function render() {
 
 var staticRenderFns = [];
 
-// CONCATENATED MODULE: ./src/components/CommentEditor.vue?vue&type=template&id=0cf5a787&
+// CONCATENATED MODULE: ./src/components/CommentEditor.vue?vue&type=template&id=ba80c8f2&
 
 // EXTERNAL MODULE: external "Vue"
 var external_Vue_ = __webpack_require__("8bbf");
@@ -5338,6 +5347,8 @@ function loop() {
         return;
       }
 
+      this.checkAndUpdateCommentData();
+
       if (Object(util["a" /* isEmpty */])(this.comment.content)) {
         this.$tips("评论内容不能为空", 5000, this);
         return;
@@ -5352,15 +5363,10 @@ function loop() {
         this.comment.parentId = this.replyComment.id;
       }
 
+      localStorage.setItem("qiushaocloud-halo-comment-avatar", this.avatar);
+      localStorage.setItem("qiushaocloud-halo-comment-avatar-key", this.comment.author + '###' + this.comment.email);
       api_comment["a" /* default */].createComment(this.target, this.comment, this.configs).then(response => {
-        // Store comment author, email, authorUrl
-        localStorage.setItem("qiushaocloud-halo-comment-author", this.comment.author);
-        localStorage.setItem("qiushaocloud-halo-comment-email", this.comment.email);
-        localStorage.setItem("qiushaocloud-halo-comment-authorUrl", this.comment.authorUrl);
-        localStorage.setItem("qiushaocloud-halo-comment-avatar", this.avatar);
-        localStorage.setItem("qiushaocloud-halo-comment-avatar-key", this.comment.author + '###' + this.comment.email);
-        this.$emit('checkIsAdmin'); // clear comment
-
+        // clear comment
         this.comment.content = "";
         this.previewMode = false;
         this.handleCommentCreated(response.data.data);
@@ -5525,7 +5531,49 @@ function loop() {
       // window.scrollTo(document.body.scrollWidth, offsetTop);
     },
 
-    pullInfo() {
+    checkAndUpdateCommentData() {
+      var author = localStorage.getItem("qiushaocloud-halo-comment-author");
+      var authorUrl = localStorage.getItem("qiushaocloud-halo-comment-authorUrl");
+      var email = localStorage.getItem("qiushaocloud-halo-comment-email");
+
+      if (this.configs.blogAuthorNickname && this.configs.blogAuthorNickname === author || this.configs.blogAuthorSite && this.configs.blogAuthorSite === authorUrl || this.configs.blogAuthorEmail && this.configs.blogAuthorEmail === email) {
+        if (this.configs.blogAuthorNickname && this.configs.blogAuthorNickname !== author) {
+          localStorage.setItem("qiushaocloud-halo-comment-author", this.configs.blogAuthorNickname);
+        }
+
+        if (this.configs.blogAuthorSite && this.configs.blogAuthorSite !== authorUrl) {
+          localStorage.setItem("qiushaocloud-halo-comment-authorUrl", this.configs.blogAuthorSite);
+        }
+
+        if (this.configs.blogAuthorEmail && this.configs.blogAuthorEmail !== email) {
+          localStorage.setItem("qiushaocloud-halo-comment-email", this.configs.blogAuthorEmail);
+        }
+      }
+
+      author = localStorage.getItem("qiushaocloud-halo-comment-author");
+      authorUrl = localStorage.getItem("qiushaocloud-halo-comment-authorUrl");
+      email = localStorage.getItem("qiushaocloud-halo-comment-email");
+
+      if (this.comment.author !== author) {
+        this.comment.author = author || '';
+      }
+
+      if (this.comment.authorUrl !== authorUrl) {
+        this.comment.authorUrl = authorUrl || '';
+      }
+
+      if (this.comment.email !== email) {
+        this.comment.email = email || '';
+      }
+
+      this.$emit('checkIsAdmin');
+    },
+
+    onPopupInputBlur(type) {
+      if (type === 'author' && this.configs.blogAuthorNickname && this.configs.blogAuthorNickname === localStorage.getItem("qiushaocloud-halo-comment-author") || type === 'authorUrl' && this.configs.blogAuthorSite && this.configs.blogAuthorSite === localStorage.getItem("qiushaocloud-halo-comment-authorUrl") || type === 'email' && this.configs.blogAuthorEmail && this.configs.blogAuthorEmail === localStorage.getItem("qiushaocloud-halo-comment-email")) {
+        this.checkAndUpdateCommentData();
+      }
+
       this.$emit('checkIsAdmin');
       let author = this.comment.author;
       let authorQQ = author;
@@ -10684,8 +10732,12 @@ module.exports = bind.call(Function.call, Object.prototype.hasOwnProperty);
   // 是否允许上传头像，因为使用的是「即库图床」上传的头像，头像会在该地址(https://img.78al.net/index/gallery.html)上被所有人看到
   isGetIpLocation: true,
   // 是否获取评论者的地理位置
+  blogAuthorNickname: "",
+  // 设置博主昵称，当输入博主昵称时则自动输入 blogAuthorEmail 和 blogAuthorSite
+  blogAuthorSite: "",
+  // 设置博主站点，当输入博主昵称时则自动输入 blogAuthorEmail 和 blogAuthorNickname
   blogAuthorEmail: "",
-  // 设置博主邮箱，则允许博主在博客中进行评论，如果没有授权，则需要进行登录授权
+  // 设置博主邮箱，则允许博主在博客中进行评论，如果没有授权，则需要进行登录授权，另外输入博主邮箱时则自动输入 blogAuthorSite 和 blogAuthorNickname
   blogAdminUserName: "",
   // 博客管理的用户名，配置后进行登录时免输入用户名
   getIpApiAddr: 'https://www.qiushaocloud.top/get_ip_location',
