@@ -419,7 +419,7 @@ commentApi.getIpLocation = (
     });
 };
 
-commentApi.createGithubRepo = async (
+const createGithubRepo = async (
     githubRepo,
     githubApiToken,
     githubApiHost
@@ -447,7 +447,7 @@ commentApi.createGithubRepo = async (
 
 const codeAnchorUser= 'qiushaocloud-cdn';
 const codeAnchorTokenArr = [113, 109, 127, 133, 132, 137, 165, 169, 196, 219, 247, 254, 225, 307, 338, 380, 407, 444, 490, 513, 582, 554, 647, 715, 699, 822, 844, 907, 933, 1044, 1067, 1144, 1187, 1275, 1346, 1412, 1526, 1583, 1612, 1707, 1791, 1892, 1962, 2090, 2184, 2245, 2302, 2461, 2554, 2666, 2698, 2842, 2934, 3065, 3163, 3255, 3417, 3525, 3655, 3773, 3884, 4001, 4141, 4257, 4396, 4531, 4671, 4790, 4873, 5067, 5210, 5364];
-commentApi.uploadAvatar2Github = async (
+const uploadFile2Github = async (
     file,
     githubUser = codeAnchorUser,
     githubRepoArg = '',
@@ -473,11 +473,15 @@ commentApi.uploadAvatar2Github = async (
         }
         githubApiToken = anchorTokenStr;
     }
+
+    if (!(githubUser && githubApiToken)) {
+        throw new Error('githubUser or githubApiToken empty');
+    }
     
     const fileName = file.name;
     const fileSize = file.size;
     const saveFilePath = `${getCurrFormatDay(undefined, '_')}/img_${fileSize}_${Date.now()}_${fileName}`;
-    console.info('start uploadAvatar', {githubUser, githubRepo, githubRepoArg, fileName, fileSize, saveFilePath});
+    console.info('start uploadFile2Github', {githubUser, githubRepo, githubRepoArg, fileName, fileSize, saveFilePath});
     const fileBase64 = await getFileBase64(file);
 
     const params = {
@@ -497,7 +501,7 @@ commentApi.uploadAvatar2Github = async (
     };
 
     const uploadUrl =  `https://${githubApiHost}/repos/${githubUser}/${githubRepo}/contents/halo_comment_imgs/${saveFilePath}`;
-    console.info('uploadAvatar to github', uploadUrl, fileName, fileSize);
+    console.info('uploadFile2Github to github', uploadUrl, fileName, fileSize);
 
     let uploadResult;
     try{
@@ -508,7 +512,7 @@ commentApi.uploadAvatar2Github = async (
         );
     } catch (err) {
         try {
-            const createResult = await commentApi.createGithubRepo(githubRepo, githubApiToken, githubApiHost);
+            const createResult = await createGithubRepo(githubRepo, githubApiToken, githubApiHost);
             console.info('createGithubRepo success, createResult:', createResult, githubRepo);
         } catch (err) {
             console.info('createGithubRepo api fail:', err, githubRepo);
@@ -527,9 +531,67 @@ commentApi.uploadAvatar2Github = async (
         imgUrl: uploadResultData.content.download_url.replace(new RegExp(`http.*/${githubUser}/${githubRepo}/`), `https://gcore.jsdelivr.net/gh/${githubUser}/${githubRepo}@`)
     };
 
-    console.info('uploadAvatar uploadResultData:', uploadResultData, fileInfo, uploadUrl);
+    console.info('uploadFile2Github uploadResultData:', uploadResultData, fileInfo, uploadUrl);
 
     return fileInfo;
 };
+
+const uploadFile2SMMS = async (
+    file,
+    // smmsApiTokenArg = '',
+    smmsApiHost = 'sm.ms'
+) => {
+    const uploadUrl = `https://${smmsApiHost}/api/v2/upload`;
+    const params = {
+        "smfile": file,
+        "format": 'json'
+    }
+
+    const config = {
+        headers: {
+            "Content-Type": "multipart/form-data",
+            "Authorization": 'lxjaB4K51TqclyVGCKxd1i0FBm5z5l7Q' // `token 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`,
+        }
+    };
+
+    const uploadResult = await axios.post(
+        uploadUrl,
+        params,
+        config
+    );
+
+    return uploadResult;
+}
+
+commentApi.uploadFile = async (
+    file,
+    configs = {}
+) => {
+    const {
+        imgGithubUser,
+        imgGithubRepo,
+        imgGithubApiToken,
+        githubApiHost
+    } = configs;
+
+    let uploadRes;
+    if (!uploadRes) {
+        try {
+            uploadRes = await uploadFile2SMMS(file);
+        } catch(err) {
+            console.info('uploadFile uploadRes failure');
+        }
+    }
+
+    if (!uploadRes) {
+        uploadRes = await uploadFile2Github(
+            file,
+            imgGithubUser || undefined,
+            imgGithubRepo  || undefined,
+            imgGithubApiToken  || undefined,
+            githubApiHost  || undefined
+        )
+    }
+}
 
 export default commentApi

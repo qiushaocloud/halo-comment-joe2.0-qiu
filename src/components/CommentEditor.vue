@@ -137,9 +137,7 @@ import {
   isEmpty,
   isObject,
   return2Br,
-  getUrlKey,
   isQQ,
-  queryStringify,
   isInVisibleArea,
 } from "@/utils/util";
 import commentApi from "../api/comment";
@@ -298,12 +296,9 @@ export default {
         return;
 
       commentApi
-        .uploadAvatar2Github(
+        .uploadFile(
           file,
-          this.configs.imgGithubUser || undefined,
-          this.configs.imgGithubRepo || undefined,
-          this.configs.imgGithubApiToken || undefined,
-          this.configs.githubApiHost || undefined
+          this.configs
         )
         .then((response) => {
           console.info('uploadAvatar success, response:', response);
@@ -315,6 +310,7 @@ export default {
         })
         .catch((error) => {
           console.error('uploadAvatar error:', error);
+          this.$tips("上传头像失败", 2500, this, 'danger');
         });
     },
     updateAvatar() {
