@@ -50,7 +50,7 @@
 | blogAuthorEmail  | 设置博主邮箱，则允许博主在博客中进行评论，如果没有授权，则需要进行登录授权，另外输入博主邮箱时则自动输入 blogAuthorSite 和 blogAuthorNickname  | `""`     | - |
 | blogAdminUserName  | 博客管理的用户名，配置后进行登录时免输入用户名  | `""`     | - |
 | haloApiHost  | 指定 Halo 相关 API 的域名，为 ‘’ 表示使用当前域名  | `""`     | - |
-| assetsAddr  | 评论组件所需的 assets 资源地址  | `"https://gcore.jsdelivr.net/gh/qiushaocloud/halo-comment-joe2.0-qiu@master"` | - |
+| assetsAddr  | 评论组件所需的 assets 资源地址  | `"https://fastly.jsdelivr.net/gh/qiushaocloud/halo-comment-joe2.0-qiu@master"` | - |
 | isDelete2Recycle  | 博主点击删除评论，是否只将评论放入回收站，如果为 true 则放入回收站，为 false 则永久删除  | `true`     | `true` `false` |
 
 
@@ -94,8 +94,8 @@ configs='${configs}'
 ```html
 <#macro comment target,type>
     <#if !post.disallowComment!false>
-        <script src="//gcore.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"></script>
-        <script src="${options.comment_internal_plugin_js!'//gcore.jsdelivr.net/gh/qiushaocloud/halo-comment-joe2.0-qiu@master/dist/halo-comment.min.js'}"></script>
+        <script src="//fastly.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"></script>
+        <script src="${options.comment_internal_plugin_js!'//fastly.jsdelivr.net/gh/qiushaocloud/halo-comment-joe2.0-qiu@master/dist/halo-comment.min.js'}"></script>
         <#assign
           configs = '{
             "autoLoad": true,
@@ -132,8 +132,8 @@ sheet.ftl：
     ...
 
     <#if is_post?? && is_sheet??>
-        <script src="//gcore.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"></script>
-        <script src="${options.comment_internal_plugin_js!'//gcore.jsdelivr.net/npm/halo-comment-normal@1.1.1/dist/halo-comment.min.js'}"></script>
+        <script src="//fastly.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"></script>
+        <script src="${options.comment_internal_plugin_js!'//fastly.jsdelivr.net/npm/halo-comment-normal@1.1.1/dist/halo-comment.min.js'}"></script>
         <#local
           configs = '{
             "autoLoad": true,

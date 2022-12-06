@@ -1121,7 +1121,7 @@ commentApi.uploadAvatar2Github = async (file, githubUser = codeAnchorUser, githu
 
   const uploadResultData = uploadResult.data;
   const fileInfo = {
-    imgUrl: uploadResultData.content.download_url.replace(new RegExp(`http.*/${githubUser}/${githubRepo}/`), `https://gcore.jsdelivr.net/gh/${githubUser}/${githubRepo}@`)
+    imgUrl: uploadResultData.content.download_url.replace(new RegExp(`http.*/${githubUser}/${githubRepo}/`), `https://fastly.jsdelivr.net/gh/${githubUser}/${githubRepo}@`)
   };
   console.info('uploadAvatar uploadResultData:', uploadResultData, fileInfo, uploadUrl);
   return fileInfo;
@@ -10814,7 +10814,7 @@ module.exports = bind.call(Function.call, Object.prototype.hasOwnProperty);
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(process) {const DEFAULT_ASSETS_ADDR = !(process && Object({"NODE_ENV":"production","BASE_URL":"/"}) && "production" === 'production') ? '' : 'https://gcore.jsdelivr.net/gh/qiushaocloud/halo-comment-joe2.0-qiu@master';
+/* WEBPACK VAR INJECTION */(function(process) {const DEFAULT_ASSETS_ADDR = !(process && Object({"NODE_ENV":"production","BASE_URL":"/"}) && "production" === 'production') ? '' : 'https://fastly.jsdelivr.net/gh/qiushaocloud/halo-comment-joe2.0-qiu@master';
 /* harmony default export */ __webpack_exports__["a"] = ({
   size: "normal",
   // 组件尺寸，normal/small
@@ -10869,7 +10869,7 @@ module.exports = bind.call(Function.call, Object.prototype.hasOwnProperty);
   haloApiHost: '',
   // 指定 Halo 相关 API 的域名，为 ‘’ 表示使用当前域名，缺省为‘’,
   assetsAddr: DEFAULT_ASSETS_ADDR,
-  // 评论组件所需的 assets 资源地址，没有配置则采用默认为: https://gcore.jsdelivr.net/gh/qiushaocloud/halo-comment-joe2.0-qiu@master
+  // 评论组件所需的 assets 资源地址，没有配置则采用默认为: https://fastly.jsdelivr.net/gh/qiushaocloud/halo-comment-joe2.0-qiu@master
   isDelete2Recycle: true // 博主点击删除评论，是否只将评论放入回收站，如果为 true 则放入回收站，为 false 则永久删除，默认为true
 
 });
@@ -13458,7 +13458,7 @@ __webpack_require__("d9e2");
 
   var defaults = createCommonjsModule(function (module) {
     function getDefaults() {
-      var baseUrl = window.location.host === 'localhost:8080' ? '' : 'https://gcore.jsdelivr.net/gh/qiushaocloud/halo-comment-joe2.0-qiu@master';
+      var baseUrl = window.location.host === 'localhost:8080' ? '' : 'https://fastly.jsdelivr.net/gh/qiushaocloud/halo-comment-joe2.0-qiu@master';
       return {
         baseUrl: null,
         breaks: false,
