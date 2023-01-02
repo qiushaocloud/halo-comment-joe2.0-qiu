@@ -310,7 +310,7 @@ for (var i = 0; i < comments.length; i++) {
 
 * 分享者邮箱: [qiushaocloud@126.com](mailto:qiushaocloud@126.com)
 * [分享者博客](https://www.qiushaocloud.top)
-* [分享者自己搭建的 gitlab](https://www.qiushaocloud.top/gitlab/qiushaocloud) 
+* [分享者自己搭建的 gitlab](https://gitlab.qiushaocloud.top/qiushaocloud) 
 * [分享者 gitee](https://gitee.com/qiushaocloud/dashboard/projects) 
 * [分享者 github](https://github.com/qiushaocloud?tab=repositories) 
 
