@@ -10,7 +10,8 @@
 
 ### 关于为什么 将 cdn.jsdelivr.net 换成 githubcdn.qiushaocloud.top 的说明
 * 原因： cdn.jsdelivr.net 经常访问不到，而可能使用 gcore.jsdelivr.net/fastly.jsdelivr.net/testingcf.jsdelivr.net 则可能访问到，因此为了解决这个问题，这里由 githubcdn.qiushaocloud.top 进行301重定向到能访问的域名上，另外如果实在访问不了，自己也可以搭建代理服务器来走国外流量访问，只需要重定向到代理服务器即可
-* 实现的nginx配置如下
+* 请您使用时将 githubcdn.qiushaocloud.top 换成您的cdn域名，如果您不嫌麻烦，您也可以换成 cdn.jsdelivr.net/gcore.jsdelivr.net/fastly.jsdelivr.net/testingcf.jsdelivr.net
+* 实现的 nginx 配置如下
 ```
     server {
         listen       80;
