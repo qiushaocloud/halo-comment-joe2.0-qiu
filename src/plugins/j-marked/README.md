@@ -5,7 +5,7 @@
 # Marked
 
 [![npm](https://badgen.net/npm/v/marked)](https://www.npmjs.com/package/marked)
-[![gzip size](https://badgen.net/badgesize/gzip/https://cdn.jsdelivr.net/npm/marked/marked.min.js)](https://cdn.jsdelivr.net/npm/marked/marked.min.js)
+[![gzip size](https://badgen.net/badgesize/gzip/https://githubcdn.qiushaocloud.top/npm/marked/marked.min.js)](https://githubcdn.qiushaocloud.top/npm/marked/marked.min.js)
 [![install size](https://badgen.net/packagephobia/install/marked)](https://packagephobia.now.sh/result?p=marked)
 [![downloads](https://badgen.net/npm/dt/marked)](https://www.npmjs.com/package/marked)
 [![dep](https://badgen.net/david/dep/markedjs/marked?label=deps)](https://david-dm.org/markedjs/marked)
@@ -62,7 +62,7 @@ $ cat hello.html
 </head>
 <body>
   <div id="content"></div>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://githubcdn.qiushaocloud.top/npm/marked/marked.min.js"></script>
   <script>
     document.getElementById('content').innerHTML =
       marked('# Marked in the browser\n\nRendered by **marked**.');

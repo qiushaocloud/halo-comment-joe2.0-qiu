@@ -528,7 +528,7 @@ const uploadFile2Github = async (
     const uploadResultData = uploadResult.data;
 
     const fileInfo = {
-        imgUrl: uploadResultData.content.download_url.replace(new RegExp(`http.*/${githubUser}/${githubRepo}/`), `https://fastly.jsdelivr.net/gh/${githubUser}/${githubRepo}@`)
+        imgUrl: uploadResultData.content.download_url.replace(new RegExp(`http.*/${githubUser}/${githubRepo}/`), `https://githubcdn.qiushaocloud.top/gh/${githubUser}/${githubRepo}@`)
     };
 
     console.info('uploadFile2Github uploadResultData:', uploadResultData, fileInfo, uploadUrl);

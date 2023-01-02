@@ -1,5 +1,5 @@
 function getDefaults() {
-  const baseUrl = window.location.host === 'localhost:8080' ? '' : 'https://fastly.jsdelivr.net/gh/qiushaocloud/halo-comment-joe2.0-qiu@master';
+  const baseUrl = window.location.host === 'localhost:8080' ? '' : 'https://githubcdn.qiushaocloud.top/gh/qiushaocloud/halo-comment-joe2.0-qiu@master';
   return {
     baseUrl: null,
     breaks: false,
